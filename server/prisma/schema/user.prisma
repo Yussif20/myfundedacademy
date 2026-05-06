@@ -1,0 +1,18 @@
+// User skeleton — full auth/profile fields land in Batch 1.
+model User {
+  id        String       @id @default(uuid())
+  email     String
+  fullName  String
+  password  String?
+  role      UserRoleEnum @default(STUDENT)
+  status    UserStatus   @default(ACTIVE)
+  authType  AuthType     @default(EMAIL_PASSWORD)
+
+  isEmailVerified Boolean   @default(false)
+  isDeleted       Boolean   @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("users")
+}

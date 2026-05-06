@@ -1,0 +1,25 @@
+{
+  "site": {
+    "name": "My Funded Academy",
+    "tagline": "Master prop trading. Built by traders, for traders.",
+    "comingSoon": "Coming soon",
+    "comingSoonBlurb": "We're building the most-secure trading academy on the web. Premium courses, DRM-protected video, certified by traders who've been there."
+  },
+  "nav": {
+    "home": "Home",
+    "courses": "Courses",
+    "instructors": "Instructors",
+    "pricing": "Pricing",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
+  },
+  "common": {
+    "switchLocale": "Language",
+    "switchTheme": "Theme",
+    "english": "English",
+    "arabic": "العربية",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  }
+}

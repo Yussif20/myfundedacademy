@@ -1,0 +1,17 @@
+enum UserRoleEnum {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum AuthType {
+  EMAIL_PASSWORD
+  GOOGLE
+  MAGIC_LINK
+}
