@@ -3,7 +3,7 @@
 import { useRouter } from "@/i18n/navigation";
 import { useGetMeQuery } from "@/redux/api/usersApi";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { logout, setUser } from "@/redux/authSlice";
+import { logout } from "@/redux/authSlice";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 
@@ -17,27 +17,16 @@ export function AuthGuard({
   const router = useRouter();
   const dispatch = useAppDispatch();
   const stored = useAppSelector((s) => s.auth.user);
-  const { data, isLoading, isError, error } = useGetMeQuery(undefined, {
-    skip: !stored,
+  const token = useAppSelector((s) => s.auth.token);
+
+  const { isLoading, isError, error } = useGetMeQuery(undefined, {
+    skip: !stored || !token,
   });
 
   useEffect(() => {
-    if (!stored) {
+    if (!stored || !token) {
       router.replace("/login");
       return;
-    }
-    if (data?.data) {
-      dispatch(
-        setUser({
-          user: {
-            id: data.data.id,
-            email: data.data.email,
-            fullName: data.data.fullName,
-            role: data.data.role,
-          },
-          token: "", // RTK reauth refreshes token automatically
-        }),
-      );
     }
     if (isError) {
       const status = (error as { status?: number })?.status;
@@ -46,9 +35,9 @@ export function AuthGuard({
         router.replace("/login");
       }
     }
-  }, [stored, data, isError, error, dispatch, router]);
+  }, [stored, token, isError, error, dispatch, router]);
 
-  if (!stored || isLoading) {
+  if (!stored || !token || isLoading) {
     return (
       <div className="grid min-h-screen place-items-center bg-[var(--background)]">
         <Loader2 className="size-6 animate-spin text-[var(--primary)]" />

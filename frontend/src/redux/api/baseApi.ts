@@ -8,8 +8,10 @@ const baseUrl = `${AppConfig.backendUrl}/api/v1`;
 const baseQuery = fetchBaseQuery({
   baseUrl,
   credentials: "include",
-  prepareHeaders: (headers) => {
+  prepareHeaders: (headers, { getState }) => {
     headers.set("x-client-type", "WEB");
+    const token = (getState() as { auth?: { token?: string | null } }).auth?.token;
+    if (token) headers.set("Authorization", `Bearer ${token}`);
     return headers;
   },
 });
