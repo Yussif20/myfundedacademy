@@ -1,8 +1,10 @@
 # My Funded Academy (MFA) — Project Reference
 
-A **multi-instructor trading courses marketplace**. DRM-protected video lessons, one-time + subscription purchases, instructor payouts via Stripe Connect, certificates, quizzes, English + Arabic with RTL.
+A **multi-instructor trading courses marketplace**. DRM-protected video lessons, one-time + subscription purchases, certificates, quizzes, English + Arabic with RTL.
 
 Sister project to [Funded For You](https://github.com/Yussif20/fundedforyou) — runs on its own infrastructure (separate repo, DB, Stripe account, host).
+
+> **Status: MVP for client demo.** Built on $0/mo free-tier infra to validate the product with a client. Scope is intentionally trimmed (no Stripe Connect, no instructor self-signup, no queues, no discussions). Once the client greenlights the project, the stack and scope expand.
 
 ## Project Structure
 
@@ -19,14 +21,14 @@ myfundedacademy/
 | --------------- | ---------------------------------------------------------------------------------------------------------------- |
 | **Frontend**    | Next.js 16, React 19, TypeScript 5.9, Tailwind CSS 4, Redux Toolkit (RTK Query), shadcn/ui (new-york), next-intl |
 | **Backend**     | Express 5, TypeScript 5.9, Prisma 6.19 ORM                                                                       |
-| **Database**    | PostgreSQL (Neon for dev → DO Managed PG in prod)                                                                |
-| **Cache/Queue** | Redis (Upstash) + BullMQ (queues land in Batch 4)                                                                |
-| **Storage**     | DigitalOcean Spaces (`mfa-prod` bucket — separate from FFY)                                                      |
-| **Video DRM**   | **VdoCipher** — Widevine + FairPlay + PlayReady, dynamic watermarking                                            |
-| **Payments**    | Stripe Checkout + Stripe Billing + Stripe Connect Express                                                        |
-| **Email**       | Resend                                                                                                           |
+| **Database**    | PostgreSQL — **Neon free tier** for MVP                                                                          |
+| **Storage**     | **Cloudflare R2 free tier** — S3-compatible API, zero egress fees                                                |
+| **Video DRM**   | **VdoCipher free trial** for MVP — Widevine + FairPlay + PlayReady, dynamic watermarking                         |
+| **Payments**    | **Stripe Checkout + Stripe Billing (test mode)**. Connect deferred to post-signoff.                              |
+| **Email**       | **Resend free tier** (3000/mo)                                                                                   |
 | **Auth**        | JWT (access + refresh), bcrypt, OTP, magic links                                                                 |
 | **i18n**        | next-intl (frontend), i18next (backend) — `en`, `ar`                                                             |
+| **Cache/Queue** | _Skipped for MVP_ (no Redis, no BullMQ; email/certs run inline). Added post-signoff.                             |
 
 ## Getting Started
 
@@ -60,19 +62,20 @@ npm run dev                # http://localhost:3000
 
 ## Domain Modules (planned, by batch)
 
-| Batch | Modules                                                                             |
-| ----: | ----------------------------------------------------------------------------------- |
-|  0 ✅ | Scaffolding (this batch)                                                            |
-|     1 | `auth`, `users`, `instructor-applications`                                          |
-|     2 | `courses`, `sections`, `lessons`, `vdocipher` (instructor authoring)                |
-|     3 | `admin-moderation`, `categories`                                                    |
-|     4 | `catalog`, `orders` (Stripe Checkout), `subscriptions` (Stripe Billing), `webhooks` |
-|     5 | `enrollments`, `progress`, `player` (DRM OTP + watermark)                           |
-|     6 | `quizzes`, `certificates`                                                           |
-|     7 | `reviews`, `discussions`, `qna`                                                     |
-|     8 | `payouts` (Stripe Connect Express), `instructor-analytics`                          |
-|     9 | Arabic translation pass + RTL polish                                                |
-|    10 | SEO, sitemaps, structured data, production deploy                                   |
+| Batch | MVP scope                                                                         |
+| ----: | --------------------------------------------------------------------------------- |
+|  0 ✅ | Scaffolding (shipped)                                                             |
+|     1 | `auth` (signup/login/email-verify/pwd-reset) + roles + admin seed                 |
+|     2 | Admin-managed instructors + course CRUD (admin-only authoring) + VdoCipher upload |
+|     3 | Categories + featured courses + admin publishing                                  |
+|     4 | Catalog + Stripe Checkout (one-time) + Stripe Billing (subscription) + webhooks   |
+|     5 | Course player with DRM OTP + watermark + progress tracking                        |
+|     6 | Quizzes + auto-generated certificates + public verification page                  |
+|     7 | Reviews/ratings                                                                   |
+|     8 | Arabic translations + RTL polish                                                  |
+|     9 | Demo deploy (Vercel + Render + UptimeRobot) + seed demo data                      |
+
+**Cut from MVP, deferred until client signoff:** Stripe Connect (revenue splits), instructor self-signup application flow, BullMQ + Redis queues, discussions/Q&A, wishlist, coupons.
 
 ## User Roles
 
@@ -149,14 +152,16 @@ Tier A DRM (Widevine + FairPlay + PlayReady + dynamic watermarking) stops:
 
 It **does not** stop a determined user with a second phone camera. The defense for that is the dynamic watermark — every playback burns viewer email + IP into the video, so any leak traces back to a specific account.
 
-## Hosting (planned)
+## Hosting (MVP — all $0/mo)
 
-- **Frontend** → Vercel (apex `myfundedacademy.com`)
-- **Backend** → Hetzner CCX13 (4 GB) + PM2 + nginx, on `api.myfundedacademy.com`
-- **DB** → Neon (dev) → DigitalOcean Managed Postgres (prod)
-- **Redis** → Upstash serverless
-- **Video** → VdoCipher CDN
-- **Storage** → DO Spaces `mfa-prod`
-- **DNS / WAF** → Cloudflare
+- **Frontend** → Vercel free tier (apex `myfundedacademy.com`)
+- **Backend** → Render free tier on `api.myfundedacademy.com`, kept warm by a UptimeRobot HTTP pinger every 10 min
+- **DB** → Neon free tier (3 GB)
+- **Storage** → Cloudflare R2 free tier (10 GB, zero egress fees)
+- **Video** → VdoCipher free trial CDN
+- **Email** → Resend free tier
+- **DNS / WAF** → Cloudflare free tier
+
+Post-signoff, this stack is expected to migrate to a paid host (Hostinger VPS, Hetzner, or similar) chosen with the client's input.
 
 See `server/.env.example` and `frontend/.env.example` for required environment variables.

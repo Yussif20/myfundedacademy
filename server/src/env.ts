@@ -38,11 +38,12 @@ const EnvSchema = z.object({
 
   VDOCIPHER_API_SECRET: z.string().optional().default(""),
 
-  DO_SPACES_KEY: z.string().optional().default(""),
-  DO_SPACES_SECRET: z.string().optional().default(""),
-  DO_SPACES_BUCKET: z.string().optional().default(""),
-  DO_SPACES_REGION: z.string().optional().default(""),
-  DO_SPACES_ENDPOINT: z.string().optional().default(""),
+  S3_ACCESS_KEY: z.string().optional().default(""),
+  S3_SECRET_KEY: z.string().optional().default(""),
+  S3_BUCKET: z.string().optional().default(""),
+  S3_REGION: z.string().optional().default("auto"),
+  S3_ENDPOINT: z.string().optional().default(""),
+  S3_PUBLIC_URL: z.string().optional().default(""),
 });
 
 type EnvBase = z.infer<typeof EnvSchema>;
