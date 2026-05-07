@@ -59,7 +59,7 @@ export default function NewCoursePage() {
         accessTier: form.accessTier,
         oneTimePrice: Number(form.oneTimePrice) || 0,
       }).unwrap();
-      router.push({ pathname: "/admin/courses/[id]", params: { id: res.data.id } } as never);
+      router.push(`/admin/courses/${res.data.id}`);
     } catch (err) {
       setError(extractApiError(err));
     }

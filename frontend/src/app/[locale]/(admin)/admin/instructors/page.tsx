@@ -73,11 +73,7 @@ export default function AdminInstructorsPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Button asChild variant="ghost" size="icon" aria-label={tCommon("edit")}>
-                      <Link
-                        href={
-                          { pathname: "/admin/instructors/[id]", params: { id: p.id } } as never
-                        }
-                      >
+                      <Link href={`/admin/instructors/${p.id}`}>
                         <Edit3 className="size-4" />
                       </Link>
                     </Button>
