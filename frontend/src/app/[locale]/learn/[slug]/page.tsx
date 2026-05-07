@@ -8,6 +8,7 @@ import { Wordmark } from "@/components/brand/wordmark";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AuthGuard } from "@/components/auth-guard";
+import { ProgressRing } from "@/components/public/progress-ring";
 import { Link, useRouter } from "@/i18n/navigation";
 import { extractApiError } from "@/lib/errors";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,7 @@ import {
   type Section,
 } from "@/redux/api/coursesApi";
 import { useAppSelector } from "@/redux/store";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   CheckCircle2,
   ChevronDown,
@@ -143,13 +145,15 @@ function ClassroomShell() {
           </Link>
           <div className="flex items-center gap-2">
             <div className="hidden items-center gap-2 md:flex">
-              <div className="h-2 w-32 overflow-hidden rounded-full bg-[var(--secondary)]">
-                <div
-                  className="h-full bg-[var(--primary)] transition-all"
-                  style={{ width: `${pct}%` }}
+              <div className="h-2 w-32 overflow-hidden rounded-full bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${pct}%` }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="h-full rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]"
                 />
               </div>
-              <span className="text-xs text-[var(--muted-foreground)]">{pct}%</span>
+              <span className="text-xs font-medium text-[var(--muted-foreground)]">{pct}%</span>
             </div>
             <LocaleSwitcher />
             <ThemeToggle />
@@ -169,22 +173,32 @@ function ClassroomShell() {
           slug={slug}
         />
 
-        <main className="min-w-0 space-y-6">
-          {currentLesson ? (
-            <LessonView
-              lesson={currentLesson}
-              course={course}
-              progressByLesson={progressByLesson}
-              prevLesson={prevLesson}
-              nextLesson={nextLesson}
-              onComplete={refetchProgress}
-              onGoTo={goToLesson}
-            />
-          ) : (
-            <div className="rounded-xl border border-dashed border-[var(--border)] py-16 text-center text-sm text-[var(--muted-foreground)]">
-              {t("noLessonsYet")}
-            </div>
-          )}
+        <main className="min-w-0">
+          <AnimatePresence mode="wait">
+            {currentLesson ? (
+              <motion.div
+                key={currentLesson.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <LessonView
+                  lesson={currentLesson}
+                  course={course}
+                  progressByLesson={progressByLesson}
+                  prevLesson={prevLesson}
+                  nextLesson={nextLesson}
+                  onComplete={refetchProgress}
+                  onGoTo={goToLesson}
+                />
+              </motion.div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-[var(--border)] py-16 text-center text-sm text-[var(--muted-foreground)]">
+                {t("noLessonsYet")}
+              </div>
+            )}
+          </AnimatePresence>
         </main>
       </div>
     </div>
@@ -277,18 +291,23 @@ function SectionGroup({
     (l) => progressByLesson.get(l.id)?.completedAt,
   ).length;
 
+  const sectionPct = section.lessons.length > 0 ? completedInSection / section.lessons.length : 0;
+
   return (
-    <div className="overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)]">
+    <div className="overflow-hidden rounded-xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_75%,transparent)] backdrop-blur transition-colors hover:border-[color-mix(in_oklch,var(--primary)_25%,transparent)]">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-medium hover:bg-[var(--secondary)]"
+        className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm font-medium transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_4%,transparent)]"
       >
-        {open ? (
-          <ChevronDown className="size-4 shrink-0 text-[var(--muted-foreground)]" />
-        ) : (
-          <ChevronRight className="size-4 shrink-0 text-[var(--muted-foreground)] rtl:rotate-180" />
-        )}
+        <motion.span
+          animate={{ rotate: open ? 0 : -90 }}
+          transition={{ type: "spring", stiffness: 400, damping: 28 }}
+          className="grid size-5 shrink-0 place-items-center"
+        >
+          <ChevronDown className="size-4 text-[var(--muted-foreground)]" />
+        </motion.span>
+        <ProgressRing value={sectionPct} size={22} stroke={2.5} />
         <span className="line-clamp-1 flex-1">
           {(isAr && section.titleArabic) || section.title}
         </span>
@@ -297,38 +316,52 @@ function SectionGroup({
         </span>
       </button>
 
-      {open && (
-        <ul>
-          {section.lessons.map((l) => {
-            const completed = Boolean(progressByLesson.get(l.id)?.completedAt);
-            const isCurrent = l.id === currentLessonId;
-            return (
-              <li key={l.id}>
-                <button
-                  type="button"
-                  onClick={() => onPick(l.id)}
-                  className={cn(
-                    "flex w-full items-center gap-3 border-t border-[var(--border)] px-3 py-2 text-left text-sm",
-                    isCurrent
-                      ? "bg-[var(--primary)]/10 text-[var(--foreground)]"
-                      : "text-[var(--muted-foreground)] hover:bg-[var(--secondary)] hover:text-[var(--foreground)]",
-                  )}
-                >
-                  {completed ? (
-                    <CheckCircle2 className="size-4 shrink-0 text-[var(--primary)]" />
-                  ) : (
-                    <Circle className="size-4 shrink-0 text-[var(--muted-foreground)]" />
-                  )}
-                  <span className="line-clamp-1 flex-1">{(isAr && l.titleArabic) || l.title}</span>
-                  {l.durationMin > 0 && (
-                    <span className="text-xs text-[var(--muted-foreground)]">{l.durationMin}m</span>
-                  )}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <ul className="border-t border-[color-mix(in_oklch,var(--border)_60%,transparent)]">
+              {section.lessons.map((l) => {
+                const completed = Boolean(progressByLesson.get(l.id)?.completedAt);
+                const isCurrent = l.id === currentLessonId;
+                return (
+                  <li key={l.id}>
+                    <button
+                      type="button"
+                      onClick={() => onPick(l.id)}
+                      className={cn(
+                        "flex w-full items-center gap-3 border-b border-[color-mix(in_oklch,var(--border)_40%,transparent)] px-3 py-2.5 text-left text-sm transition-colors last:border-b-0",
+                        isCurrent
+                          ? "bg-[color-mix(in_oklch,var(--primary)_12%,transparent)] text-[var(--foreground)]"
+                          : "text-[var(--muted-foreground)] hover:bg-[color-mix(in_oklch,var(--primary)_5%,transparent)] hover:text-[var(--foreground)]",
+                      )}
+                    >
+                      {completed ? (
+                        <CheckCircle2 className="size-4 shrink-0 text-[var(--primary)]" />
+                      ) : (
+                        <Circle className="size-4 shrink-0 text-[var(--muted-foreground)]" />
+                      )}
+                      <span className="line-clamp-1 flex-1">
+                        {(isAr && l.titleArabic) || l.title}
+                      </span>
+                      {l.durationMin > 0 && (
+                        <span className="text-xs text-[var(--muted-foreground)]">
+                          {l.durationMin}m
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
