@@ -6,25 +6,28 @@ import { UploadsValidation } from "./uploads.validation";
 
 const router = express.Router();
 
-const admin = [requireAuth, requireRole("ADMIN")];
+// Open to ADMIN + INSTRUCTOR. Both can presign uploads; backend operations
+// that consume the presigned URL still gate on course ownership in the
+// courses service.
+const author = [requireAuth, requireRole("ADMIN", "INSTRUCTOR")];
 
 router.post(
   "/thumbnail-presign",
-  ...admin,
+  ...author,
   validateRequest(UploadsValidation.thumbnailPresign),
   UploadsController.thumbnailPresign,
 );
 
 router.post(
   "/attachment-presign",
-  ...admin,
+  ...author,
   validateRequest(UploadsValidation.attachmentPresign),
   UploadsController.attachmentPresign,
 );
 
 router.post(
   "/video-credentials",
-  ...admin,
+  ...author,
   validateRequest(UploadsValidation.videoCredentials),
   UploadsController.videoCredentials,
 );

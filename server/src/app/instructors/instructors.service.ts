@@ -162,6 +162,128 @@ export const InstructorsService = {
     return InstructorsService.get(id);
   },
 
+  /**
+   * Returns the InstructorProfile linked to the current user. Used by the
+   * instructor workspace's profile editor + dashboard.
+   */
+  async getMe(userId: string) {
+    const profile = await prisma.instructorProfile.findFirst({
+      where: { userId },
+      include: PROFILE_INCLUDE,
+    });
+    if (!profile) {
+      throw new AppError(httpStatus.NOT_FOUND, "No instructor profile on file.");
+    }
+    return profile;
+  },
+
+  /**
+   * Self-edit for instructors. Excludes admin-only fields like isFeatured.
+   */
+  async updateMe(
+    userId: string,
+    input: Partial<{
+      fullName: string;
+      country: string;
+      preferredLocale: "en" | "ar";
+      profile: string;
+      headline: string;
+      headlineArabic: string;
+      bio: string;
+      bioArabic: string;
+      expertise: string[];
+      twitterUrl: string;
+      linkedinUrl: string;
+      websiteUrl: string;
+    }>,
+  ) {
+    const profile = await prisma.instructorProfile.findFirst({
+      where: { userId },
+      select: { id: true },
+    });
+    if (!profile) {
+      throw new AppError(httpStatus.NOT_FOUND, "No instructor profile on file.");
+    }
+    return InstructorsService.update(profile.id, input);
+  },
+
+  /**
+   * Lists courses authored by the current user (any status, including drafts).
+   * Used by the instructor's "my courses" page.
+   */
+  async listMyCourses(userId: string) {
+    const profile = await prisma.instructorProfile.findFirst({
+      where: { userId },
+      select: { id: true },
+    });
+    if (!profile) {
+      throw new AppError(httpStatus.NOT_FOUND, "No instructor profile on file.");
+    }
+    const courses = await prisma.course.findMany({
+      where: { instructorId: profile.id, isDeleted: false },
+      orderBy: [{ updatedAt: "desc" }],
+      include: {
+        category: { select: { id: true, slug: true, name: true, nameArabic: true } },
+        instructor: {
+          select: {
+            id: true,
+            headline: true,
+            headlineArabic: true,
+            isFeatured: true,
+            user: { select: { id: true, fullName: true, profile: true } },
+          },
+        },
+        _count: { select: { sections: true, enrollments: true, reviews: true } },
+      },
+    });
+    return courses;
+  },
+
+  /**
+   * Aggregate KPIs for the instructor dashboard.
+   * - courseCount: total courses (any status)
+   * - publishedCount: subset that are PUBLISHED
+   * - totalEnrollments: distinct enrollments across all my courses
+   * - avgRating: average rating across all reviews of my courses
+   */
+  async getMyStats(userId: string) {
+    const profile = await prisma.instructorProfile.findFirst({
+      where: { userId },
+      select: {
+        id: true,
+        courses: {
+          where: { isDeleted: false },
+          select: { id: true, status: true },
+        },
+      },
+    });
+    if (!profile) {
+      throw new AppError(httpStatus.NOT_FOUND, "No instructor profile on file.");
+    }
+    const courseIds = profile.courses.map((c) => c.id);
+    const courseCount = profile.courses.length;
+    const publishedCount = profile.courses.filter((c) => c.status === "PUBLISHED").length;
+
+    if (courseIds.length === 0) {
+      return { courseCount: 0, publishedCount: 0, totalEnrollments: 0, avgRating: 0 };
+    }
+
+    const [enrollmentCount, ratingAgg] = await Promise.all([
+      prisma.enrollment.count({ where: { courseId: { in: courseIds } } }),
+      prisma.review.aggregate({
+        where: { courseId: { in: courseIds }, isDeleted: false },
+        _avg: { rating: true },
+      }),
+    ]);
+
+    return {
+      courseCount,
+      publishedCount,
+      totalEnrollments: enrollmentCount,
+      avgRating: Number(ratingAgg._avg.rating ?? 0),
+    };
+  },
+
   async remove(id: string): Promise<void> {
     const profile = await prisma.instructorProfile.findUnique({
       where: { id },

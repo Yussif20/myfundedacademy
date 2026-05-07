@@ -40,26 +40,33 @@ router.get(
   CoursesController.getCourseProgress,
 );
 
-const admin = [requireAuth, requireRole("ADMIN")];
+// Course mutations: open to ADMIN and INSTRUCTOR. The service layer enforces
+// per-course ownership for INSTRUCTORs (they can only touch their own courses).
+const author = [requireAuth, requireRole("ADMIN", "INSTRUCTOR")];
 
 // Course CRUD
-router.post("/", ...admin, validateRequest(CoursesValidation.create), CoursesController.create);
-router.patch("/:id", ...admin, validateRequest(CoursesValidation.update), CoursesController.update);
+router.post("/", ...author, validateRequest(CoursesValidation.create), CoursesController.create);
+router.patch(
+  "/:id",
+  ...author,
+  validateRequest(CoursesValidation.update),
+  CoursesController.update,
+);
 router.delete(
   "/:id",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.remove),
   CoursesController.remove,
 );
 router.post(
   "/:id/publish",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.publish),
   CoursesController.publish,
 );
 router.post(
   "/:id/unpublish",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.publish),
   CoursesController.unpublish,
 );
@@ -67,25 +74,25 @@ router.post(
 // Sections
 router.post(
   "/:courseId/sections",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.createSection),
   CoursesController.createSection,
 );
 router.patch(
   "/sections/:id",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.updateSection),
   CoursesController.updateSection,
 );
 router.delete(
   "/sections/:id",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.removeSection),
   CoursesController.removeSection,
 );
 router.post(
   "/:courseId/sections/reorder",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.reorderSections),
   CoursesController.reorderSections,
 );
@@ -93,25 +100,25 @@ router.post(
 // Lessons
 router.post(
   "/sections/:sectionId/lessons",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.createLesson),
   CoursesController.createLesson,
 );
 router.patch(
   "/lessons/:id",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.updateLesson),
   CoursesController.updateLesson,
 );
 router.delete(
   "/lessons/:id",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.removeLesson),
   CoursesController.removeLesson,
 );
 router.post(
   "/sections/:sectionId/lessons/reorder",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.reorderLessons),
   CoursesController.reorderLessons,
 );
@@ -119,13 +126,13 @@ router.post(
 // Lesson attachments
 router.post(
   "/lessons/:id/attachments",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.addAttachment),
   CoursesController.addAttachment,
 );
 router.delete(
   "/lessons/:id/attachments/:attachmentId",
-  ...admin,
+  ...author,
   validateRequest(CoursesValidation.removeAttachment),
   CoursesController.removeAttachment,
 );

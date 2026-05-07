@@ -7,6 +7,63 @@ import { deleteObject } from "@/lib/storage/r2";
 import { deleteVideo } from "@/lib/video/vdocipher";
 import { userHasCourseAccess } from "@/lib/payments/access";
 
+type Actor = { id: string; role: UserRoleEnum };
+
+/**
+ * Resolves the InstructorProfile.id for a given user, or null if the user
+ * doesn't have one. Cached implicitly per request via Prisma's connection.
+ */
+async function getInstructorProfileId(userId: string): Promise<string | null> {
+  const profile = await prisma.instructorProfile.findFirst({
+    where: { userId },
+    select: { id: true },
+  });
+  return profile?.id ?? null;
+}
+
+/**
+ * Throws 403 unless the actor owns the course (instructor) or is an admin.
+ * Call as the FIRST thing inside any mutation that touches a course.
+ */
+async function assertCourseOwnership(courseId: string, actor: Actor): Promise<void> {
+  if (actor.role === "ADMIN") return;
+  if (actor.role !== "INSTRUCTOR") {
+    throw new AppError(httpStatus.FORBIDDEN, "You do not have permission for this action.");
+  }
+  const [course, profileId] = await Promise.all([
+    prisma.course.findUnique({
+      where: { id: courseId },
+      select: { instructorId: true, isDeleted: true },
+    }),
+    getInstructorProfileId(actor.id),
+  ]);
+  if (!course || course.isDeleted) throw new AppError(httpStatus.NOT_FOUND, "Course not found.");
+  if (!profileId) throw new AppError(httpStatus.FORBIDDEN, "No instructor profile on file.");
+  if (course.instructorId !== profileId) {
+    throw new AppError(httpStatus.FORBIDDEN, "You don't have access to this course.");
+  }
+}
+
+async function assertSectionOwnership(sectionId: string, actor: Actor): Promise<void> {
+  if (actor.role === "ADMIN") return;
+  const section = await prisma.section.findUnique({
+    where: { id: sectionId },
+    select: { courseId: true },
+  });
+  if (!section) throw new AppError(httpStatus.NOT_FOUND, "Section not found.");
+  return assertCourseOwnership(section.courseId, actor);
+}
+
+async function assertLessonOwnership(lessonId: string, actor: Actor): Promise<void> {
+  if (actor.role === "ADMIN") return;
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    select: { section: { select: { courseId: true } } },
+  });
+  if (!lesson) throw new AppError(httpStatus.NOT_FOUND, "Lesson not found.");
+  return assertCourseOwnership(lesson.section.courseId, actor);
+}
+
 const COURSE_LIST_INCLUDE = {
   category: { select: { id: true, slug: true, name: true, nameArabic: true } },
   instructor: {
@@ -367,25 +424,42 @@ export const CoursesService = {
   },
 
   // ---------- Course CRUD ----------
-  async create(input: {
-    title: string;
-    titleArabic?: string;
-    shortDescription?: string;
-    shortDescriptionArabic?: string;
-    description?: string;
-    descriptionArabic?: string;
-    thumbnail?: string;
-    promoVideoVdoId?: string;
-    level?: "BEGINNER" | "INTERMEDIATE" | "ADVANCED" | "ALL_LEVELS";
-    language?: "EN" | "AR" | "BOTH";
-    oneTimePrice?: number;
-    accessTier?: "FREE" | "STARTER" | "PRO";
-    isFeatured?: boolean;
-    categoryId?: string | null;
-    instructorId: string;
-  }) {
+  async create(
+    input: {
+      title: string;
+      titleArabic?: string;
+      shortDescription?: string;
+      shortDescriptionArabic?: string;
+      description?: string;
+      descriptionArabic?: string;
+      thumbnail?: string;
+      promoVideoVdoId?: string;
+      level?: "BEGINNER" | "INTERMEDIATE" | "ADVANCED" | "ALL_LEVELS";
+      language?: "EN" | "AR" | "BOTH";
+      oneTimePrice?: number;
+      accessTier?: "FREE" | "STARTER" | "PRO";
+      isFeatured?: boolean;
+      categoryId?: string | null;
+      instructorId?: string;
+    },
+    actor: Actor,
+  ) {
+    // Instructors can only create courses for themselves; admins can target any.
+    let instructorId = input.instructorId;
+    if (actor.role === "INSTRUCTOR") {
+      const ownProfileId = await getInstructorProfileId(actor.id);
+      if (!ownProfileId) throw new AppError(httpStatus.FORBIDDEN, "No instructor profile on file.");
+      instructorId = ownProfileId;
+    }
+    if (!instructorId) {
+      throw new AppError(httpStatus.BAD_REQUEST, "Instructor is required.");
+    }
+    if (actor.role !== "ADMIN" && actor.role !== "INSTRUCTOR") {
+      throw new AppError(httpStatus.FORBIDDEN, "You do not have permission for this action.");
+    }
+
     const instructor = await prisma.instructorProfile.findUnique({
-      where: { id: input.instructorId },
+      where: { id: instructorId },
       select: { id: true },
     });
     if (!instructor) throw new AppError(httpStatus.BAD_REQUEST, "Instructor does not exist.");
@@ -424,7 +498,7 @@ export const CoursesService = {
         accessTier: input.accessTier || "FREE",
         isFeatured: input.isFeatured ?? false,
         categoryId: input.categoryId ?? null,
-        instructorId: input.instructorId,
+        instructorId,
         status: "DRAFT",
       },
     });
@@ -451,24 +525,34 @@ export const CoursesService = {
       categoryId: string | null;
       instructorId: string;
     }>,
+    actor: Actor,
   ) {
+    await assertCourseOwnership(id, actor);
+
     const existing = await prisma.course.findUnique({ where: { id } });
     if (!existing || existing.isDeleted) {
       throw new AppError(httpStatus.NOT_FOUND, "Course not found.");
     }
 
-    if (input.categoryId !== undefined && input.categoryId !== null) {
+    // Only admins can reassign a course to a different instructor or toggle isFeatured.
+    const safeInput = { ...input };
+    if (actor.role !== "ADMIN") {
+      delete safeInput.instructorId;
+      delete safeInput.isFeatured;
+    }
+
+    if (safeInput.categoryId !== undefined && safeInput.categoryId !== null) {
       const category = await prisma.category.findUnique({
-        where: { id: input.categoryId },
+        where: { id: safeInput.categoryId },
         select: { id: true, isDeleted: true },
       });
       if (!category || category.isDeleted) {
         throw new AppError(httpStatus.BAD_REQUEST, "Category does not exist.");
       }
     }
-    if (input.instructorId !== undefined) {
+    if (safeInput.instructorId !== undefined) {
       const instructor = await prisma.instructorProfile.findUnique({
-        where: { id: input.instructorId },
+        where: { id: safeInput.instructorId },
         select: { id: true },
       });
       if (!instructor) throw new AppError(httpStatus.BAD_REQUEST, "Instructor does not exist.");
@@ -476,13 +560,15 @@ export const CoursesService = {
 
     await prisma.course.update({
       where: { id },
-      data: input as Prisma.CourseUpdateInput,
+      data: safeInput as Prisma.CourseUpdateInput,
     });
 
     return CoursesService.get(id);
   },
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string, actor: Actor): Promise<void> {
+    await assertCourseOwnership(id, actor);
+
     const course = await prisma.course.findUnique({
       where: { id },
       include: { sections: { include: { lessons: { include: { attachments: true } } } } },
@@ -513,7 +599,8 @@ export const CoursesService = {
     });
   },
 
-  async publish(id: string) {
+  async publish(id: string, actor: Actor) {
+    await assertCourseOwnership(id, actor);
     const course = await prisma.course.findUnique({
       where: { id },
       include: { sections: { include: { lessons: true } } },
@@ -534,7 +621,8 @@ export const CoursesService = {
     return CoursesService.get(id);
   },
 
-  async unpublish(id: string) {
+  async unpublish(id: string, actor: Actor) {
+    await assertCourseOwnership(id, actor);
     const course = await prisma.course.findUnique({ where: { id } });
     if (!course || course.isDeleted) {
       throw new AppError(httpStatus.NOT_FOUND, "Course not found.");
@@ -547,7 +635,9 @@ export const CoursesService = {
   async createSection(
     courseId: string,
     input: { title: string; titleArabic?: string; order?: number },
+    actor: Actor,
   ) {
+    await assertCourseOwnership(courseId, actor);
     const course = await prisma.course.findUnique({ where: { id: courseId } });
     if (!course || course.isDeleted) throw new AppError(httpStatus.NOT_FOUND, "Course not found.");
 
@@ -568,7 +658,9 @@ export const CoursesService = {
   async updateSection(
     id: string,
     input: Partial<{ title: string; titleArabic: string; order: number }>,
+    actor: Actor,
   ) {
+    await assertSectionOwnership(id, actor);
     return prisma.section.update({
       where: { id },
       data: input,
@@ -576,7 +668,9 @@ export const CoursesService = {
     });
   },
 
-  async removeSection(id: string): Promise<void> {
+  async removeSection(id: string, actor: Actor): Promise<void> {
+    await assertSectionOwnership(id, actor);
+
     const section = await prisma.section.findUnique({
       where: { id },
       include: { lessons: { include: { attachments: true } } },
@@ -593,7 +687,8 @@ export const CoursesService = {
     await recomputeTotals(section.courseId);
   },
 
-  async reorderSections(courseId: string, ids: string[]) {
+  async reorderSections(courseId: string, ids: string[], actor: Actor) {
+    await assertCourseOwnership(courseId, actor);
     await prisma.$transaction(
       ids.map((id, i) =>
         prisma.section.update({
@@ -617,7 +712,9 @@ export const CoursesService = {
       isFreePreview?: boolean;
       order?: number;
     },
+    actor: Actor,
   ) {
+    await assertSectionOwnership(sectionId, actor);
     const section = await prisma.section.findUnique({ where: { id: sectionId } });
     if (!section) throw new AppError(httpStatus.NOT_FOUND, "Section not found.");
 
@@ -653,7 +750,9 @@ export const CoursesService = {
       isFreePreview: boolean;
       order: number;
     }>,
+    actor: Actor,
   ) {
+    await assertLessonOwnership(id, actor);
     const lesson = await prisma.lesson.findUnique({ where: { id } });
     if (!lesson) throw new AppError(httpStatus.NOT_FOUND, "Lesson not found.");
 
@@ -675,7 +774,8 @@ export const CoursesService = {
     return updated;
   },
 
-  async removeLesson(id: string): Promise<void> {
+  async removeLesson(id: string, actor: Actor): Promise<void> {
+    await assertLessonOwnership(id, actor);
     const lesson = await prisma.lesson.findUnique({
       where: { id },
       include: { attachments: true, section: { select: { courseId: true } } },
@@ -691,7 +791,8 @@ export const CoursesService = {
     await recomputeTotals(lesson.section.courseId);
   },
 
-  async reorderLessons(sectionId: string, ids: string[]) {
+  async reorderLessons(sectionId: string, ids: string[], actor: Actor) {
+    await assertSectionOwnership(sectionId, actor);
     await prisma.$transaction(
       ids.map((id, i) =>
         prisma.lesson.update({
@@ -706,7 +807,9 @@ export const CoursesService = {
   async addAttachment(
     lessonId: string,
     input: { fileName: string; fileKey: string; fileSize?: number; fileType?: string },
+    actor: Actor,
   ) {
+    await assertLessonOwnership(lessonId, actor);
     const lesson = await prisma.lesson.findUnique({ where: { id: lessonId } });
     if (!lesson) throw new AppError(httpStatus.NOT_FOUND, "Lesson not found.");
 
@@ -721,7 +824,8 @@ export const CoursesService = {
     });
   },
 
-  async removeAttachment(lessonId: string, attachmentId: string): Promise<void> {
+  async removeAttachment(lessonId: string, attachmentId: string, actor: Actor): Promise<void> {
+    await assertLessonOwnership(lessonId, actor);
     const attachment = await prisma.lessonAttachment.findFirst({
       where: { id: attachmentId, lessonId },
     });

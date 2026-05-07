@@ -55,4 +55,23 @@ export const InstructorsValidation = {
   remove: z.object({
     params: z.object({ id: z.string().uuid() }),
   }),
+
+  // Self-edit by an instructor — same shape as `update.body` minus admin-only
+  // fields (no isFeatured) and no `params.id` since the route is /me.
+  updateMe: z.object({
+    body: z.object({
+      fullName: z.string().min(2).max(120).optional(),
+      country: z.string().max(80).optional(),
+      preferredLocale: z.enum(["en", "ar"]).optional(),
+      profile: z.string().max(500).optional(),
+      headline: z.string().max(160).optional(),
+      headlineArabic: z.string().max(160).optional(),
+      bio: z.string().max(2000).optional(),
+      bioArabic: z.string().max(2000).optional(),
+      expertise: z.array(z.string().max(60)).max(20).optional(),
+      twitterUrl: z.string().url().optional().or(z.literal("")),
+      linkedinUrl: z.string().url().optional().or(z.literal("")),
+      websiteUrl: z.string().url().optional().or(z.literal("")),
+    }),
+  }),
 };

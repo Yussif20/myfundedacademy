@@ -8,6 +8,21 @@ const router = express.Router();
 
 // Public reads
 router.get("/", validateRequest(InstructorsValidation.list), InstructorsController.list);
+
+// Me-scoped (instructor self-service). Must come BEFORE /:id so the literal
+// segment "me" doesn't get matched as a uuid by the param route.
+const instructor = [requireAuth, requireRole("INSTRUCTOR", "ADMIN")];
+
+router.get("/me", ...instructor, InstructorsController.getMe);
+router.patch(
+  "/me",
+  ...instructor,
+  validateRequest(InstructorsValidation.updateMe),
+  InstructorsController.updateMe,
+);
+router.get("/me/courses", ...instructor, InstructorsController.listMyCourses);
+router.get("/me/stats", ...instructor, InstructorsController.getMyStats);
+
 router.get("/:id", validateRequest(InstructorsValidation.get), InstructorsController.get);
 
 // Admin writes

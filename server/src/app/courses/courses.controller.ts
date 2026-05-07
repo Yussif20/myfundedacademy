@@ -3,6 +3,12 @@ import sendResponse from "@/utils/sendResponse";
 import httpStatus from "http-status";
 import AppError from "@/helpers/errors/AppError";
 import { CoursesService } from "./courses.service";
+import type { Request } from "express";
+
+const requireActor = (req: Request) => {
+  if (!req.user) throw new AppError(httpStatus.UNAUTHORIZED, "Sign in required.");
+  return { id: req.user.id, role: req.user.role };
+};
 
 export const CoursesController = {
   list: catchAsync(async (req, res) => {
@@ -58,7 +64,7 @@ export const CoursesController = {
   }),
 
   create: catchAsync(async (req, res) => {
-    const data = await CoursesService.create(req.body);
+    const data = await CoursesService.create(req.body, requireActor(req));
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       message: "Course draft created.",
@@ -67,28 +73,32 @@ export const CoursesController = {
   }),
 
   update: catchAsync(async (req, res) => {
-    const data = await CoursesService.update(String(req.params.id), req.body);
+    const data = await CoursesService.update(String(req.params.id), req.body, requireActor(req));
     sendResponse(res, { statusCode: httpStatus.OK, message: "Course updated.", data });
   }),
 
   remove: catchAsync(async (req, res) => {
-    await CoursesService.remove(String(req.params.id));
+    await CoursesService.remove(String(req.params.id), requireActor(req));
     sendResponse(res, { statusCode: httpStatus.OK, message: "Course deleted.", data: null });
   }),
 
   publish: catchAsync(async (req, res) => {
-    const data = await CoursesService.publish(String(req.params.id));
+    const data = await CoursesService.publish(String(req.params.id), requireActor(req));
     sendResponse(res, { statusCode: httpStatus.OK, message: "Course published.", data });
   }),
 
   unpublish: catchAsync(async (req, res) => {
-    const data = await CoursesService.unpublish(String(req.params.id));
+    const data = await CoursesService.unpublish(String(req.params.id), requireActor(req));
     sendResponse(res, { statusCode: httpStatus.OK, message: "Course unpublished.", data });
   }),
 
   // Sections
   createSection: catchAsync(async (req, res) => {
-    const data = await CoursesService.createSection(String(req.params.courseId), req.body);
+    const data = await CoursesService.createSection(
+      String(req.params.courseId),
+      req.body,
+      requireActor(req),
+    );
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       message: "Section created.",
@@ -97,48 +107,76 @@ export const CoursesController = {
   }),
 
   updateSection: catchAsync(async (req, res) => {
-    const data = await CoursesService.updateSection(String(req.params.id), req.body);
+    const data = await CoursesService.updateSection(
+      String(req.params.id),
+      req.body,
+      requireActor(req),
+    );
     sendResponse(res, { statusCode: httpStatus.OK, message: "Section updated.", data });
   }),
 
   removeSection: catchAsync(async (req, res) => {
-    await CoursesService.removeSection(String(req.params.id));
+    await CoursesService.removeSection(String(req.params.id), requireActor(req));
     sendResponse(res, { statusCode: httpStatus.OK, message: "Section deleted.", data: null });
   }),
 
   reorderSections: catchAsync(async (req, res) => {
-    await CoursesService.reorderSections(String(req.params.courseId), req.body.ids);
+    await CoursesService.reorderSections(
+      String(req.params.courseId),
+      req.body.ids,
+      requireActor(req),
+    );
     sendResponse(res, { statusCode: httpStatus.OK, message: "Sections reordered.", data: null });
   }),
 
   // Lessons
   createLesson: catchAsync(async (req, res) => {
-    const data = await CoursesService.createLesson(String(req.params.sectionId), req.body);
+    const data = await CoursesService.createLesson(
+      String(req.params.sectionId),
+      req.body,
+      requireActor(req),
+    );
     sendResponse(res, { statusCode: httpStatus.CREATED, message: "Lesson created.", data });
   }),
 
   updateLesson: catchAsync(async (req, res) => {
-    const data = await CoursesService.updateLesson(String(req.params.id), req.body);
+    const data = await CoursesService.updateLesson(
+      String(req.params.id),
+      req.body,
+      requireActor(req),
+    );
     sendResponse(res, { statusCode: httpStatus.OK, message: "Lesson updated.", data });
   }),
 
   removeLesson: catchAsync(async (req, res) => {
-    await CoursesService.removeLesson(String(req.params.id));
+    await CoursesService.removeLesson(String(req.params.id), requireActor(req));
     sendResponse(res, { statusCode: httpStatus.OK, message: "Lesson deleted.", data: null });
   }),
 
   reorderLessons: catchAsync(async (req, res) => {
-    await CoursesService.reorderLessons(String(req.params.sectionId), req.body.ids);
+    await CoursesService.reorderLessons(
+      String(req.params.sectionId),
+      req.body.ids,
+      requireActor(req),
+    );
     sendResponse(res, { statusCode: httpStatus.OK, message: "Lessons reordered.", data: null });
   }),
 
   addAttachment: catchAsync(async (req, res) => {
-    const data = await CoursesService.addAttachment(String(req.params.id), req.body);
+    const data = await CoursesService.addAttachment(
+      String(req.params.id),
+      req.body,
+      requireActor(req),
+    );
     sendResponse(res, { statusCode: httpStatus.CREATED, message: "Attachment added.", data });
   }),
 
   removeAttachment: catchAsync(async (req, res) => {
-    await CoursesService.removeAttachment(String(req.params.id), String(req.params.attachmentId));
+    await CoursesService.removeAttachment(
+      String(req.params.id),
+      String(req.params.attachmentId),
+      requireActor(req),
+    );
     sendResponse(res, { statusCode: httpStatus.OK, message: "Attachment removed.", data: null });
   }),
 };
