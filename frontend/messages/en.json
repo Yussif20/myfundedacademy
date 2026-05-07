@@ -7,15 +7,35 @@
   },
   "home": {
     "heroEyebrow": "Trade smarter, not harder",
-    "heroTitle": "Master prop trading with traders who've been there.",
+    "heroTitle": "Master <accent>prop trading</accent> with traders who've been there.",
     "heroSubtitle": "Premium courses, DRM-protected videos, real certification — built by funded traders for funded traders.",
     "heroCta": "Browse courses",
     "heroSecondary": "Watch a free preview",
+    "trustedBy": "Trusted by traders from",
     "stats": {
       "courses": "Courses",
       "instructors": "Instructors",
       "students": "Students",
       "watchTime": "Hours of content"
+    },
+    "howItWorks": {
+      "title": "Three steps to certified",
+      "subtitle": "From your first lesson to a verifiable certificate — fast, focused, and built around how traders actually learn.",
+      "browseTitle": "Browse the library",
+      "browseBody": "Filter by topic, level, or language. Watch free previews on every course.",
+      "learnTitle": "Learn at your pace",
+      "learnBody": "DRM-protected videos, downloadable resources, and quizzes to lock in what you study.",
+      "certifyTitle": "Get certified",
+      "certifyBody": "Pass the quiz, earn a certificate with a public verification URL you can share."
+    },
+    "testimonials": {
+      "title": "Traders who shipped it",
+      "subtitle": "Real students. Real results."
+    },
+    "pricingTeaser": {
+      "title": "One subscription, the whole library",
+      "subtitle": "Or buy any course outright. No hidden fees, cancel anytime.",
+      "cta": "See plans"
     },
     "featuredCourses": "Featured courses",
     "featuredCoursesSub": "Hand-picked by our team. Start with the fundamentals or jump into advanced strategies.",
@@ -522,6 +542,18 @@
   },
   "footer": {
     "tagline": "DRM-protected prop trading courses. Built by traders, for traders.",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "newsletterTitle": "Get our weekly trade brief",
+    "newsletterSub": "One email a week — setups, market color, no fluff.",
+    "newsletterPlaceholder": "you@trader.com",
+    "newsletterCta": "Subscribe",
+    "newsletterSuccess": "You're on the list. Watch your inbox.",
+    "explore": "Explore",
+    "company": "Company",
+    "legal": "Legal",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "refund": "Refund Policy",
+    "contact": "Contact"
   }
 }
