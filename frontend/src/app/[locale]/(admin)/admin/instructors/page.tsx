@@ -58,14 +58,10 @@ export default function AdminInstructorsPage() {
               {data.data.map((p) => (
                 <li key={p.id} className="flex items-center justify-between gap-4 py-3">
                   <div>
-                    <p className="font-medium">
-                      {p.user.fullName}
-                      {p.isFeatured && (
-                        <Badge variant="success" className="ml-2">
-                          ★
-                        </Badge>
-                      )}
-                    </p>
+                    <div className="flex items-center gap-2 font-medium">
+                      <span>{p.user.fullName}</span>
+                      {p.isFeatured && <Badge variant="success">★</Badge>}
+                    </div>
                     <p className="text-xs text-[var(--muted-foreground)]">{p.user.email}</p>
                     {p.headline && (
                       <p className="mt-1 text-sm text-[var(--muted-foreground)]">{p.headline}</p>
