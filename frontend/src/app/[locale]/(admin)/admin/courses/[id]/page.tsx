@@ -29,6 +29,7 @@ import {
 } from "@/redux/api/coursesApi";
 import { useListInstructorsQuery } from "@/redux/api/instructorsApi";
 import { useThumbnailPresignMutation, useVideoCredentialsMutation } from "@/redux/api/uploadsApi";
+import { QuizEditor } from "@/components/admin/quiz-editor";
 import { ChevronDown, ChevronRight, Loader2, Plus, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -402,6 +403,8 @@ export default function EditCoursePage() {
       </Card>
 
       <CurriculumEditor courseId={id} sections={course.sections} onChange={refetch} />
+
+      <QuizEditor courseId={id} />
     </div>
   );
 }

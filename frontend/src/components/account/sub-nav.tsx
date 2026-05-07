@@ -6,8 +6,11 @@ import { cn } from "@/lib/utils";
 const items = [
   { href: "/account", label: "Profile" },
   { href: "/account/courses", label: "My courses" },
+  { href: "/account/certificates", label: "Certificates" },
   { href: "/account/billing", label: "Billing" },
 ];
+
+type AccountPath = "/account" | "/account/courses" | "/account/certificates" | "/account/billing";
 
 export function AccountSubNav() {
   const pathname = usePathname();
@@ -18,7 +21,7 @@ export function AccountSubNav() {
         return (
           <Link
             key={it.href}
-            href={it.href as "/account" | "/account/courses" | "/account/billing"}
+            href={it.href as AccountPath}
             className={cn(
               "rounded-md px-3 py-1.5 text-sm font-medium transition-colors whitespace-nowrap",
               active

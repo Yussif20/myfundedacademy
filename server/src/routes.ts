@@ -8,6 +8,7 @@ import { UploadsRoutes } from "./app/uploads/uploads.route";
 import { OrdersRoutes } from "./app/orders/orders.route";
 import { SubscriptionsRoutes } from "./app/subscriptions/subscriptions.route";
 import { EnrollmentsRoutes } from "./app/enrollments/enrollments.route";
+import { QuizzesRoutes } from "./app/quizzes/quizzes.route";
 
 const router: Router = express.Router();
 
@@ -21,6 +22,7 @@ const moduleRoutes: ModuleRoute[] = [
   { path: "/orders", route: OrdersRoutes },
   { path: "/subscriptions", route: SubscriptionsRoutes },
   { path: "/enrollments", route: EnrollmentsRoutes },
+  { path: "/quizzes", route: QuizzesRoutes },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

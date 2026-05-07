@@ -67,6 +67,7 @@ export const baseApi = createApi({
     "Discussion",
     "Comment",
     "Certificate",
+    "Certificates",
     "Category",
     "InstructorProfile",
     "InstructorApplication",

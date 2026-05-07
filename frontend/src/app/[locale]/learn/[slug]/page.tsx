@@ -163,6 +163,9 @@ function ClassroomShell() {
           currentLessonId={currentLesson?.id || null}
           progressByLesson={progressByLesson}
           onPick={goToLesson}
+          totalLessons={totalCount}
+          completedCount={completedCount}
+          slug={slug}
         />
 
         <main className="min-w-0 space-y-6">
@@ -192,14 +195,22 @@ function CurriculumSidebar({
   currentLessonId,
   progressByLesson,
   onPick,
+  totalLessons,
+  completedCount,
+  slug,
 }: {
   course: CourseDetail;
   currentLessonId: string | null;
   progressByLesson: Map<string, { completedAt: string | null }>;
   onPick: (lessonId: string) => void;
+  totalLessons: number;
+  completedCount: number;
+  slug: string;
 }) {
   const locale = useLocale();
   const isAr = locale === "ar";
+
+  const allLessonsDone = totalLessons > 0 && completedCount >= totalLessons;
 
   return (
     <aside className="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
@@ -214,6 +225,25 @@ function CurriculumSidebar({
             onPick={onPick}
           />
         ))}
+
+        {/* Final-quiz / certificate CTAs surface once everything is done. */}
+        {allLessonsDone && (
+          <div className="space-y-2 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/5 p-3">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--primary)]">
+              All lessons complete
+            </p>
+            <div className="flex flex-col gap-2">
+              <Button asChild size="sm" className="gap-2">
+                <Link href={`/learn/${slug}/quiz` as `/learn/${string}/quiz`}>Take final quiz</Link>
+              </Button>
+              <Button asChild size="sm" variant="outline" className="gap-2">
+                <Link href={`/learn/${slug}/certificate` as `/learn/${string}/certificate`}>
+                  Get certificate
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </aside>
   );

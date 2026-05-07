@@ -32,6 +32,8 @@ model User {
   subscription  Subscription?
   enrollments   Enrollment[]
   progress      Progress[]
+  quizAttempts  QuizAttempt[]
+  certificates  Certificate[]
 
   @@map("users")
 }

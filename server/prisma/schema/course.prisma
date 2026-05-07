@@ -32,8 +32,10 @@ model Course {
   instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Restrict)
   sections   Section[]
 
-  enrollments Enrollment[]
-  orders      Order[]
+  enrollments  Enrollment[]
+  orders       Order[]
+  quiz         Quiz?
+  certificates Certificate[]
 
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
