@@ -18,6 +18,10 @@ const getClient = (): S3Client => {
       secretAccessKey: env.S3_SECRET_KEY,
     },
     forcePathStyle: true,
+    // R2 / non-AWS S3 services reject the auto-added x-amz-checksum-crc32
+    // params that AWS SDK v3 enables by default. WHEN_REQUIRED skips them.
+    requestChecksumCalculation: "WHEN_REQUIRED",
+    responseChecksumValidation: "WHEN_REQUIRED",
   });
   return cachedClient;
 };
