@@ -26,6 +26,13 @@ export type VideoCredentials = {
 
 export const uploadsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    avatarPresign: builder.mutation<
+      Envelope<PresignResult>,
+      { fileName: string; contentType: string; contentLength: number }
+    >({
+      query: (body) => ({ url: "/uploads/avatar-presign", method: "POST", body }),
+    }),
+
     thumbnailPresign: builder.mutation<
       Envelope<PresignResult>,
       { fileName: string; contentType: string; contentLength: number }
@@ -47,6 +54,7 @@ export const uploadsApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useAvatarPresignMutation,
   useThumbnailPresignMutation,
   useAttachmentPresignMutation,
   useVideoCredentialsMutation,

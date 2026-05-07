@@ -1,5 +1,6 @@
 "use client";
 
+import { AvatarUploader } from "@/components/public/avatar-uploader";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -104,6 +105,21 @@ export default function AccountPage() {
           <CardDescription>{t("profileDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="mb-6">
+            <AvatarUploader
+              value={me?.profile || ""}
+              initial={(me?.fullName || me?.email || "?").charAt(0)}
+              onChange={async (url) => {
+                try {
+                  await updateMe({ profile: url }).unwrap();
+                  refetch();
+                } catch (err) {
+                  setProfileErr(extractApiError(err));
+                }
+              }}
+              disabled={saving}
+            />
+          </div>
           <form onSubmit={onSaveProfile} className="space-y-4">
             {profileErr && (
               <Alert variant="destructive">

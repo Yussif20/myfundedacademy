@@ -134,6 +134,17 @@
     "actions": "Actions",
     "confirmDelete": "Are you sure you want to delete this? This action cannot be undone."
   },
+  "avatarUploader": {
+    "upload": "Upload photo",
+    "change": "Change photo",
+    "remove": "Remove",
+    "removeConfirm": "Remove your profile photo?",
+    "uploaded": "Profile photo updated.",
+    "removed": "Profile photo removed.",
+    "hint": "PNG, JPG, or WebP. 5 MB max.",
+    "errImage": "File must be an image.",
+    "errSize": "Image must be 5 MB or smaller."
+  },
   "instructor": {
     "nav": {
       "dashboard": "Dashboard",
@@ -205,7 +216,8 @@
       "dashboard": "Dashboard",
       "categories": "Categories",
       "instructors": "Instructors",
-      "courses": "Courses"
+      "courses": "Courses",
+      "profile": "Profile"
     },
     "dashboard": {
       "title": "Admin dashboard",

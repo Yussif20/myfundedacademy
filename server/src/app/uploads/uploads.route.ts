@@ -6,9 +6,15 @@ import { UploadsValidation } from "./uploads.validation";
 
 const router = express.Router();
 
-// Open to ADMIN + INSTRUCTOR. Both can presign uploads; backend operations
-// that consume the presigned URL still gate on course ownership in the
-// courses service.
+// Avatars: any authenticated user can upload their own profile picture.
+router.post(
+  "/avatar-presign",
+  requireAuth,
+  validateRequest(UploadsValidation.avatarPresign),
+  UploadsController.avatarPresign,
+);
+
+// Course thumbnails / videos / attachments: ADMIN + INSTRUCTOR only.
 const author = [requireAuth, requireRole("ADMIN", "INSTRUCTOR")];
 
 router.post(

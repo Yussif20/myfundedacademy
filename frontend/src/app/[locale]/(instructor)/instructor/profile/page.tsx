@@ -1,5 +1,6 @@
 "use client";
 
+import { AvatarUploader } from "@/components/public/avatar-uploader";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -109,6 +110,21 @@ export default function InstructorProfilePage() {
           <CardTitle className="text-lg">{t("publicProfile")}</CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="mb-6">
+            <AvatarUploader
+              value={data?.data?.user.profile || ""}
+              initial={(form.fullName || data?.data?.user.email || "?").charAt(0)}
+              onChange={async (url) => {
+                try {
+                  await updateMe({ profile: url }).unwrap();
+                  refetch();
+                } catch (err) {
+                  setError(extractApiError(err));
+                }
+              }}
+              disabled={saving}
+            />
+          </div>
           <form onSubmit={onSubmit} className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2 md:col-span-2">
               <Label htmlFor="fullName">{t("fullName")}</Label>
