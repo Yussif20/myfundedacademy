@@ -75,7 +75,15 @@ export const getUploadCredentials = async (title: string): Promise<VdoUploadCred
 export type PlaybackOtpInput = {
   videoId: string;
   ttlSeconds?: number;
-  annotation?: { type: "rtext"; text: string; alpha?: string; color?: string; size?: string }[];
+  /** VdoCipher dynamic watermark spec. `interval` (ms) is required when type is rtext. */
+  annotation?: {
+    type: "rtext";
+    text: string;
+    alpha?: string;
+    color?: string;
+    size?: string;
+    interval?: string;
+  }[];
 };
 
 export const getPlaybackOtp = async (input: PlaybackOtpInput) => {

@@ -182,6 +182,7 @@ export const CoursesService = {
           alpha: "0.6",
           color: "0xFFFFFF",
           size: "12",
+          interval: "5000", // ms between watermark position randomisation
         },
       ],
     });
