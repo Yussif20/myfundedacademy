@@ -77,6 +77,9 @@ const changePassword = async (
 // ---- Admin ----
 
 const listUsers = async (query: ListUsersQuery) => {
+  const page = Math.max(1, Number(query.page) || 1);
+  const limit = Math.min(100, Math.max(1, Number(query.limit) || 20));
+
   const where: Prisma.UserWhereInput = {
     isDeleted: false,
     ...(query.role ? { role: query.role } : {}),
@@ -95,8 +98,8 @@ const listUsers = async (query: ListUsersQuery) => {
     prisma.user.findMany({
       where,
       select: PUBLIC_FIELDS,
-      skip: (query.page - 1) * query.limit,
-      take: query.limit,
+      skip: (page - 1) * limit,
+      take: limit,
       orderBy: { createdAt: "desc" },
     }),
   ]);
@@ -104,10 +107,10 @@ const listUsers = async (query: ListUsersQuery) => {
   return {
     data,
     meta: {
-      page: query.page,
-      limit: query.limit,
+      page,
+      limit,
       total,
-      totalPage: Math.max(1, Math.ceil(total / query.limit)),
+      totalPage: Math.max(1, Math.ceil(total / limit)),
     },
   };
 };

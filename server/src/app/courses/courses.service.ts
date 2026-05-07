@@ -52,20 +52,28 @@ const recomputeTotals = async (courseId: string) => {
 export const CoursesService = {
   // ---------- Catalog ----------
   async list(query: {
-    page: number;
-    limit: number;
+    page?: number | string;
+    limit?: number | string;
     categoryId?: string;
     instructorId?: string;
     status?: "DRAFT" | "PENDING" | "PUBLISHED" | "REJECTED";
-    featured?: boolean;
+    featured?: boolean | string;
     search?: string;
   }) {
+    // req.query values may arrive as strings; coerce defensively.
+    const page = Math.max(1, Number(query.page) || 1);
+    const limit = Math.min(100, Math.max(1, Number(query.limit) || 12));
+    const featured =
+      query.featured === undefined
+        ? undefined
+        : query.featured === true || query.featured === "true";
+
     const where: Prisma.CourseWhereInput = {
       isDeleted: false,
       ...(query.status ? { status: query.status } : {}),
       ...(query.categoryId ? { categoryId: query.categoryId } : {}),
       ...(query.instructorId ? { instructorId: query.instructorId } : {}),
-      ...(query.featured !== undefined ? { isFeatured: query.featured } : {}),
+      ...(featured !== undefined ? { isFeatured: featured } : {}),
       ...(query.search
         ? {
             OR: [
@@ -81,8 +89,8 @@ export const CoursesService = {
       prisma.course.findMany({
         where,
         include: COURSE_LIST_INCLUDE,
-        skip: (query.page - 1) * query.limit,
-        take: query.limit,
+        skip: (page - 1) * limit,
+        take: limit,
         orderBy: [{ isFeatured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
       }),
     ]);
@@ -90,10 +98,10 @@ export const CoursesService = {
     return {
       data,
       meta: {
-        page: query.page,
-        limit: query.limit,
+        page,
+        limit,
         total,
-        totalPage: Math.max(1, Math.ceil(total / query.limit)),
+        totalPage: Math.max(1, Math.ceil(total / limit)),
       },
     };
   },
