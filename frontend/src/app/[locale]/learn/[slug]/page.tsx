@@ -31,7 +31,7 @@ import {
   Lock,
   PlayCircle,
 } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -51,6 +51,7 @@ function ClassroomShell() {
   const router = useRouter();
   const locale = useLocale();
   const isAr = locale === "ar";
+  const t = useTranslations("classroom");
 
   const {
     data: courseRes,
@@ -106,9 +107,9 @@ function ClassroomShell() {
       <div className="grid min-h-screen place-items-center bg-[var(--background)] text-[var(--foreground)]">
         <div className="text-center">
           <p className="font-display text-3xl font-bold">404</p>
-          <p className="mt-2 text-[var(--muted-foreground)]">Course not found.</p>
+          <p className="mt-2 text-[var(--muted-foreground)]">{t("courseNotFound")}</p>
           <Button asChild className="mt-6">
-            <Link href="/courses">Back to courses</Link>
+            <Link href="/courses">{t("backToCourses")}</Link>
           </Button>
         </div>
       </div>
@@ -181,7 +182,7 @@ function ClassroomShell() {
             />
           ) : (
             <div className="rounded-xl border border-dashed border-[var(--border)] py-16 text-center text-sm text-[var(--muted-foreground)]">
-              This course has no lessons yet.
+              {t("noLessonsYet")}
             </div>
           )}
         </main>
@@ -209,6 +210,7 @@ function CurriculumSidebar({
 }) {
   const locale = useLocale();
   const isAr = locale === "ar";
+  const t = useTranslations("classroom");
 
   const allLessonsDone = totalLessons > 0 && completedCount >= totalLessons;
 
@@ -230,15 +232,17 @@ function CurriculumSidebar({
         {allLessonsDone && (
           <div className="space-y-2 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/5 p-3">
             <p className="text-xs font-semibold uppercase tracking-wider text-[var(--primary)]">
-              All lessons complete
+              {t("allLessonsComplete")}
             </p>
             <div className="flex flex-col gap-2">
               <Button asChild size="sm" className="gap-2">
-                <Link href={`/learn/${slug}/quiz` as `/learn/${string}/quiz`}>Take final quiz</Link>
+                <Link href={`/learn/${slug}/quiz` as `/learn/${string}/quiz`}>
+                  {t("takeFinalQuiz")}
+                </Link>
               </Button>
               <Button asChild size="sm" variant="outline" className="gap-2">
                 <Link href={`/learn/${slug}/certificate` as `/learn/${string}/certificate`}>
-                  Get certificate
+                  {t("getCertificate")}
                 </Link>
               </Button>
             </div>
@@ -348,6 +352,7 @@ function LessonView({
 }) {
   const locale = useLocale();
   const isAr = locale === "ar";
+  const t = useTranslations("classroom");
   const user = useAppSelector((s) => s.auth.user);
 
   const [getOtp, { isLoading: otpLoading }] = useGetPlaybackOtpMutation();
@@ -376,7 +381,7 @@ function LessonView({
         setPlaybackInfo(res.data.playbackInfo);
       } catch (err) {
         if (!active) return;
-        setError(extractApiError(err, "Couldn't load this lesson."));
+        setError(extractApiError(err, t("couldntLoadLesson")));
       }
     })();
     return () => {
@@ -417,7 +422,7 @@ function LessonView({
         <div className="grid aspect-video w-full place-items-center rounded-xl border border-dashed border-[var(--border)] bg-[var(--card)] text-sm text-[var(--muted-foreground)]">
           <div className="text-center">
             <Lock className="mx-auto size-8 text-[var(--muted-foreground)]" />
-            <p className="mt-2">No video uploaded for this lesson yet.</p>
+            <p className="mt-2">{t("noVideoUploaded")}</p>
           </div>
         </div>
       ) : (
@@ -434,7 +439,7 @@ function LessonView({
       <div className="space-y-3">
         <div className="flex items-center gap-3">
           <h1 className="font-display text-2xl font-bold tracking-tight">{title}</h1>
-          {lesson.isFreePreview && <Badge variant="success">Free preview</Badge>}
+          {lesson.isFreePreview && <Badge variant="success">{t("freePreview")}</Badge>}
         </div>
 
         {description && (
@@ -457,7 +462,7 @@ function LessonView({
           ) : (
             <PlayCircle className="size-4" />
           )}
-          {completed ? "Marked complete" : "Mark complete"}
+          {completed ? t("markedComplete") : t("markComplete")}
         </Button>
 
         <div className="flex items-center gap-2">
@@ -468,7 +473,7 @@ function LessonView({
             className="gap-2"
           >
             <ChevronLeft className="size-4 rtl:rotate-180" />
-            Previous
+            {t("previous")}
           </Button>
           <Button
             variant="outline"
@@ -476,7 +481,7 @@ function LessonView({
             onClick={() => nextLesson && onGoTo(nextLesson.id)}
             className="gap-2"
           >
-            Next
+            {t("next")}
             <ChevronRight className="size-4 rtl:rotate-180" />
           </Button>
         </div>

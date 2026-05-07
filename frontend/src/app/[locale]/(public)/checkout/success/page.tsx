@@ -9,6 +9,7 @@ import {
   useGetMySubscriptionQuery,
 } from "@/redux/api/paymentsApi";
 import { CheckCircle2, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -58,6 +59,7 @@ export default function CheckoutSuccessPage() {
   }, [pollAttempt, orderQuery, subQuery, enrollmentsQuery]);
 
   const stillWaiting = pollAttempt < 12 && !done;
+  const t = useTranslations("checkout");
 
   return (
     <div className="mx-auto flex min-h-[60vh] max-w-xl items-center justify-center px-6 py-16">
@@ -71,45 +73,35 @@ export default function CheckoutSuccessPage() {
             )}
           </div>
           <CardTitle className="mt-3">
-            {stillWaiting
-              ? "Confirming your payment…"
-              : isSub
-                ? "Subscription activated"
-                : "Purchase complete"}
+            {stillWaiting ? t("confirming") : isSub ? t("subActivated") : t("purchaseComplete")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {stillWaiting ? (
-            <p className="text-sm text-[var(--muted-foreground)]">
-              Stripe is still finalizing the payment. This usually takes a few seconds.
-            </p>
+            <p className="text-sm text-[var(--muted-foreground)]">{t("confirmingBlurb")}</p>
           ) : isSub ? (
             <>
-              <p className="text-sm text-[var(--muted-foreground)]">
-                Your subscription is now active. You can start watching paid courses immediately.
-              </p>
+              <p className="text-sm text-[var(--muted-foreground)]">{t("subActivatedBlurb")}</p>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button asChild className="flex-1">
-                  <Link href="/courses">Browse courses</Link>
+                  <Link href="/courses">{t("browseCourses")}</Link>
                 </Button>
                 <Button asChild variant="outline" className="flex-1">
-                  <Link href="/account/billing">Manage subscription</Link>
+                  <Link href="/account/billing">{t("manageSubscription")}</Link>
                 </Button>
               </div>
             </>
           ) : (
             <>
-              <p className="text-sm text-[var(--muted-foreground)]">
-                Course unlocked. You have lifetime access.
-              </p>
+              <p className="text-sm text-[var(--muted-foreground)]">{t("purchaseCompleteBlurb")}</p>
               <div className="flex flex-col gap-2 sm:flex-row">
                 {courseSlug && (
                   <Button asChild className="flex-1">
-                    <Link href={{ pathname: `/courses/${courseSlug}` }}>Start learning</Link>
+                    <Link href={{ pathname: `/courses/${courseSlug}` }}>{t("startLearning")}</Link>
                   </Button>
                 )}
                 <Button asChild variant="outline" className="flex-1">
-                  <Link href="/account/courses">My courses</Link>
+                  <Link href="/account/courses">{t("myCourses")}</Link>
                 </Button>
               </div>
             </>

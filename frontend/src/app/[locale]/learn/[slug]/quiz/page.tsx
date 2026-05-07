@@ -16,7 +16,7 @@ import {
   type QuizAttemptResult,
 } from "@/redux/api/quizzesApi";
 import { CheckCircle2, ChevronLeft, Loader2, XCircle } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -33,6 +33,7 @@ function QuizContent() {
   const slug = String(params?.slug || "");
   const locale = useLocale();
   const isAr = locale === "ar";
+  const t = useTranslations("quizPage");
 
   const { data, isLoading, isError, error } = useGetCourseQuizForStudentQuery(slug, {
     skip: !slug,
@@ -49,7 +50,7 @@ function QuizContent() {
     if (!quiz) return;
     setSubmitError(null);
     if (Object.keys(answers).length < quiz.questions.length) {
-      setSubmitError("Answer every question before submitting.");
+      setSubmitError(t("answerEvery"));
       return;
     }
     try {
@@ -75,16 +76,14 @@ function QuizContent() {
       <Shell>
         <Card className="mx-auto max-w-xl">
           <CardHeader>
-            <CardTitle>{status === 404 ? "No quiz yet" : "Quiz unavailable"}</CardTitle>
+            <CardTitle>{status === 404 ? t("noQuizYet") : t("quizUnavailable")}</CardTitle>
             <CardDescription>
-              {status === 404
-                ? "This course doesn't have a quiz."
-                : "Couldn't load the quiz. Try again in a moment."}
+              {status === 404 ? t("noQuizDescription") : t("quizUnavailableDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild>
-              <Link href={`/learn/${slug}` as `/learn/${string}`}>Back to course</Link>
+              <Link href={`/learn/${slug}` as `/learn/${string}`}>{t("backToCourse")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -92,7 +91,7 @@ function QuizContent() {
     );
   }
 
-  const title = (isAr && quiz.titleArabic) || quiz.title || "Final assessment";
+  const title = (isAr && quiz.titleArabic) || quiz.title || t("title");
 
   return (
     <Shell title={title}>
@@ -103,8 +102,8 @@ function QuizContent() {
           <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription>
-              {quiz.questions.length} question{quiz.questions.length === 1 ? "" : "s"} · passing
-              score {quiz.passingScore}%
+              {t("questionCount", { count: quiz.questions.length })} ·{" "}
+              {t("passingScore", { score: quiz.passingScore })}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -165,7 +164,7 @@ function QuizContent() {
               <Button asChild variant="ghost" className="gap-2">
                 <Link href={`/learn/${slug}` as `/learn/${string}`}>
                   <ChevronLeft className="size-4 rtl:rotate-180" />
-                  Back to course
+                  {t("backToCourse")}
                 </Link>
               </Button>
               <Button size="lg" onClick={onSubmit} disabled={submitting} className="gap-2">
@@ -174,7 +173,7 @@ function QuizContent() {
                 ) : (
                   <CheckCircle2 className="size-4" />
                 )}
-                Submit quiz
+                {t("submit")}
               </Button>
             </div>
           </CardContent>
@@ -193,6 +192,7 @@ function ResultCard({
   slug: string;
   onRetake: () => void;
 }) {
+  const t = useTranslations("quizPage");
   return (
     <Card className={result.passed ? "border-[var(--primary)]" : ""}>
       <CardHeader className="text-center">
@@ -206,27 +206,27 @@ function ResultCard({
         >
           {result.passed ? <CheckCircle2 className="size-7" /> : <XCircle className="size-7" />}
         </div>
-        <CardTitle className="mt-3">{result.passed ? "Passed" : "Not yet"}</CardTitle>
+        <CardTitle className="mt-3">{result.passed ? t("passed") : t("notYet")}</CardTitle>
         <CardDescription>
-          You scored {result.score}% — passing score is {result.passingScore}%.
+          {t("scoreLine", { score: result.score, passing: result.passingScore })}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-center text-sm text-[var(--muted-foreground)]">
-          {result.correct} correct out of {result.total}.
+          {t("correctOf", { correct: result.correct, total: result.total })}
         </p>
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
           {result.passed ? (
             <Button asChild>
               <Link href={`/learn/${slug}/certificate` as `/learn/${string}/certificate`}>
-                Get certificate
+                {t("getCertificate")}
               </Link>
             </Button>
           ) : (
-            <Button onClick={onRetake}>Retake quiz</Button>
+            <Button onClick={onRetake}>{t("retake")}</Button>
           )}
           <Button asChild variant="outline">
-            <Link href={`/learn/${slug}` as `/learn/${string}`}>Back to course</Link>
+            <Link href={`/learn/${slug}` as `/learn/${string}`}>{t("backToCourse")}</Link>
           </Button>
         </div>
       </CardContent>

@@ -13,66 +13,30 @@ import {
 } from "@/redux/api/paymentsApi";
 import { useAppSelector } from "@/redux/store";
 import { Check, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+
+type PlanKey = "free" | "starter" | "pro" | "proAnnual";
 
 type Plan = {
   id: SubscriptionPlan | "FREE";
-  name: string;
+  key: PlanKey;
   price: string;
-  cadence: string;
-  description: string;
-  features: string[];
-  cta: string;
   highlighted?: boolean;
+  features: Array<"f1" | "f2" | "f3" | "f4">;
 };
 
 const plans: Plan[] = [
-  {
-    id: "FREE",
-    name: "Free",
-    price: "$0",
-    cadence: "forever",
-    description: "Browse the catalog and watch every free preview lesson.",
-    features: ["Browse all courses", "Watch free preview lessons", "1 quiz attempt per course"],
-    cta: "Sign up",
-  },
-  {
-    id: "STARTER_MONTHLY",
-    name: "Starter",
-    price: "$29",
-    cadence: "per month",
-    description: "Curated catalog of starter courses for the price of a takeaway.",
-    features: [
-      "Selected catalog (Starter tier)",
-      "Watch on any device, DRM-protected",
-      "Cancel anytime",
-    ],
-    cta: "Subscribe to Starter",
-  },
+  { id: "FREE", key: "free", price: "$0", features: ["f1", "f2", "f3"] },
+  { id: "STARTER_MONTHLY", key: "starter", price: "$29", features: ["f1", "f2", "f3"] },
   {
     id: "PRO_MONTHLY",
-    name: "Pro",
+    key: "pro",
     price: "$79",
-    cadence: "per month",
-    description: "Everything we publish, certificates, downloadable resources, priority Q&A.",
-    features: [
-      "Full catalog (Pro tier)",
-      "Verified certificates",
-      "Downloadable resources",
-      "Priority instructor Q&A",
-    ],
-    cta: "Subscribe to Pro",
     highlighted: true,
+    features: ["f1", "f2", "f3", "f4"],
   },
-  {
-    id: "PRO_ANNUAL",
-    name: "Pro · Annual",
-    price: "$790",
-    cadence: "per year",
-    description: "Two months free vs monthly Pro. Best for the serious trader.",
-    features: ["Everything in Pro", "Save ~17% vs monthly", "Single annual charge"],
-    cta: "Subscribe annually",
-  },
+  { id: "PRO_ANNUAL", key: "proAnnual", price: "$790", features: ["f1", "f2", "f3"] },
 ];
 
 export default function PricingPage() {
@@ -83,6 +47,7 @@ export default function PricingPage() {
   const [checkout, { isLoading }] = useCheckoutSubscriptionMutation();
   const [pendingPlan, setPendingPlan] = useState<SubscriptionPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("pricing");
 
   const onSubscribe = async (plan: SubscriptionPlan) => {
     setError(null);
@@ -105,12 +70,8 @@ export default function PricingPage() {
   return (
     <div className="mx-auto max-w-7xl px-6 py-16">
       <div className="mx-auto max-w-3xl text-center">
-        <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-          Pick the plan that fits your journey
-        </h1>
-        <p className="mt-4 text-[var(--muted-foreground)]">
-          Subscribe for ongoing access, or buy individual courses outright. Cancel anytime.
-        </p>
+        <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">{t("title")}</h1>
+        <p className="mt-4 text-[var(--muted-foreground)]">{t("subtitle")}</p>
       </div>
 
       {error && (
@@ -139,29 +100,31 @@ export default function PricingPage() {
             >
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">{plan.name}</CardTitle>
-                  {plan.highlighted && <Badge>Most popular</Badge>}
-                  {isCurrent && <Badge variant="success">Current</Badge>}
+                  <CardTitle className="text-lg">{t(`${plan.key}.name`)}</CardTitle>
+                  {plan.highlighted && <Badge>{t("mostPopular")}</Badge>}
+                  {isCurrent && <Badge variant="success">{t("current")}</Badge>}
                 </div>
-                <CardDescription>{plan.description}</CardDescription>
+                <CardDescription>{t(`${plan.key}.description`)}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
                   <p className="font-display text-4xl font-bold">{plan.price}</p>
-                  <p className="text-xs text-[var(--muted-foreground)]">{plan.cadence}</p>
+                  <p className="text-xs text-[var(--muted-foreground)]">
+                    {t(`${plan.key}.cadence`)}
+                  </p>
                 </div>
                 <ul className="space-y-2 text-sm">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-2">
                       <Check className="mt-0.5 size-4 shrink-0 text-[var(--primary)]" />
-                      <span>{f}</span>
+                      <span>{t(`${plan.key}.${f}`)}</span>
                     </li>
                   ))}
                 </ul>
                 {plan.id === "FREE" ? (
                   user ? (
                     <Button className="w-full" variant="outline" disabled>
-                      Free tier active
+                      {t("freeTierActive")}
                     </Button>
                   ) : (
                     <Button
@@ -169,7 +132,7 @@ export default function PricingPage() {
                       className="w-full"
                       variant={plan.highlighted ? "default" : "outline"}
                     >
-                      <Link href="/signup">{plan.cta}</Link>
+                      <Link href="/signup">{t(`${plan.key}.cta`)}</Link>
                     </Button>
                   )
                 ) : (
@@ -182,12 +145,12 @@ export default function PricingPage() {
                     {isPending ? (
                       <span className="inline-flex items-center gap-2">
                         <Loader2 className="size-4 animate-spin" />
-                        Redirecting…
+                        {t("redirecting")}
                       </span>
                     ) : isCurrent ? (
-                      "Your current plan"
+                      t("yourCurrentPlan")
                     ) : (
-                      plan.cta
+                      t(`${plan.key}.cta`)
                     )}
                   </Button>
                 )}
@@ -198,9 +161,9 @@ export default function PricingPage() {
       </div>
 
       <p className="mt-10 text-center text-sm text-[var(--muted-foreground)]">
-        Want lifetime access to a single course instead?{" "}
+        {t("oneTimeAlt")}{" "}
         <Link href="/courses" className="text-[var(--primary)] hover:underline">
-          Browse one-time-purchase courses
+          {t("oneTimeAltLink")}
         </Link>
         .
       </p>

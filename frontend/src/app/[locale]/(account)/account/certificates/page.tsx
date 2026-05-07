@@ -5,18 +5,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Link } from "@/i18n/navigation";
 import { useListMyCertificatesQuery } from "@/redux/api/quizzesApi";
 import { Award, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function MyCertificatesPage() {
   const { data, isLoading } = useListMyCertificatesQuery();
   const certs = data?.data || [];
+  const t = useTranslations("accountCertificates");
 
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">My certificates</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">
-          Every course you've completed and passed.
-        </p>
+        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
       </header>
 
       {isLoading ? (
@@ -27,11 +27,9 @@ export default function MyCertificatesPage() {
         <Card>
           <CardContent className="py-16 text-center">
             <Award className="mx-auto size-10 text-[var(--muted-foreground)]" />
-            <p className="mt-3 text-sm text-[var(--muted-foreground)]">
-              No certificates yet. Complete a course to earn your first one.
-            </p>
+            <p className="mt-3 text-sm text-[var(--muted-foreground)]">{t("none")}</p>
             <Button asChild className="mt-4">
-              <Link href="/account/courses">My courses</Link>
+              <Link href="/account/courses">{t("myCourses")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -48,8 +46,10 @@ export default function MyCertificatesPage() {
                     <div className="min-w-0 flex-1">
                       <CardTitle className="line-clamp-1 text-base">{cert.course?.title}</CardTitle>
                       <CardDescription className="text-xs">
-                        Issued {new Date(cert.issuedAt).toLocaleDateString()} · code{" "}
-                        <span className="font-mono">{cert.code}</span>
+                        {t("issuedAt", {
+                          date: new Date(cert.issuedAt).toLocaleDateString(),
+                          code: cert.code,
+                        })}
                       </CardDescription>
                     </div>
                   </div>
@@ -61,7 +61,7 @@ export default function MyCertificatesPage() {
                         `/learn/${cert.course?.slug}/certificate` as `/learn/${string}/certificate`
                       }
                     >
-                      View certificate
+                      {t("viewCertificate")}
                     </Link>
                   </Button>
                 </CardContent>

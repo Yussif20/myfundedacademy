@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { useVerifyCertificateQuery } from "@/redux/api/quizzesApi";
 import { CheckCircle2, Loader2, XCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 
 export default function VerifyCertificatePage() {
   const params = useParams();
   const code = String(params?.code || "");
+  const t = useTranslations("verifyPage");
   const { data, isLoading, isError } = useVerifyCertificateQuery(code, { skip: !code });
 
   if (isLoading) {
@@ -36,34 +38,30 @@ export default function VerifyCertificatePage() {
           >
             {valid ? <CheckCircle2 className="size-7" /> : <XCircle className="size-7" />}
           </div>
-          <CardTitle className="mt-3">
-            {valid ? "Certificate verified" : "Certificate not found"}
-          </CardTitle>
+          <CardTitle className="mt-3">{valid ? t("verified") : t("notFound")}</CardTitle>
           <CardDescription>
-            Code: <span className="font-mono">{code}</span>
+            {t("code")}: <span className="font-mono">{code}</span>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 text-center">
           {valid && cert ? (
             <>
-              <p className="text-[var(--muted-foreground)]">Issued to</p>
+              <p className="text-[var(--muted-foreground)]">{t("issuedTo")}</p>
               <p className="font-display text-2xl font-semibold">{cert.user?.fullName}</p>
-              <p className="text-[var(--muted-foreground)]">For completing</p>
+              <p className="text-[var(--muted-foreground)]">{t("forCompleting")}</p>
               <p className="font-display text-xl font-semibold">{cert.course?.title}</p>
               <p className="text-sm text-[var(--muted-foreground)]">
-                Issued on {new Date(cert.issuedAt).toLocaleDateString()}
+                {t("issuedOnDate", { date: new Date(cert.issuedAt).toLocaleDateString() })}
               </p>
               <Button asChild className="mt-4">
-                <Link href="/courses">Browse our courses</Link>
+                <Link href="/courses">{t("browseCourses")}</Link>
               </Button>
             </>
           ) : (
             <>
-              <p className="text-[var(--muted-foreground)]">
-                We couldn't find a certificate with that code. It may have been mistyped or revoked.
-              </p>
+              <p className="text-[var(--muted-foreground)]">{t("notFoundBlurb")}</p>
               <Button asChild className="mt-4">
-                <Link href="/">Back to home</Link>
+                <Link href="/">{t("backToHome")}</Link>
               </Button>
             </>
           )}

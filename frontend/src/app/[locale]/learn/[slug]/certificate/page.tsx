@@ -14,6 +14,7 @@ import {
   useIssueCertificateMutation,
 } from "@/redux/api/quizzesApi";
 import { Award, Loader2, Printer } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -28,6 +29,7 @@ export default function CertificatePage() {
 function CertificateContent() {
   const params = useParams();
   const slug = String(params?.slug || "");
+  const t = useTranslations("certPage");
 
   const { data, isLoading, refetch } = useGetMyCertificateForCourseQuery(slug, { skip: !slug });
   const [issue, { isLoading: issuing }] = useIssueCertificateMutation();
@@ -62,11 +64,8 @@ function CertificateContent() {
             <div className="mx-auto grid size-14 place-items-center rounded-full bg-[var(--primary)]/10 text-[var(--primary)]">
               <Award className="size-7" />
             </div>
-            <CardTitle className="mt-3">Earn your certificate</CardTitle>
-            <CardDescription>
-              Finish every lesson and pass the final quiz (if there is one) to unlock your
-              certificate.
-            </CardDescription>
+            <CardTitle className="mt-3">{t("earnTitle")}</CardTitle>
+            <CardDescription>{t("earnDescription")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
@@ -81,10 +80,10 @@ function CertificateContent() {
                 ) : (
                   <Award className="size-4" />
                 )}
-                Get my certificate
+                {t("getMyCertificate")}
               </Button>
               <Button asChild variant="outline">
-                <Link href={`/learn/${slug}` as `/learn/${string}`}>Back to course</Link>
+                <Link href={`/learn/${slug}` as `/learn/${string}`}>{t("backToCourse")}</Link>
               </Button>
             </div>
           </CardContent>
@@ -115,6 +114,7 @@ function CertificateView({
     user?: { fullName?: string; email?: string };
   };
 }) {
+  const t = useTranslations("certPage");
   const courseTitle = cert.course?.title || "—";
   const studentName = cert.user?.fullName || "—";
   const instructorName = cert.course?.instructor?.user.fullName;
@@ -131,11 +131,11 @@ function CertificateView({
           href={`/learn/${cert.course?.slug}` as `/learn/${string}`}
           className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
         >
-          ← Back to course
+          ← {t("backToCourse")}
         </Link>
         <Button onClick={() => window.print()} className="gap-2">
           <Printer className="size-4" />
-          Print / Save as PDF
+          {t("printPdf")}
         </Button>
       </div>
 
@@ -156,42 +156,40 @@ function CertificateView({
 
         <div className="relative space-y-6">
           <p className="text-xs font-bold uppercase tracking-[0.4em] text-[#0F766E]">
-            My Funded Academy
+            {t("subtitle")}
           </p>
           <h1 className="font-display text-3xl font-bold uppercase tracking-wide text-slate-900 md:text-4xl">
-            Certificate of Completion
+            {t("title")}
           </h1>
-          <p className="text-sm text-slate-500">This certifies that</p>
+          <p className="text-sm text-slate-500">{t("thisCertifies")}</p>
           <p className="font-display text-4xl font-bold text-[#0F766E] md:text-5xl">
             {studentName}
           </p>
-          <p className="text-sm text-slate-500">has successfully completed</p>
+          <p className="text-sm text-slate-500">{t("hasCompleted")}</p>
           <p className="font-display text-2xl font-semibold text-slate-900 md:text-3xl">
             {courseTitle}
           </p>
 
           {instructorName && (
-            <p className="text-sm text-slate-500">
-              Instructed by <span className="font-medium text-slate-700">{instructorName}</span>
-            </p>
+            <p className="text-sm text-slate-500">{t("instructedBy", { name: instructorName })}</p>
           )}
 
           <div className="mx-auto h-px w-32 bg-[#0F766E]/40" />
 
           <div className="grid gap-2 text-sm text-slate-600 md:grid-cols-2">
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400">Issued on</p>
+              <p className="text-xs uppercase tracking-wider text-slate-400">{t("issuedOn")}</p>
               <p className="mt-1 font-medium text-slate-700">{issued}</p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-400">Verification code</p>
+              <p className="text-xs uppercase tracking-wider text-slate-400">
+                {t("verificationCode")}
+              </p>
               <p className="mt-1 font-mono font-medium text-slate-700">{cert.code}</p>
             </div>
           </div>
 
-          <p className="text-xs text-slate-400">
-            Verify online at myfundedacademy.com/verify/{cert.code}
-          </p>
+          <p className="text-xs text-slate-400">{t("verifyOnline", { code: cert.code })}</p>
         </div>
       </div>
     </div>

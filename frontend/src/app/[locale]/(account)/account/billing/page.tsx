@@ -13,13 +13,8 @@ import {
   useListMyOrdersQuery,
 } from "@/redux/api/paymentsApi";
 import { ExternalLink, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
-
-const planLabel: Record<string, string> = {
-  STARTER_MONTHLY: "Starter · Monthly",
-  PRO_MONTHLY: "Pro · Monthly",
-  PRO_ANNUAL: "Pro · Annual",
-};
 
 export default function BillingPage() {
   const { data: subRes, isLoading: subLoading, refetch: refetchSub } = useGetMySubscriptionQuery();
@@ -28,13 +23,15 @@ export default function BillingPage() {
   const [openPortal, { isLoading: openingPortal }] = useBillingPortalMutation();
   const [error, setError] = useState<string | null>(null);
 
+  const t = useTranslations("accountBilling");
+  const tPlan = useTranslations("pricing.planLabels");
+
   const sub = subRes?.data;
   const orders = ordersRes?.data || [];
 
   const onCancel = async () => {
     setError(null);
-    if (!confirm("Cancel at period end? You'll keep access until your billing period ends."))
-      return;
+    if (!confirm(t("confirmCancel"))) return;
     try {
       await cancel().unwrap();
       refetchSub();
@@ -56,10 +53,8 @@ export default function BillingPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">Billing</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">
-          Manage your subscription and view past purchases.
-        </p>
+        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
       </header>
 
       {error && (
@@ -70,8 +65,8 @@ export default function BillingPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Subscription</CardTitle>
-          <CardDescription>Your current plan and billing cycle.</CardDescription>
+          <CardTitle>{t("subscription")}</CardTitle>
+          <CardDescription>{t("subscriptionDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           {subLoading ? (
@@ -80,25 +75,27 @@ export default function BillingPage() {
             </div>
           ) : !sub ? (
             <div className="space-y-4">
-              <p className="text-sm text-[var(--muted-foreground)]">
-                You don't have an active subscription.
-              </p>
+              <p className="text-sm text-[var(--muted-foreground)]">{t("noActiveSub")}</p>
               <Button asChild>
-                <Link href="/pricing">View plans</Link>
+                <Link href="/pricing">{t("viewPlans")}</Link>
               </Button>
             </div>
           ) : (
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <p className="font-display text-xl font-semibold">{planLabel[sub.plan]}</p>
+                <p className="font-display text-xl font-semibold">{tPlan(sub.plan)}</p>
                 <StatusBadge status={sub.status} cancelAtPeriodEnd={sub.cancelAtPeriodEnd} />
               </div>
 
               {sub.currentPeriodEnd && (
                 <p className="text-sm text-[var(--muted-foreground)]">
                   {sub.cancelAtPeriodEnd
-                    ? `Access ends ${new Date(sub.currentPeriodEnd).toLocaleDateString()}.`
-                    : `Next charge ${new Date(sub.currentPeriodEnd).toLocaleDateString()}.`}
+                    ? t("accessEndsOn", {
+                        date: new Date(sub.currentPeriodEnd).toLocaleDateString(),
+                      })
+                    : t("nextChargeOn", {
+                        date: new Date(sub.currentPeriodEnd).toLocaleDateString(),
+                      })}
                 </p>
               )}
 
@@ -114,11 +111,11 @@ export default function BillingPage() {
                   ) : (
                     <ExternalLink className="size-4" />
                   )}
-                  Manage in Stripe
+                  {t("manageInStripe")}
                 </Button>
                 {!sub.cancelAtPeriodEnd && (
                   <Button onClick={onCancel} disabled={canceling} variant="ghost">
-                    {canceling ? "Canceling…" : "Cancel at period end"}
+                    {canceling ? t("canceling") : t("cancelAtPeriodEnd")}
                   </Button>
                 )}
               </div>
@@ -129,8 +126,8 @@ export default function BillingPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Order history</CardTitle>
-          <CardDescription>Your one-time course purchases.</CardDescription>
+          <CardTitle>{t("orderHistory")}</CardTitle>
+          <CardDescription>{t("orderHistoryDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           {ordersLoading ? (
@@ -139,7 +136,7 @@ export default function BillingPage() {
             </div>
           ) : orders.length === 0 ? (
             <p className="py-6 text-center text-sm text-[var(--muted-foreground)]">
-              No orders yet.
+              {t("noOrders")}
             </p>
           ) : (
             <ul className="divide-y divide-[var(--border)]">
@@ -147,7 +144,8 @@ export default function BillingPage() {
                 <li key={o.id} className="flex items-center justify-between gap-4 py-3 text-sm">
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium">
-                      {o.course?.title || (o.type === "SUBSCRIPTION" ? "Subscription" : "Order")}
+                      {o.course?.title ||
+                        (o.type === "SUBSCRIPTION" ? t("subscriptionLabel") : t("orderLabel"))}
                     </p>
                     <p className="text-xs text-[var(--muted-foreground)]">
                       {new Date(o.createdAt).toLocaleDateString()} · {o.type}
@@ -184,7 +182,8 @@ function StatusBadge({
   status: string;
   cancelAtPeriodEnd: boolean;
 }) {
-  if (cancelAtPeriodEnd) return <Badge variant="warning">Ending</Badge>;
+  const t = useTranslations("accountBilling");
+  if (cancelAtPeriodEnd) return <Badge variant="warning">{t("ending")}</Badge>;
   if (status === "ACTIVE" || status === "TRIALING")
     return <Badge variant="success">{status}</Badge>;
   if (status === "PAST_DUE" || status === "UNPAID")

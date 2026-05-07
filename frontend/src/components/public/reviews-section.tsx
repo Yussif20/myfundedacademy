@@ -6,7 +6,7 @@ import { StarRating } from "@/components/public/star-rating";
 import { Link } from "@/i18n/navigation";
 import { useListCourseReviewsQuery } from "@/redux/api/reviewsApi";
 import { Loader2, MessageSquare } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 export function ReviewsSection({
   slug,
@@ -18,6 +18,7 @@ export function ReviewsSection({
   const { data, isLoading } = useListCourseReviewsQuery({ slug, limit: 5 });
   const locale = useLocale();
   const isAr = locale === "ar";
+  const t = useTranslations("reviewsSection");
 
   const reviews = data?.data?.data || [];
   const meta = data?.meta;
@@ -28,10 +29,10 @@ export function ReviewsSection({
   return (
     <section className="space-y-6">
       <div className="flex items-end justify-between gap-4">
-        <h2 className="font-display text-2xl font-bold tracking-tight">Student reviews</h2>
+        <h2 className="font-display text-2xl font-bold tracking-tight">{t("title")}</h2>
         {viewerHasAccess && (
           <Button asChild size="sm">
-            <Link href={`/learn/${slug}/review` as `/learn/${string}/review`}>Leave a review</Link>
+            <Link href={`/learn/${slug}/review` as `/learn/${string}/review`}>{t("leave")}</Link>
           </Button>
         )}
       </div>
@@ -44,7 +45,7 @@ export function ReviewsSection({
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-10 text-center text-sm text-[var(--muted-foreground)]">
             <MessageSquare className="size-6" />
-            <p>No reviews yet. Be the first to share what you thought.</p>
+            <p>{t("noneYet")}</p>
           </CardContent>
         </Card>
       ) : (
@@ -55,7 +56,7 @@ export function ReviewsSection({
                 <p className="font-display text-5xl font-bold">{avg.toFixed(1)}</p>
                 <StarRating value={avg} size={18} />
                 <p className="text-xs text-[var(--muted-foreground)]">
-                  {total} review{total === 1 ? "" : "s"}
+                  {t("reviewsCount", { count: total })}
                 </p>
               </div>
               <div className="space-y-2">
@@ -118,7 +119,7 @@ export function ReviewsSection({
 
           {meta && meta.total > reviews.length && (
             <p className="text-center text-xs text-[var(--muted-foreground)]">
-              Showing {reviews.length} of {meta.total} reviews
+              {t("showingNOf", { shown: reviews.length, total: meta.total })}
             </p>
           )}
         </>

@@ -145,6 +145,7 @@ export default function HomePage() {
 }
 
 function Hero({ t }: { t: ReturnType<typeof useTranslations> }) {
+  const tF = useTranslations("homeFeatures");
   return (
     <section className="relative overflow-hidden">
       <div
@@ -180,14 +181,14 @@ function Hero({ t }: { t: ReturnType<typeof useTranslations> }) {
         </div>
 
         <div className="mx-auto mt-16 grid max-w-4xl grid-cols-2 gap-6 md:grid-cols-3">
-          <Feature icon={<ShieldCheck className="size-5" />} title="DRM-protected">
-            Widevine + FairPlay + PlayReady. Watermarked per viewer.
+          <Feature icon={<ShieldCheck className="size-5" />} title={tF("drmTitle")}>
+            {tF("drmBody")}
           </Feature>
-          <Feature icon={<Sparkles className="size-5" />} title="Real instructors">
-            Funded traders teaching strategies they actually trade.
+          <Feature icon={<Sparkles className="size-5" />} title={tF("instructorsTitle")}>
+            {tF("instructorsBody")}
           </Feature>
-          <Feature icon={<Trophy className="size-5" />} title="Verified certificates">
-            Every completion gets a certificate with a public verification URL.
+          <Feature icon={<Trophy className="size-5" />} title={tF("certsTitle")}>
+            {tF("certsBody")}
           </Feature>
         </div>
       </div>

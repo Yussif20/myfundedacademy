@@ -15,6 +15,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { extractApiError } from "@/lib/errors";
 import { useGetMyReviewQuery, useUpsertCourseReviewMutation } from "@/redux/api/reviewsApi";
 import { ChevronLeft, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -30,6 +31,7 @@ function ReviewContent() {
   const params = useParams();
   const slug = String(params?.slug || "");
   const router = useRouter();
+  const t = useTranslations("reviewWrite");
 
   const { data, isLoading } = useGetMyReviewQuery(slug, { skip: !slug });
   const [upsert, { isLoading: saving }] = useUpsertCourseReviewMutation();
@@ -53,7 +55,7 @@ function ReviewContent() {
     e.preventDefault();
     setError(null);
     if (rating < 1) {
-      setError("Pick a rating between 1 and 5 stars.");
+      setError(t("ratingRequired"));
       return;
     }
     try {
@@ -84,7 +86,7 @@ function ReviewContent() {
             className="flex items-center gap-2 text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
           >
             <ChevronLeft className="size-4 rtl:rotate-180" />
-            Back to course
+            {t("backToCourse")}
           </Link>
           <div className="flex items-center gap-2">
             <LocaleSwitcher />
@@ -96,10 +98,8 @@ function ReviewContent() {
       <section className="mx-auto max-w-2xl px-4 py-8 md:px-6">
         <Card>
           <CardHeader>
-            <CardTitle>{existing ? "Update your review" : "Leave a review"}</CardTitle>
-            <CardDescription>
-              Your honest take helps other traders decide if this course is right for them.
-            </CardDescription>
+            <CardTitle>{existing ? t("updateTitle") : t("leaveTitle")}</CardTitle>
+            <CardDescription>{t("subtitle")}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={onSubmit} className="space-y-5">
@@ -110,34 +110,34 @@ function ReviewContent() {
               )}
 
               <div className="space-y-2">
-                <Label>Rating</Label>
+                <Label>{t("ratingLabel")}</Label>
                 <div className="flex items-center gap-3">
                   <StarRating value={rating} size={28} onChange={setRating} />
                   <span className="text-sm text-[var(--muted-foreground)]">
-                    {rating > 0 ? `${rating} / 5` : "Pick a rating"}
+                    {rating > 0 ? t("starsOf", { rating }) : t("pickRating")}
                   </span>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="title">Title (optional)</Label>
+                <Label htmlFor="title">{t("titleLabel")}</Label>
                 <Input
                   id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="A short summary of your experience"
+                  placeholder={t("titlePlaceholder")}
                   maxLength={160}
                   disabled={saving}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="body">Review (optional)</Label>
+                <Label htmlFor="body">{t("bodyLabel")}</Label>
                 <Textarea
                   id="body"
                   value={body}
                   onChange={(e) => setBody(e.target.value)}
-                  placeholder="What worked, what didn't, what surprised you?"
+                  placeholder={t("bodyPlaceholder")}
                   rows={6}
                   maxLength={2000}
                   disabled={saving}
@@ -146,16 +146,16 @@ function ReviewContent() {
 
               <div className="flex justify-end gap-2">
                 <Button asChild variant="outline" disabled={saving}>
-                  <Link href={`/courses/${slug}` as `/courses/${string}`}>Cancel</Link>
+                  <Link href={`/courses/${slug}` as `/courses/${string}`}>{t("cancel")}</Link>
                 </Button>
                 <Button type="submit" disabled={saving || rating < 1}>
                   {saving
                     ? existing
-                      ? "Updating…"
-                      : "Submitting…"
+                      ? t("updating")
+                      : t("submitting")
                     : existing
-                      ? "Update review"
-                      : "Submit review"}
+                      ? t("update")
+                      : t("submit")}
                 </Button>
               </div>
             </form>
