@@ -1,12 +1,13 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, Icosahedron, MeshDistortMaterial, TorusKnot } from "@react-three/drei";
+import { Float, Icosahedron, Octahedron } from "@react-three/drei";
 import { useRef } from "react";
 import type { Group } from "three";
 
 const TEAL = "#14b8a6";
 const TEAL_DEEP = "#0f766e";
+const TEAL_BRIGHT = "#5eead4";
 const AMBER = "#f59e0b";
 const INK = "#0a0f14";
 
@@ -25,35 +26,63 @@ function ParallaxGroup({ children }: { children: React.ReactNode }) {
   return <group ref={ref}>{children}</group>;
 }
 
-function SlowSpin({ children, speed = 0.15 }: { children: React.ReactNode; speed?: number }) {
+function SlowSpin({ children, speed = 0.18 }: { children: React.ReactNode; speed?: number }) {
   const ref = useRef<Group>(null);
   useFrame((_, delta) => {
     if (!ref.current) return;
     ref.current.rotation.y += delta * speed;
-    ref.current.rotation.x += delta * speed * 0.3;
+    ref.current.rotation.x += delta * speed * 0.25;
   });
   return <group ref={ref}>{children}</group>;
+}
+
+function GemCenterpiece() {
+  return (
+    <group position={[1.6, -0.2, -2]} scale={1.05}>
+      <Float speed={1.2} rotationIntensity={0.4} floatIntensity={1}>
+        <SlowSpin>
+          {/* Outer faceted gem — clearcoat + emissive teal */}
+          <Octahedron args={[1.1, 0]}>
+            <meshPhysicalMaterial
+              color={TEAL}
+              metalness={0.15}
+              roughness={0.08}
+              clearcoat={1}
+              clearcoatRoughness={0.04}
+              emissive={TEAL_DEEP}
+              emissiveIntensity={0.45}
+              envMapIntensity={1.5}
+              reflectivity={0.7}
+            />
+          </Octahedron>
+
+          {/* Inner glow core — slightly smaller, brighter, lower-poly */}
+          <Octahedron args={[0.65, 0]}>
+            <meshStandardMaterial
+              color={TEAL_BRIGHT}
+              emissive={TEAL_BRIGHT}
+              emissiveIntensity={0.85}
+              transparent
+              opacity={0.55}
+              toneMapped={false}
+            />
+          </Octahedron>
+
+          {/* Subtle wireframe edges — adds the "faceted" definition */}
+          <Octahedron args={[1.105, 0]}>
+            <meshBasicMaterial color={TEAL_BRIGHT} wireframe transparent opacity={0.18} />
+          </Octahedron>
+        </SlowSpin>
+      </Float>
+    </group>
+  );
 }
 
 function Scene() {
   return (
     <ParallaxGroup>
-      {/* Centerpiece: distorted torus knot — smaller, recessed, off-center */}
-      <Float speed={1.3} rotationIntensity={0.6} floatIntensity={1.2}>
-        <SlowSpin>
-          <TorusKnot args={[0.62, 0.2, 220, 32]} position={[2.2, -0.4, -2]}>
-            <MeshDistortMaterial
-              color={TEAL}
-              emissive={TEAL_DEEP}
-              emissiveIntensity={0.3}
-              metalness={0.7}
-              roughness={0.2}
-              distort={0.24}
-              speed={1.4}
-            />
-          </TorusKnot>
-        </SlowSpin>
-      </Float>
+      {/* Hero centerpiece — faceted teal gem */}
+      <GemCenterpiece />
 
       {/* Floating amber icosahedron — top right accent */}
       <Float speed={1.6} rotationIntensity={1.4} floatIntensity={1.8}>
@@ -69,7 +98,7 @@ function Scene() {
         </Icosahedron>
       </Float>
 
-      {/* Smaller teal icosahedron — bottom left */}
+      {/* Teal icosahedron — bottom left */}
       <Float speed={2.2} rotationIntensity={1.2} floatIntensity={1.4}>
         <Icosahedron args={[0.3, 0]} position={[-3, -1.4, -0.5]}>
           <meshStandardMaterial
@@ -83,7 +112,7 @@ function Scene() {
         </Icosahedron>
       </Float>
 
-      {/* Smaller secondary teal icosahedron — top left */}
+      {/* Smaller teal icosahedron — top left */}
       <Float speed={1.9} rotationIntensity={1.1} floatIntensity={1.6}>
         <Icosahedron args={[0.22, 0]} position={[-2.6, 1.5, -1.2]}>
           <meshStandardMaterial
@@ -97,7 +126,7 @@ function Scene() {
         </Icosahedron>
       </Float>
 
-      {/* Tiny accent dots */}
+      {/* Tiny accent sparkle dots */}
       <Float speed={2.8} rotationIntensity={0} floatIntensity={2}>
         <mesh position={[1.8, -1.7, 0.5]}>
           <sphereGeometry args={[0.1, 16, 16]} />
@@ -116,6 +145,16 @@ function Scene() {
           <meshStandardMaterial color={AMBER} emissive={AMBER} emissiveIntensity={1.5} />
         </mesh>
       </Float>
+      <Float speed={3} rotationIntensity={0} floatIntensity={2}>
+        <mesh position={[0.4, 1.2, 0.4]}>
+          <sphereGeometry args={[0.05, 16, 16]} />
+          <meshStandardMaterial
+            color={TEAL_BRIGHT}
+            emissive={TEAL_BRIGHT}
+            emissiveIntensity={1.6}
+          />
+        </mesh>
+      </Float>
     </ParallaxGroup>
   );
 }
@@ -128,10 +167,11 @@ export default function Hero3dScene() {
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       style={{ background: "transparent" }}
     >
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[3, 4, 5]} intensity={0.85} color={"#ffffff"} />
-      <pointLight position={[-3, -2, 3]} intensity={1} color={TEAL} />
-      <pointLight position={[3, 2, -2]} intensity={0.8} color={AMBER} />
+      <ambientLight intensity={0.35} />
+      <directionalLight position={[3, 4, 5]} intensity={0.9} color={"#ffffff"} />
+      <pointLight position={[-3, -2, 3]} intensity={1.4} color={TEAL} />
+      <pointLight position={[3, 2, -2]} intensity={1.1} color={AMBER} />
+      <pointLight position={[0, 3, 4]} intensity={0.6} color={TEAL_BRIGHT} />
       <fog attach="fog" args={[INK, 5, 11]} />
       <Scene />
     </Canvas>
