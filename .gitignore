@@ -41,6 +41,8 @@ next-env.d.ts
 npm-debug.log*
 yarn-debug.log*
 .pnpm-debug.log*
+mfa-dev.log
+*.dev.log
 
 # Claude Code
 .claude/
