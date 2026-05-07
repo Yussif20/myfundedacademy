@@ -1,4 +1,5 @@
 import { baseApi } from "./baseApi";
+import type { CourseSummary } from "./coursesApi";
 
 export type InstructorProfile = {
   id: string;
@@ -107,6 +108,40 @@ export const instructorsApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/instructors/${id}`, method: "DELETE" }),
       invalidatesTags: [{ type: "InstructorProfile", id: "LIST" }],
     }),
+
+    // Me-scoped (instructor self-service)
+    getMyInstructorProfile: builder.query<Envelope<InstructorProfile>, void>({
+      query: () => ({ url: "/instructors/me" }),
+      providesTags: [{ type: "InstructorProfile", id: "ME" }],
+    }),
+
+    updateMyInstructorProfile: builder.mutation<Envelope<InstructorProfile>, UpdateInstructorInput>(
+      {
+        query: (body) => ({ url: "/instructors/me", method: "PATCH", body }),
+        invalidatesTags: [
+          { type: "InstructorProfile", id: "ME" },
+          { type: "InstructorProfile", id: "LIST" },
+        ],
+      },
+    ),
+
+    listMyCourses: builder.query<Envelope<CourseSummary[]>, void>({
+      query: () => ({ url: "/instructors/me/courses" }),
+      providesTags: [{ type: "Course", id: "MINE" }],
+    }),
+
+    getMyInstructorStats: builder.query<
+      Envelope<{
+        courseCount: number;
+        publishedCount: number;
+        totalEnrollments: number;
+        avgRating: number;
+      }>,
+      void
+    >({
+      query: () => ({ url: "/instructors/me/stats" }),
+      providesTags: [{ type: "InstructorProfile", id: "STATS" }],
+    }),
   }),
 });
 
@@ -116,4 +151,8 @@ export const {
   useCreateInstructorMutation,
   useUpdateInstructorMutation,
   useDeleteInstructorMutation,
+  useGetMyInstructorProfileQuery,
+  useUpdateMyInstructorProfileMutation,
+  useListMyCoursesQuery,
+  useGetMyInstructorStatsQuery,
 } = instructorsApi;

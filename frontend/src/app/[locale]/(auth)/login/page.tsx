@@ -14,16 +14,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useRouter } from "@/i18n/navigation";
 import { extractApiError } from "@/lib/errors";
+import { roleHome } from "@/lib/role-home";
 import { useLoginMutation } from "@/redux/api/authApi";
 import { useAppDispatch } from "@/redux/store";
 import { setUser } from "@/redux/authSlice";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginPage() {
   const t = useTranslations("auth.login");
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
   const [login, { isLoading }] = useLoginMutation();
 
   const [email, setEmail] = useState("");
@@ -37,7 +40,10 @@ export default function LoginPage() {
       const res = await login({ email, password }).unwrap();
       if (res.data?.user && res.data.accessToken) {
         dispatch(setUser({ user: res.data.user, token: res.data.accessToken }));
-        router.push("/account");
+        // Honor explicit ?next=, otherwise route by role.
+        const next = searchParams.get("next");
+        const target = next || roleHome(res.data.user.role);
+        router.push(target as Parameters<typeof router.push>[0]);
       }
     } catch (err) {
       setError(extractApiError(err));

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "@/i18n/navigation";
+import { roleHome } from "@/lib/role-home";
 import { useGetMeQuery } from "@/redux/api/usersApi";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { logout } from "@/redux/authSlice";
@@ -23,6 +24,8 @@ export function AuthGuard({
     skip: !stored || !token,
   });
 
+  const roleMismatch = Boolean(roles && stored?.role && !roles.includes(stored.role));
+
   useEffect(() => {
     if (!stored || !token) {
       router.replace("/login");
@@ -34,26 +37,19 @@ export function AuthGuard({
         dispatch(logout());
         router.replace("/login");
       }
+      return;
     }
-  }, [stored, token, isError, error, dispatch, router]);
+    if (roleMismatch && stored?.role) {
+      // Send the user to the surface that matches their role rather than a
+      // dead-end 403 — keeps cross-role navigation friendly.
+      router.replace(roleHome(stored.role) as Parameters<typeof router.replace>[0]);
+    }
+  }, [stored, token, isError, error, dispatch, router, roleMismatch]);
 
-  if (!stored || !token || isLoading) {
+  if (!stored || !token || isLoading || roleMismatch) {
     return (
       <div className="grid min-h-screen place-items-center bg-[var(--background)]">
         <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
-      </div>
-    );
-  }
-
-  if (roles && stored.role && !roles.includes(stored.role)) {
-    return (
-      <div className="grid min-h-screen place-items-center bg-[var(--background)] text-[var(--foreground)]">
-        <div className="text-center">
-          <p className="font-display text-3xl font-bold">403</p>
-          <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-            You don't have access to this page.
-          </p>
-        </div>
       </div>
     );
   }

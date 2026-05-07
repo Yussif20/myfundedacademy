@@ -106,7 +106,10 @@
     "signIn": "تسجيل الدخول",
     "signUp": "إنشاء حساب",
     "account": "الحساب",
-    "signOut": "تسجيل الخروج"
+    "signOut": "تسجيل الخروج",
+    "studentDashboard": "لوحة الطالب",
+    "instructorWorkspace": "مساحة المدرب",
+    "adminPanel": "لوحة الإدارة"
   },
   "common": {
     "switchLocale": "اللغة",
@@ -130,6 +133,72 @@
     "search": "بحث",
     "actions": "إجراءات",
     "confirmDelete": "هل أنت متأكد من الحذف؟ لا يمكن التراجع عن هذا الإجراء."
+  },
+  "instructor": {
+    "nav": {
+      "dashboard": "لوحة التحكم",
+      "profile": "الملف الشخصي",
+      "courses": "دوراتي",
+      "students": "الطلاب",
+      "earnings": "الأرباح"
+    },
+    "dashboard": {
+      "title": "مساحة المدرّب",
+      "subtitle": "تابع أداء دوراتك وحدّث ملفّك العام.",
+      "kpiCourses": "دوراتي",
+      "kpiPublished": "منشور",
+      "kpiEnrollments": "إجمالي التسجيلات",
+      "kpiRating": "متوسط التقييم",
+      "recentCoursesTitle": "الدورات الحديثة",
+      "recentCoursesSub": "أحدث دوراتك المحدَّثة.",
+      "noCoursesYetTitle": "لا توجد دورات بعد",
+      "noCoursesYetBody": "أنشئ دورتك الأولى وابدأ التعليم.",
+      "newCourse": "دورة جديدة",
+      "editProfile": "تحرير الملف",
+      "viewPublic": "عرض الملف العام"
+    },
+    "profile": {
+      "title": "الملف العام",
+      "subtitle": "كيف يراك الطلاب في الفهرس.",
+      "publicProfile": "الملف العام",
+      "fullName": "الاسم الكامل",
+      "headline": "العنوان",
+      "headlinePlaceholder": "متداول ممول · ٦ سنوات",
+      "headlineArabic": "العنوان (عربي)",
+      "bio": "نبذة",
+      "bioArabic": "نبذة (عربي)",
+      "expertise": "وسوم الخبرة",
+      "expertisePlaceholder": "أضف وسماً واضغط Enter",
+      "add": "إضافة",
+      "twitter": "رابط تويتر / X",
+      "linkedin": "رابط لينكدإن",
+      "website": "رابط الموقع",
+      "save": "حفظ الملف",
+      "saving": "جاري الحفظ…",
+      "savedToast": "تم حفظ الملف."
+    },
+    "coursesPage": {
+      "title": "دوراتي",
+      "subtitle": "أنشئ ونشر وأدر كل ما تُدرّسه.",
+      "newCourse": "دورة جديدة",
+      "listTitle": "كل دوراتي",
+      "listSub": "المسودات والدورات المنشورة.",
+      "edit": "تحرير",
+      "emptyTitle": "حان وقت بناء أول دورة لك",
+      "emptyBody": "أنشئ الأقسام، ارفع الفيديوهات، أضف اختباراً — وسيراها الطلاب فور النشر."
+    },
+    "studentsPage": {
+      "title": "الطلاب",
+      "subtitle": "كل من سجّل في دوراتك.",
+      "comingSoonTitle": "قريباً",
+      "comingSoonBody": "قائمة الطلاب وتحليلات الإكمال لكل دورة في الدفعة القادمة."
+    },
+    "earningsPage": {
+      "title": "الأرباح",
+      "subtitle": "الإيرادات من دوراتك وسجل المدفوعات.",
+      "comingSoonTitle": "الأرباح تُفعَّل عند الإطلاق الفعلي",
+      "comingSoonBody": "يتم ربط Stripe Connect مع التحوّل إلى المدفوعات الحيّة. حتى ذلك الحين هذه مساحة معاينة."
+    }
   },
   "admin": {
     "nav": {
