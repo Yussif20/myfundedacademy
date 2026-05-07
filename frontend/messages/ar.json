@@ -530,7 +530,23 @@
       "STARTER_MONTHLY": "ستارتر · شهري",
       "PRO_MONTHLY": "برو · شهري",
       "PRO_ANNUAL": "برو · سنوي"
-    }
+    },
+    "compareTitle": "قارن كل ميزة",
+    "compareSubtitle": "تفصيل جنباً إلى جنب لما هو متضمَّن في كل خطة.",
+    "feat": {
+      "catalog": "الوصول إلى مكتبة الدورات",
+      "previews": "دروس معاينة مجانية",
+      "drm": "تشغيل محمي بـ DRM",
+      "watermark": "علامة مائية لكل مشاهد",
+      "quizzes": "اختبارات وإعادة محاولات",
+      "certificates": "شهادات معتمدة",
+      "downloads": "موارد قابلة للتنزيل",
+      "priorityQa": "أولوية في أسئلة المدرّب",
+      "savings": "توفير سنوي"
+    },
+    "yes": "متضمن",
+    "no": "—",
+    "limited": "محدود"
   },
   "homeFeatures": {
     "drmTitle": "محمي بـ DRM",

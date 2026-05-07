@@ -1,10 +1,14 @@
 "use client";
 
+import { ScrollReveal } from "@/components/motion";
+import { ReviewsSection } from "@/components/public/reviews-section";
+import { StarRating } from "@/components/public/star-rating";
+import { StickyCourseCta } from "@/components/public/sticky-course-cta";
+import { VdoCipherPlayer } from "@/components/public/vdocipher-player";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { VdoCipherPlayer } from "@/components/public/vdocipher-player";
 import { Link } from "@/i18n/navigation";
 import { extractApiError } from "@/lib/errors";
 import {
@@ -15,23 +19,13 @@ import {
   type Section,
 } from "@/redux/api/coursesApi";
 import { useCheckoutCourseMutation } from "@/redux/api/paymentsApi";
-import { ReviewsSection } from "@/components/public/reviews-section";
-import { StarRating } from "@/components/public/star-rating";
 import { useAppSelector } from "@/redux/store";
-import {
-  BookOpen,
-  ChevronDown,
-  ChevronRight,
-  Clock,
-  Globe,
-  Loader2,
-  PlayCircle,
-  Star,
-} from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { BookOpen, ChevronDown, Clock, Globe, Loader2, PlayCircle, Star } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 export default function CourseDetailPage() {
   const params = useParams();
@@ -45,6 +39,7 @@ export default function CourseDetailPage() {
   const { data, isLoading, isError } = useGetCourseQuery(slug, { skip: !slug });
   const course = data?.data;
   const user = useAppSelector((s) => s.auth.user);
+  const inlineCtaRef = useRef<HTMLDivElement | null>(null);
 
   const previewLesson: Lesson | null = useMemo(() => {
     if (!course) return null;
@@ -91,11 +86,21 @@ export default function CourseDetailPage() {
       : `${totalMinutes || 0}m`;
 
   return (
-    <div>
+    <div className="relative">
+      {/* Hero accent gradient */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[500px] opacity-50"
+        style={{
+          background:
+            "radial-gradient(ellipse at top right, color-mix(in oklch, var(--primary) 30%, transparent), transparent 60%)",
+        }}
+      />
+
       {/* Hero */}
-      <section className="border-b border-[var(--border)] bg-[var(--card)]/30">
+      <section className="relative border-b border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_30%,transparent)]">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 lg:grid-cols-[1fr_400px]">
-          <div>
+          <ScrollReveal>
             <div className="flex items-center gap-2 text-sm">
               {course.category && (
                 <Link
@@ -133,7 +138,13 @@ export default function CourseDetailPage() {
 
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-[var(--muted-foreground)]">
               <span className="inline-flex items-center gap-2">
-                <span className="grid size-7 place-items-center rounded-full bg-[var(--secondary)] text-xs font-semibold">
+                <span
+                  className="grid size-7 place-items-center rounded-full text-xs font-semibold text-[var(--primary)]"
+                  style={{
+                    background: "color-mix(in oklch, var(--primary) 15%, transparent)",
+                    border: "1px solid color-mix(in oklch, var(--primary) 25%, transparent)",
+                  }}
+                >
                   {instructorName.charAt(0)}
                 </span>
                 {t("by")} <span className="text-[var(--foreground)]">{instructorName}</span>
@@ -151,10 +162,10 @@ export default function CourseDetailPage() {
                 {tField(`language.${course.language}`)}
               </span>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right rail */}
-          <div className="space-y-4">
+          <div ref={inlineCtaRef} className="space-y-4">
             {previewLesson ? (
               <PreviewPlayer lesson={previewLesson} thumbnail={course.thumbnail} />
             ) : course.thumbnail ? (
@@ -170,7 +181,7 @@ export default function CourseDetailPage() {
               </div>
             ) : null}
 
-            <Card>
+            <Card className="overflow-hidden border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_85%,transparent)] backdrop-blur">
               <CardContent className="space-y-4 p-6">
                 <div className="flex items-baseline justify-between">
                   {course.oneTimePrice > 0 ? (
@@ -203,66 +214,82 @@ export default function CourseDetailPage() {
       <section className="mx-auto grid max-w-7xl gap-12 px-6 py-12 lg:grid-cols-[1fr_360px]">
         <div className="space-y-12">
           {longDesc && (
-            <div>
-              <h2 className="font-display text-2xl font-bold tracking-tight">
-                {t("whatYouLearn")}
-              </h2>
-              <div className="prose prose-invert mt-4 max-w-none text-[var(--muted-foreground)]">
-                {longDesc.split("\n").map((line, i) => (
-                  <p key={i} className="mb-3 leading-relaxed">
-                    {line}
-                  </p>
-                ))}
+            <ScrollReveal>
+              <div>
+                <h2 className="font-display text-2xl font-bold tracking-tight">
+                  {t("whatYouLearn")}
+                </h2>
+                <div className="prose prose-invert mt-4 max-w-none text-[var(--muted-foreground)]">
+                  {longDesc.split("\n").map((line, i) => (
+                    <p key={i} className="mb-3 leading-relaxed">
+                      {line}
+                    </p>
+                  ))}
+                </div>
               </div>
-            </div>
+            </ScrollReveal>
           )}
 
-          <div>
-            <h2 className="font-display text-2xl font-bold tracking-tight">{t("curriculum")}</h2>
-            <div className="mt-4 space-y-3">
-              {course.sections.map((section) => (
-                <SectionRow key={section.id} section={section} isAr={isAr} />
-              ))}
-              {course.sections.length === 0 && (
-                <p className="rounded-md border border-dashed border-[var(--border)] py-6 text-center text-sm text-[var(--muted-foreground)]">
-                  Curriculum not finalized yet.
-                </p>
-              )}
+          <ScrollReveal>
+            <div>
+              <h2 className="font-display text-2xl font-bold tracking-tight">{t("curriculum")}</h2>
+              <div className="mt-4 space-y-3">
+                {course.sections.map((section, i) => (
+                  <SectionRow
+                    key={section.id}
+                    section={section}
+                    isAr={isAr}
+                    defaultOpen={i === 0}
+                  />
+                ))}
+                {course.sections.length === 0 && (
+                  <p className="rounded-md border border-dashed border-[var(--border)] py-6 text-center text-sm text-[var(--muted-foreground)]">
+                    Curriculum not finalized yet.
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* Instructor sidebar */}
         <aside className="space-y-4">
-          <h3 className="font-display text-xl font-bold tracking-tight">{t("aboutInstructor")}</h3>
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-start gap-4">
-                <div className="grid size-14 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[var(--primary)]/30 to-[var(--accent)]/20 font-display text-lg font-semibold text-[var(--primary)]">
-                  {instructorName.charAt(0)}
+          <ScrollReveal>
+            <h3 className="font-display text-xl font-bold tracking-tight">
+              {t("aboutInstructor")}
+            </h3>
+            <Card className="mt-4">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="grid size-14 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[var(--primary)]/30 to-[var(--accent)]/20 font-display text-lg font-semibold text-[var(--primary)]">
+                    {instructorName.charAt(0)}
+                  </div>
+                  <div className="min-w-0">
+                    <Link
+                      href={{ pathname: `/instructors/${course.instructor.id}` }}
+                      className="font-medium hover:text-[var(--primary)]"
+                    >
+                      {instructorName}
+                    </Link>
+                    {instructorHeadline && (
+                      <p className="mt-1 text-sm text-[var(--muted-foreground)]">
+                        {instructorHeadline}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <Link
-                    href={{ pathname: `/instructors/${course.instructor.id}` }}
-                    className="font-medium hover:text-[var(--primary)]"
-                  >
-                    {instructorName}
-                  </Link>
-                  {instructorHeadline && (
-                    <p className="mt-1 text-sm text-[var(--muted-foreground)]">
-                      {instructorHeadline}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </ScrollReveal>
         </aside>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-16">
         <ReviewsSection slug={course.slug} viewerHasAccess={Boolean(course.viewerHasAccess)} />
       </section>
+
+      {/* Sticky floating CTA on scroll */}
+      <StickyCourseCta course={course} loggedIn={Boolean(user)} triggerRef={inlineCtaRef} />
     </div>
   );
 }
@@ -274,7 +301,7 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
 
   if (course.viewerHasAccess) {
     return (
-      <Button asChild className="w-full" size="lg">
+      <Button asChild className="w-full brand-glow" size="lg">
         <Link href={`/learn/${course.slug}` as `/learn/${string}`}>{t("continueLearning")}</Link>
       </Button>
     );
@@ -294,7 +321,7 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
     if (!loggedIn) {
       return (
         <>
-          <Button asChild className="w-full" size="lg">
+          <Button asChild className="w-full brand-glow" size="lg">
             <Link href="/login">{t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}</Link>
           </Button>
           {error && (
@@ -307,7 +334,7 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
     }
     return (
       <>
-        <Button className="w-full" size="lg" disabled={isLoading} onClick={handleBuy}>
+        <Button className="w-full brand-glow" size="lg" disabled={isLoading} onClick={handleBuy}>
           {isLoading ? "Redirecting…" : t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}
         </Button>
         {error && (
@@ -319,24 +346,32 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
     );
   }
 
-  // No one-time price; access purely via subscription
   if (!loggedIn) {
     return (
-      <Button asChild className="w-full" size="lg">
+      <Button asChild className="w-full brand-glow" size="lg">
         <Link href="/login">{t("subscribeForAccess")}</Link>
       </Button>
     );
   }
   return (
-    <Button asChild className="w-full" size="lg">
+    <Button asChild className="w-full brand-glow" size="lg">
       <Link href="/pricing">{t("subscribeForAccess")}</Link>
     </Button>
   );
 }
 
-function SectionRow({ section, isAr }: { section: Section; isAr: boolean }) {
+function SectionRow({
+  section,
+  isAr,
+  defaultOpen = false,
+}: {
+  section: Section;
+  isAr: boolean;
+  defaultOpen?: boolean;
+}) {
   const t = useTranslations("courseDetail");
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
+  const reduced = useReducedMotion();
 
   const totalDuration = section.lessons.reduce(
     (acc: number, l: Lesson) => acc + (l.durationMin || 0),
@@ -344,17 +379,19 @@ function SectionRow({ section, isAr }: { section: Section; isAr: boolean }) {
   );
 
   return (
-    <div className="overflow-hidden rounded-lg border border-[var(--border)]">
+    <div className="overflow-hidden rounded-xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_70%,transparent)] backdrop-blur transition-colors hover:border-[color-mix(in_oklch,var(--primary)_30%,transparent)]">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center gap-3 bg-[var(--card)] px-4 py-3 text-left transition-colors hover:bg-[var(--secondary)]"
+        className="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]"
       >
-        {open ? (
-          <ChevronDown className="size-4 shrink-0 text-[var(--muted-foreground)]" />
-        ) : (
-          <ChevronRight className="size-4 shrink-0 text-[var(--muted-foreground)] rtl:rotate-180" />
-        )}
+        <motion.span
+          animate={{ rotate: open ? 0 : -90 }}
+          transition={{ type: "spring", stiffness: 380, damping: 28 }}
+          className="grid size-6 shrink-0 place-items-center"
+        >
+          <ChevronDown className="size-4 text-[var(--muted-foreground)]" />
+        </motion.span>
         <div className="flex-1">
           <p className="font-medium">{(isAr && section.titleArabic) || section.title}</p>
         </div>
@@ -363,26 +400,39 @@ function SectionRow({ section, isAr }: { section: Section; isAr: boolean }) {
         </span>
       </button>
 
-      {open && (
-        <ul className="divide-y divide-[var(--border)] bg-[var(--background)]/50">
-          {section.lessons.map((l: Lesson, idx: number) => (
-            <li key={l.id} className="flex items-center gap-3 px-4 py-3 text-sm">
-              <PlayCircle className="size-4 shrink-0 text-[var(--muted-foreground)]" />
-              <span className="flex-1 truncate">
-                <span className="text-[var(--muted-foreground)]">{idx + 1}. </span>
-                {(isAr && l.titleArabic) || l.title}
-              </span>
-              {l.isFreePreview && <Badge variant="success">{t("freePreview")}</Badge>}
-              {l.durationMin > 0 && (
-                <span className="text-xs text-[var(--muted-foreground)]">{l.durationMin}m</span>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
+            animate={reduced ? { opacity: 1 } : { height: "auto", opacity: 1 }}
+            exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <ul className="divide-y divide-[color-mix(in_oklch,var(--border)_50%,transparent)] border-t border-[color-mix(in_oklch,var(--border)_50%,transparent)]">
+              {section.lessons.map((l: Lesson, idx: number) => (
+                <li
+                  key={l.id}
+                  className="flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_4%,transparent)]"
+                >
+                  <PlayCircle className="size-4 shrink-0 text-[var(--muted-foreground)]" />
+                  <span className="flex-1 truncate">
+                    <span className="text-[var(--muted-foreground)]">{idx + 1}. </span>
+                    {(isAr && l.titleArabic) || l.title}
+                  </span>
+                  {l.isFreePreview && <Badge variant="success">{t("freePreview")}</Badge>}
+                  {l.durationMin > 0 && (
+                    <span className="text-xs text-[var(--muted-foreground)]">{l.durationMin}m</span>
+                  )}
+                </li>
+              ))}
+              {section.lessons.length === 0 && (
+                <li className="px-5 py-3 text-sm text-[var(--muted-foreground)]">No lessons.</li>
               )}
-            </li>
-          ))}
-          {section.lessons.length === 0 && (
-            <li className="px-4 py-3 text-sm text-[var(--muted-foreground)]">No lessons.</li>
-          )}
-        </ul>
-      )}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

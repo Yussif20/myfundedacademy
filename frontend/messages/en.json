@@ -530,7 +530,23 @@
       "STARTER_MONTHLY": "Starter · Monthly",
       "PRO_MONTHLY": "Pro · Monthly",
       "PRO_ANNUAL": "Pro · Annual"
-    }
+    },
+    "compareTitle": "Compare every feature",
+    "compareSubtitle": "Side-by-side breakdown of what's included in each plan.",
+    "feat": {
+      "catalog": "Course catalog access",
+      "previews": "Free preview lessons",
+      "drm": "DRM-protected playback",
+      "watermark": "Per-viewer watermark",
+      "quizzes": "Quizzes & retakes",
+      "certificates": "Verified certificates",
+      "downloads": "Downloadable resources",
+      "priorityQa": "Priority instructor Q&A",
+      "savings": "Annual savings"
+    },
+    "yes": "Included",
+    "no": "—",
+    "limited": "Limited"
   },
   "homeFeatures": {
     "drmTitle": "DRM-protected",

@@ -5,8 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { StarRating } from "@/components/public/star-rating";
 import { Link } from "@/i18n/navigation";
 import { useListCourseReviewsQuery } from "@/redux/api/reviewsApi";
+import { motion, useInView } from "framer-motion";
 import { Loader2, MessageSquare } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useRef } from "react";
 
 export function ReviewsSection({
   slug,
@@ -59,26 +61,7 @@ export function ReviewsSection({
                   {t("reviewsCount", { count: total })}
                 </p>
               </div>
-              <div className="space-y-2">
-                {[5, 4, 3, 2, 1].map((star) => {
-                  const count = dist[String(star)] ?? 0;
-                  const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-                  return (
-                    <div key={star} className="flex items-center gap-3 text-sm">
-                      <span className="w-6 text-[var(--muted-foreground)]">{star}★</span>
-                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-[var(--secondary)]">
-                        <div
-                          className="h-full bg-[var(--accent)] transition-all"
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
-                      <span className="w-10 text-right text-xs text-[var(--muted-foreground)]">
-                        {count}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+              <DistributionBars dist={dist} total={total} />
             </CardContent>
           </Card>
 
@@ -125,5 +108,37 @@ export function ReviewsSection({
         </>
       )}
     </section>
+  );
+}
+
+function DistributionBars({ dist, total }: { dist: Record<string, number>; total: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+
+  return (
+    <div ref={ref} className="space-y-2">
+      {[5, 4, 3, 2, 1].map((star, i) => {
+        const count = dist[String(star)] ?? 0;
+        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+        return (
+          <div key={star} className="flex items-center gap-3 text-sm">
+            <span className="w-6 text-[var(--muted-foreground)]">{star}★</span>
+            <div className="h-2 flex-1 overflow-hidden rounded-full bg-[color-mix(in_oklch,var(--secondary)_80%,transparent)]">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: inView ? `${pct}%` : 0 }}
+                transition={{
+                  duration: 0.9,
+                  delay: i * 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="h-full rounded-full bg-gradient-to-r from-[var(--accent)] to-[color-mix(in_oklch,var(--accent)_70%,var(--primary))]"
+              />
+            </div>
+            <span className="w-10 text-right text-xs text-[var(--muted-foreground)]">{count}</span>
+          </div>
+        );
+      })}
+    </div>
   );
 }
