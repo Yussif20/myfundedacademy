@@ -80,6 +80,7 @@ export type CourseDetail = CourseSummary & {
   descriptionArabic: string;
   promoVideoVdoId: string;
   sections: Section[];
+  viewerHasAccess?: boolean;
 };
 
 type Envelope<T> = { statusCode: number; success: boolean; message?: string; data: T };

@@ -5,6 +5,9 @@ import { CategoriesRoutes } from "./app/categories/categories.route";
 import { InstructorsRoutes } from "./app/instructors/instructors.route";
 import { CoursesRoutes } from "./app/courses/courses.route";
 import { UploadsRoutes } from "./app/uploads/uploads.route";
+import { OrdersRoutes } from "./app/orders/orders.route";
+import { SubscriptionsRoutes } from "./app/subscriptions/subscriptions.route";
+import { EnrollmentsRoutes } from "./app/enrollments/enrollments.route";
 
 const router: Router = express.Router();
 
@@ -15,6 +18,9 @@ const moduleRoutes: ModuleRoute[] = [
   { path: "/instructors", route: InstructorsRoutes },
   { path: "/courses", route: CoursesRoutes },
   { path: "/uploads", route: UploadsRoutes },
+  { path: "/orders", route: OrdersRoutes },
+  { path: "/subscriptions", route: SubscriptionsRoutes },
+  { path: "/enrollments", route: EnrollmentsRoutes },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

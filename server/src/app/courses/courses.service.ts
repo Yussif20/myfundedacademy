@@ -2,9 +2,10 @@ import { prisma } from "@/lib/db/db";
 import AppError from "@/helpers/errors/AppError";
 import httpStatus from "http-status";
 import { slugify } from "@/utils/slug";
-import { Prisma } from "@prisma/client";
+import { Prisma, UserRoleEnum } from "@prisma/client";
 import { deleteObject } from "@/lib/storage/r2";
 import { deleteVideo } from "@/lib/video/vdocipher";
+import { userHasCourseAccess } from "@/lib/payments/access";
 
 const COURSE_LIST_INCLUDE = {
   category: { select: { id: true, slug: true, name: true, nameArabic: true } },
@@ -116,7 +117,7 @@ export const CoursesService = {
     };
   },
 
-  async get(idOrSlug: string, viewer?: { isAdmin: boolean }) {
+  async get(idOrSlug: string, viewer?: { isAdmin: boolean; userId?: string; role?: UserRoleEnum }) {
     const isAdmin = viewer?.isAdmin === true;
     const course = await prisma.course.findFirst({
       where: {
@@ -128,11 +129,19 @@ export const CoursesService = {
     });
     if (!course) throw new AppError(httpStatus.NOT_FOUND, "Course not found.");
 
-    // Hide vdoVideoId on non-preview lessons for public callers — defence in
-    // depth so the raw ID can't be used by a determined visitor.
-    if (!isAdmin) {
+    const viewerHasAccess = await userHasCourseAccess(
+      viewer?.userId,
+      { id: course.id, accessTier: course.accessTier },
+      viewer?.role,
+    );
+
+    // Hide vdoVideoId on non-preview lessons for public callers without
+    // access — defence in depth so the raw ID can't be used by a determined
+    // visitor. Admins and enrolled users see all video IDs.
+    if (!isAdmin && !viewerHasAccess) {
       return {
         ...course,
+        viewerHasAccess: false,
         sections: course.sections.map((s) => ({
           ...s,
           lessons: s.lessons.map((l) => ({
@@ -142,7 +151,7 @@ export const CoursesService = {
         })),
       };
     }
-    return course;
+    return { ...course, viewerHasAccess: true };
   },
 
   /**

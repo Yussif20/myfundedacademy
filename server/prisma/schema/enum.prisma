@@ -41,3 +41,38 @@ enum CourseLanguage {
   AR
   BOTH
 }
+
+enum OrderType {
+  ONE_TIME
+  SUBSCRIPTION
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum SubscriptionPlan {
+  STARTER_MONTHLY
+  PRO_MONTHLY
+  PRO_ANNUAL
+}
+
+enum SubscriptionStatus {
+  INCOMPLETE
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELED
+  UNPAID
+  INCOMPLETE_EXPIRED
+}
+
+enum EnrollmentSource {
+  PURCHASE
+  SUBSCRIPTION
+  ADMIN
+  FREE
+}

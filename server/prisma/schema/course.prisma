@@ -28,9 +28,12 @@ model Course {
   categoryId   String?
   instructorId String
 
-  category   Category?           @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  instructor InstructorProfile   @relation(fields: [instructorId], references: [id], onDelete: Restrict)
+  category   Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  instructor InstructorProfile @relation(fields: [instructorId], references: [id], onDelete: Restrict)
   sections   Section[]
+
+  enrollments Enrollment[]
+  orders      Order[]
 
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())

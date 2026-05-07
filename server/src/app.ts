@@ -13,6 +13,7 @@ import express, { Application } from "express";
 import helmet from "helmet";
 import path from "path";
 import rateLimiterMiddleware from "./middlewares/rateLimiter";
+import { StripeWebhookController } from "@/app/webhooks/webhooks.controller";
 
 const app: Application = express();
 app.set("trust proxy", 1);
@@ -32,6 +33,14 @@ app.use(
     origin: corsOrigins,
     credentials: true,
   }),
+);
+
+// Stripe webhook MUST receive the raw request body so the signature
+// verification works. Register it BEFORE express.json() takes over.
+app.post(
+  "/api/v1/webhooks/stripe",
+  express.raw({ type: "application/json" }),
+  StripeWebhookController,
 );
 
 app.use(express.json({ limit: "10mb" }));

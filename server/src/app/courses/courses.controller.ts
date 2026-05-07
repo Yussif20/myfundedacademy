@@ -14,6 +14,8 @@ export const CoursesController = {
   get: catchAsync(async (req, res) => {
     const data = await CoursesService.get(String(req.params.idOrSlug), {
       isAdmin: req.user?.role === "ADMIN",
+      userId: req.user?.id,
+      role: req.user?.role,
     });
     sendResponse(res, { statusCode: httpStatus.OK, data });
   }),

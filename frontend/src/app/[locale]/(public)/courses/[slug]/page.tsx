@@ -10,9 +10,11 @@ import { extractApiError } from "@/lib/errors";
 import {
   useGetCourseQuery,
   useGetPreviewOtpMutation,
+  type CourseDetail,
   type Lesson,
   type Section,
 } from "@/redux/api/coursesApi";
+import { useCheckoutCourseMutation } from "@/redux/api/paymentsApi";
 import { useAppSelector } from "@/redux/store";
 import {
   BookOpen,
@@ -173,23 +175,8 @@ export default function CourseDetailPage() {
                   )}
                 </div>
 
-                {user ? (
-                  <Button className="w-full" size="lg" disabled>
-                    {course.oneTimePrice > 0
-                      ? t("enrollNow", { price: course.oneTimePrice.toFixed(2) })
-                      : t("freeCourse")}
-                  </Button>
-                ) : (
-                  <Button asChild className="w-full" size="lg">
-                    <Link href="/signup">
-                      {course.oneTimePrice > 0
-                        ? t("enrollNow", { price: course.oneTimePrice.toFixed(2) })
-                        : t("freeCourse")}
-                    </Link>
-                  </Button>
-                )}
-
-                {course.accessTier !== "FREE" && course.oneTimePrice === 0 && (
+                <PurchaseCta course={course} loggedIn={Boolean(user)} />
+                {course.accessTier !== "FREE" && (
                   <Button asChild className="w-full" size="lg" variant="outline">
                     <Link href="/pricing">{t("subscribeForAccess")}</Link>
                   </Button>
@@ -261,6 +248,73 @@ export default function CourseDetailPage() {
         </aside>
       </section>
     </div>
+  );
+}
+
+function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boolean }) {
+  const t = useTranslations("courseDetail");
+  const [checkout, { isLoading }] = useCheckoutCourseMutation();
+  const [error, setError] = useState<string | null>(null);
+
+  if (course.viewerHasAccess) {
+    return (
+      <Button asChild className="w-full" size="lg">
+        <Link href="/account/courses">{t("continueLearning")}</Link>
+      </Button>
+    );
+  }
+
+  const handleBuy = async () => {
+    setError(null);
+    try {
+      const res = await checkout({ courseId: course.id }).unwrap();
+      if (res.data?.url) window.location.href = res.data.url;
+    } catch (err) {
+      setError(extractApiError(err));
+    }
+  };
+
+  if (course.oneTimePrice > 0) {
+    if (!loggedIn) {
+      return (
+        <>
+          <Button asChild className="w-full" size="lg">
+            <Link href="/login">{t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}</Link>
+          </Button>
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+        </>
+      );
+    }
+    return (
+      <>
+        <Button className="w-full" size="lg" disabled={isLoading} onClick={handleBuy}>
+          {isLoading ? "Redirecting…" : t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}
+        </Button>
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+      </>
+    );
+  }
+
+  // No one-time price; access purely via subscription
+  if (!loggedIn) {
+    return (
+      <Button asChild className="w-full" size="lg">
+        <Link href="/login">{t("subscribeForAccess")}</Link>
+      </Button>
+    );
+  }
+  return (
+    <Button asChild className="w-full" size="lg">
+      <Link href="/pricing">{t("subscribeForAccess")}</Link>
+    </Button>
   );
 }
 

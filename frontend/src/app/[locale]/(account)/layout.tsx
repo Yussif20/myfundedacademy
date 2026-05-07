@@ -1,3 +1,4 @@
+import { AccountSubNav } from "@/components/account/sub-nav";
 import { AuthGuard } from "@/components/auth-guard";
 import { Wordmark } from "@/components/brand/wordmark";
 import { LocaleSwitcher } from "@/components/locale-switcher";
@@ -19,7 +20,10 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
             </div>
           </div>
         </header>
-        <section className="mx-auto max-w-3xl px-6 py-10">{children}</section>
+        <section className="mx-auto max-w-3xl px-6 py-10">
+          <AccountSubNav />
+          {children}
+        </section>
       </main>
     </AuthGuard>
   );
