@@ -10,6 +10,13 @@ const router = express.Router();
 router.get("/", validateRequest(CoursesValidation.list), CoursesController.list);
 router.get("/:idOrSlug", validateRequest(CoursesValidation.get), CoursesController.get);
 
+// Free-preview OTP (public — service enforces lesson.isFreePreview + course PUBLISHED)
+router.post(
+  "/lessons/:id/preview-otp",
+  validateRequest(CoursesValidation.previewOtp),
+  CoursesController.previewOtp,
+);
+
 const admin = [requireAuth, requireRole("ADMIN")];
 
 // Course CRUD

@@ -5,6 +5,79 @@
     "comingSoon": "قريباً",
     "comingSoonBlurb": "نبني أكثر أكاديميات التداول أماناً على الإنترنت. دورات احترافية، فيديوهات محمية بـ DRM، شهادات معتمدة من متداولين عاشوا التجربة."
   },
+  "home": {
+    "heroEyebrow": "تداول بذكاء، لا بجهد أكبر",
+    "heroTitle": "أتقن تداول البروب مع متداولين عاشوا التجربة.",
+    "heroSubtitle": "دورات احترافية، فيديوهات محمية بـ DRM، وشهادات حقيقية — بُنيت بأيدي متداولين ممولين، لمتداولين ممولين.",
+    "heroCta": "تصفّح الدورات",
+    "heroSecondary": "شاهد معاينة مجانية",
+    "stats": {
+      "courses": "دورة",
+      "instructors": "مدرب",
+      "students": "متعلم",
+      "watchTime": "ساعة محتوى"
+    },
+    "featuredCourses": "دورات مميّزة",
+    "featuredCoursesSub": "اختيار فريقنا. ابدأ بالأساسيات أو انتقل مباشرة إلى الاستراتيجيات المتقدمة.",
+    "browseAll": "تصفّح الكل",
+    "categories": "تصفّح حسب الموضوع",
+    "categoriesSub": "اعثر على ميزتك — كل دورة مصنّفة بحسب ما تُعلّمه.",
+    "featuredInstructors": "تعرّف على المدربين",
+    "featuredInstructorsSub": "متداولون حقيقيون يعلّمون استراتيجيات يستخدمونها فعلاً.",
+    "ctaTitle": "كفى تخمين. ابدأ التدريب.",
+    "ctaSubtitle": "احصل على وصول فوري لدورات فيديو محمية بـ DRM ومعتمدة من متداولين ممولين.",
+    "ctaButton": "أنشئ حساباً مجانياً"
+  },
+  "catalog": {
+    "title": "كل الدورات",
+    "subtitle": "تصفّح المكتبة الكاملة. صفِّ حسب الفئة، المستوى، أو اللغة.",
+    "filters": {
+      "category": "الفئة",
+      "level": "المستوى",
+      "language": "اللغة",
+      "tier": "الباقة",
+      "all": "الكل",
+      "search": "ابحث في الدورات…",
+      "clear": "مسح المرشحات"
+    },
+    "noResults": "لا توجد دورات تطابق المرشحات.",
+    "loading": "جارٍ تحميل الدورات…",
+    "showingResults": "{count} دورة",
+    "page": "صفحة {page} من {total}",
+    "prev": "السابق",
+    "next": "التالي"
+  },
+  "courseDetail": {
+    "by": "تقديم",
+    "publishedOn": "نُشرت في {date}",
+    "freePreview": "معاينة مجانية",
+    "lessonsCount": "{count} درساً",
+    "duration": "{duration} من المحتوى",
+    "enrollNow": "اشترِ الدورة بـ {price}$",
+    "subscribeForAccess": "اشترك للوصول",
+    "freeCourse": "مجانية — سجّل لتبدأ",
+    "alreadyEnrolled": "أنت مسجّل في الدورة",
+    "continueLearning": "تابع التعلم",
+    "whatYouLearn": "ماذا ستتعلم",
+    "curriculum": "المنهج",
+    "aboutInstructor": "عن المدرب",
+    "previewLessonNote": "اضغط تشغيل لمعاينة الدرس — بدون تسجيل.",
+    "previewError": "تعذّر تحميل المعاينة الآن."
+  },
+  "instructorsPage": {
+    "title": "المدربون",
+    "subtitle": "تعرّف على المتداولين الذين يدرّسون في ماي فاندد أكاديمي.",
+    "noInstructors": "لا يوجد مدربون مدرجون بعد.",
+    "coursesByInstructor": "دورات {name}",
+    "noCoursesByInstructor": "لم ينشر هذا المدرب أي دورات بعد.",
+    "expertise": "الخبرة"
+  },
+  "categoryPage": {
+    "noCoursesInCategory": "لا توجد دورات في هذه الفئة بعد."
+  },
+  "pricingPage": {
+    "comingSoon": "تفاصيل الأسعار — قريباً."
+  },
   "nav": {
     "home": "الرئيسية",
     "courses": "الدورات",

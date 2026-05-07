@@ -12,6 +12,7 @@ export const CoursesValidation = {
       page: z.coerce.number().int().min(1).optional().default(1),
       limit: z.coerce.number().int().min(1).max(100).optional().default(12),
       categoryId: z.string().uuid().optional(),
+      categorySlug: z.string().optional(),
       instructorId: z.string().uuid().optional(),
       status: courseStatus.optional(),
       featured: z.coerce.boolean().optional(),
@@ -21,6 +22,10 @@ export const CoursesValidation = {
 
   get: z.object({
     params: z.object({ idOrSlug: z.string().min(1) }),
+  }),
+
+  previewOtp: z.object({
+    params: z.object({ id: z.string().uuid() }),
   }),
 
   // ---- Course CRUD (admin) ----

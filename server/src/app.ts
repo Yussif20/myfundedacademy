@@ -1,4 +1,5 @@
 import {
+  attachUser,
   errorMiddleware,
   i18nextMiddleware,
   notFoundMiddleware,
@@ -40,6 +41,7 @@ app.use(cookieParser());
 app.use("/public", express.static(path.join(process.cwd(), "public")));
 
 app.use(i18nextMiddleware);
+app.use(attachUser);
 
 app.get("/", rootMiddleware);
 app.get("/health", (_req, res) => {

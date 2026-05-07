@@ -5,6 +5,79 @@
     "comingSoon": "Coming soon",
     "comingSoonBlurb": "We're building the most-secure trading academy on the web. Premium courses, DRM-protected video, certified by traders who've been there."
   },
+  "home": {
+    "heroEyebrow": "Trade smarter, not harder",
+    "heroTitle": "Master prop trading with traders who've been there.",
+    "heroSubtitle": "Premium courses, DRM-protected videos, real certification — built by funded traders for funded traders.",
+    "heroCta": "Browse courses",
+    "heroSecondary": "Watch a free preview",
+    "stats": {
+      "courses": "Courses",
+      "instructors": "Instructors",
+      "students": "Students",
+      "watchTime": "Hours of content"
+    },
+    "featuredCourses": "Featured courses",
+    "featuredCoursesSub": "Hand-picked by our team. Start with the fundamentals or jump into advanced strategies.",
+    "browseAll": "Browse all",
+    "categories": "Browse by topic",
+    "categoriesSub": "Find your edge — every course is grouped by what it teaches.",
+    "featuredInstructors": "Meet the instructors",
+    "featuredInstructorsSub": "Real traders teaching real strategies they trade themselves.",
+    "ctaTitle": "Stop guessing. Start training.",
+    "ctaSubtitle": "Get instant access to DRM-protected video courses certified by funded traders.",
+    "ctaButton": "Create free account"
+  },
+  "catalog": {
+    "title": "All courses",
+    "subtitle": "Browse our full library. Filter by category, level, or language.",
+    "filters": {
+      "category": "Category",
+      "level": "Level",
+      "language": "Language",
+      "tier": "Access",
+      "all": "All",
+      "search": "Search courses…",
+      "clear": "Clear filters"
+    },
+    "noResults": "No courses match your filters yet.",
+    "loading": "Loading courses…",
+    "showingResults": "{count} courses",
+    "page": "Page {page} of {total}",
+    "prev": "Previous",
+    "next": "Next"
+  },
+  "courseDetail": {
+    "by": "By",
+    "publishedOn": "Published {date}",
+    "freePreview": "Free preview",
+    "lessonsCount": "{count} lessons",
+    "duration": "{duration} of content",
+    "enrollNow": "Enroll for ${price}",
+    "subscribeForAccess": "Subscribe to access",
+    "freeCourse": "Free — sign in to start",
+    "alreadyEnrolled": "You're enrolled",
+    "continueLearning": "Continue learning",
+    "whatYouLearn": "What you'll learn",
+    "curriculum": "Curriculum",
+    "aboutInstructor": "About the instructor",
+    "previewLessonNote": "Click play to preview this lesson — no signup needed.",
+    "previewError": "Couldn't load preview right now."
+  },
+  "instructorsPage": {
+    "title": "Instructors",
+    "subtitle": "Meet the traders teaching at My Funded Academy.",
+    "noInstructors": "No instructors listed yet.",
+    "coursesByInstructor": "Courses by {name}",
+    "noCoursesByInstructor": "This instructor hasn't published any courses yet.",
+    "expertise": "Expertise"
+  },
+  "categoryPage": {
+    "noCoursesInCategory": "No courses in this category yet."
+  },
+  "pricingPage": {
+    "comingSoon": "Pricing details — coming soon."
+  },
   "nav": {
     "home": "Home",
     "courses": "Courses",

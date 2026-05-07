@@ -5,12 +5,24 @@ import { CoursesService } from "./courses.service";
 
 export const CoursesController = {
   list: catchAsync(async (req, res) => {
-    const data = await CoursesService.list(req.query as never);
+    const data = await CoursesService.list(req.query as never, {
+      isAdmin: req.user?.role === "ADMIN",
+    });
     sendResponse(res, { statusCode: httpStatus.OK, data });
   }),
 
   get: catchAsync(async (req, res) => {
-    const data = await CoursesService.get(String(req.params.idOrSlug));
+    const data = await CoursesService.get(String(req.params.idOrSlug), {
+      isAdmin: req.user?.role === "ADMIN",
+    });
+    sendResponse(res, { statusCode: httpStatus.OK, data });
+  }),
+
+  previewOtp: catchAsync(async (req, res) => {
+    const data = await CoursesService.getPreviewOtp(String(req.params.id), {
+      ip: req.ip || "",
+      userAgent: req.headers["user-agent"] || "",
+    });
     sendResponse(res, { statusCode: httpStatus.OK, data });
   }),
 

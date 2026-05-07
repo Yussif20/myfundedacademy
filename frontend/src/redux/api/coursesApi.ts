@@ -83,15 +83,20 @@ export type CourseDetail = CourseSummary & {
 };
 
 type Envelope<T> = { statusCode: number; success: boolean; message?: string; data: T };
-type Paginated<T> = Envelope<{
-  data: T;
+// sendResponse hoists `meta` from data to top-level of the envelope.
+type Paginated<T> = {
+  statusCode: number;
+  success: boolean;
+  message?: string;
+  data: { data: T };
   meta: { page: number; limit: number; total: number; totalPage: number };
-}>;
+};
 
 export type ListCoursesArgs = {
   page?: number;
   limit?: number;
   categoryId?: string;
+  categorySlug?: string;
   instructorId?: string;
   status?: CourseStatus;
   featured?: boolean;
@@ -266,6 +271,16 @@ export const coursesApi = baseApi.injectEndpoints({
       query: ({ id }) => ({ url: `/courses/lessons/${id}`, method: "DELETE" }),
       invalidatesTags: (_r, _e, arg) => [{ type: "Course", id: arg.courseId }],
     }),
+
+    getPreviewOtp: builder.mutation<
+      { statusCode: number; success: boolean; data: { otp: string; playbackInfo: string } },
+      { lessonId: string }
+    >({
+      query: ({ lessonId }) => ({
+        url: `/courses/lessons/${lessonId}/preview-otp`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -283,4 +298,5 @@ export const {
   useCreateLessonMutation,
   useUpdateLessonMutation,
   useDeleteLessonMutation,
+  useGetPreviewOtpMutation,
 } = coursesApi;

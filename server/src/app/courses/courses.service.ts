@@ -51,15 +51,19 @@ const recomputeTotals = async (courseId: string) => {
 
 export const CoursesService = {
   // ---------- Catalog ----------
-  async list(query: {
-    page?: number | string;
-    limit?: number | string;
-    categoryId?: string;
-    instructorId?: string;
-    status?: "DRAFT" | "PENDING" | "PUBLISHED" | "REJECTED";
-    featured?: boolean | string;
-    search?: string;
-  }) {
+  async list(
+    query: {
+      page?: number | string;
+      limit?: number | string;
+      categoryId?: string;
+      categorySlug?: string;
+      instructorId?: string;
+      status?: "DRAFT" | "PENDING" | "PUBLISHED" | "REJECTED";
+      featured?: boolean | string;
+      search?: string;
+    },
+    viewer?: { isAdmin: boolean },
+  ) {
     // req.query values may arrive as strings; coerce defensively.
     const page = Math.max(1, Number(query.page) || 1);
     const limit = Math.min(100, Math.max(1, Number(query.limit) || 12));
@@ -68,10 +72,16 @@ export const CoursesService = {
         ? undefined
         : query.featured === true || query.featured === "true";
 
+    // Public callers (non-admin) only see PUBLISHED courses, regardless of
+    // any status filter they pass.
+    const isAdmin = viewer?.isAdmin === true;
+    const status = isAdmin ? query.status : "PUBLISHED";
+
     const where: Prisma.CourseWhereInput = {
       isDeleted: false,
-      ...(query.status ? { status: query.status } : {}),
+      ...(status ? { status } : {}),
       ...(query.categoryId ? { categoryId: query.categoryId } : {}),
+      ...(query.categorySlug ? { category: { slug: query.categorySlug } } : {}),
       ...(query.instructorId ? { instructorId: query.instructorId } : {}),
       ...(featured !== undefined ? { isFeatured: featured } : {}),
       ...(query.search
@@ -106,13 +116,75 @@ export const CoursesService = {
     };
   },
 
-  async get(idOrSlug: string) {
+  async get(idOrSlug: string, viewer?: { isAdmin: boolean }) {
+    const isAdmin = viewer?.isAdmin === true;
     const course = await prisma.course.findFirst({
-      where: { isDeleted: false, OR: [{ id: idOrSlug }, { slug: idOrSlug }] },
+      where: {
+        isDeleted: false,
+        OR: [{ id: idOrSlug }, { slug: idOrSlug }],
+        ...(isAdmin ? {} : { status: "PUBLISHED" }),
+      },
       include: COURSE_DETAIL_INCLUDE,
     });
     if (!course) throw new AppError(httpStatus.NOT_FOUND, "Course not found.");
+
+    // Hide vdoVideoId on non-preview lessons for public callers — defence in
+    // depth so the raw ID can't be used by a determined visitor.
+    if (!isAdmin) {
+      return {
+        ...course,
+        sections: course.sections.map((s) => ({
+          ...s,
+          lessons: s.lessons.map((l) => ({
+            ...l,
+            vdoVideoId: l.isFreePreview ? l.vdoVideoId : "",
+          })),
+        })),
+      };
+    }
     return course;
+  },
+
+  /**
+   * Issues a short-lived VdoCipher OTP for a free-preview lesson on a
+   * published course. Public — no auth required.
+   */
+  async getPreviewOtp(lessonId: string, viewerInfo: { ip: string; userAgent: string }) {
+    const lesson = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+      include: {
+        section: {
+          select: {
+            course: { select: { status: true, isDeleted: true } },
+          },
+        },
+      },
+    });
+    if (!lesson) throw new AppError(httpStatus.NOT_FOUND, "Lesson not found.");
+    if (!lesson.isFreePreview) {
+      throw new AppError(httpStatus.FORBIDDEN, "This lesson is not available as a preview.");
+    }
+    if (lesson.section.course.isDeleted || lesson.section.course.status !== "PUBLISHED") {
+      throw new AppError(httpStatus.NOT_FOUND, "Lesson not available.");
+    }
+    if (!lesson.vdoVideoId) {
+      throw new AppError(httpStatus.NOT_FOUND, "No video uploaded for this lesson yet.");
+    }
+
+    const { getPlaybackOtp } = await import("@/lib/video/vdocipher");
+    return getPlaybackOtp({
+      videoId: lesson.vdoVideoId,
+      ttlSeconds: 300,
+      annotation: [
+        {
+          type: "rtext",
+          text: `Preview · ${viewerInfo.ip || "anonymous"}`,
+          alpha: "0.6",
+          color: "0xFFFFFF",
+          size: "12",
+        },
+      ],
+    });
   },
 
   // ---------- Course CRUD ----------
