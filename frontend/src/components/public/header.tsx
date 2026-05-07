@@ -17,7 +17,7 @@ export function PublicHeader() {
     <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         <Link href="/" aria-label="Home">
-          <Wordmark />
+          <Wordmark height={64} />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">

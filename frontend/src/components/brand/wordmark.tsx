@@ -10,7 +10,7 @@ type Props = {
 const NATURAL_WIDTH = 690;
 const NATURAL_HEIGHT = 370;
 
-export function Wordmark({ className, height = 40 }: Props) {
+export function Wordmark({ className, height = 56 }: Props) {
   const width = Math.round((NATURAL_WIDTH / NATURAL_HEIGHT) * height);
   return (
     <div className={cn("flex items-center", className)}>
