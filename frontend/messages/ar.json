@@ -147,7 +147,18 @@
       "instructorsDesc": "أنشئ وأدر ملفات المدربين.",
       "coursesCard": "الدورات",
       "coursesDesc": "أنشئ ونشر الدورات.",
-      "manage": "إدارة"
+      "manage": "إدارة",
+      "kpiRevenue": "الإيرادات (٣٠ يوم)",
+      "kpiSubscribers": "المشتركون النشطون",
+      "kpiEnrollments": "إجمالي التسجيلات",
+      "kpiCompletion": "متوسط الإكمال",
+      "revenueChartTitle": "اتجاه الإيرادات",
+      "revenueChartSub": "آخر ٣٠ يوماً، بالدولار",
+      "enrollmentsChartTitle": "تسجيلات جديدة",
+      "enrollmentsChartSub": "آخر ٦ أشهر",
+      "topCoursesTitle": "أفضل الدورات",
+      "topCoursesSub": "الأكثر تسجيلاً هذا الشهر",
+      "demoData": "بيانات تجريبية — اربطها بالتحليلات الحية في الإنتاج"
     },
     "categories": {
       "title": "الفئات",

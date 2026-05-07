@@ -147,7 +147,18 @@
       "instructorsDesc": "Create and manage instructor profiles.",
       "coursesCard": "Courses",
       "coursesDesc": "Author, publish, and manage courses.",
-      "manage": "Manage"
+      "manage": "Manage",
+      "kpiRevenue": "Revenue (30d)",
+      "kpiSubscribers": "Active subscribers",
+      "kpiEnrollments": "Total enrollments",
+      "kpiCompletion": "Avg. completion",
+      "revenueChartTitle": "Revenue trend",
+      "revenueChartSub": "Last 30 days, USD",
+      "enrollmentsChartTitle": "New enrollments",
+      "enrollmentsChartSub": "Last 6 months",
+      "topCoursesTitle": "Top courses",
+      "topCoursesSub": "Most enrolled this month",
+      "demoData": "Demo data — wire to live analytics in production"
     },
     "categories": {
       "title": "Categories",
