@@ -80,8 +80,8 @@ npm run dev                # http://localhost:3000
 ## User Roles
 
 - `STUDENT` — Default. Buys courses, takes them.
-- `INSTRUCTOR` — Authors courses, gets payouts. **Invite-only at launch.**
-- `ADMIN` — Approves courses & instructors, moderates content.
+- `INSTRUCTOR` — Authors courses. **Admin-seeded for MVP** (no public application flow). Payouts handled manually until Stripe Connect lands post-signoff.
+- `ADMIN` — Approves courses, moderates content, creates instructor accounts.
 
 ## Subscription Tiers
 
