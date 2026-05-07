@@ -36,6 +36,7 @@ model Course {
   orders       Order[]
   quiz         Quiz?
   certificates Certificate[]
+  reviews      Review[]
 
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())

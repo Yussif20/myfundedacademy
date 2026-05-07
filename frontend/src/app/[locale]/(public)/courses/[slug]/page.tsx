@@ -15,6 +15,8 @@ import {
   type Section,
 } from "@/redux/api/coursesApi";
 import { useCheckoutCourseMutation } from "@/redux/api/paymentsApi";
+import { ReviewsSection } from "@/components/public/reviews-section";
+import { StarRating } from "@/components/public/star-rating";
 import { useAppSelector } from "@/redux/store";
 import {
   BookOpen,
@@ -117,6 +119,16 @@ export default function CourseDetailPage() {
             </h1>
             {shortDesc && (
               <p className="mt-4 text-lg text-[var(--muted-foreground)]">{shortDesc}</p>
+            )}
+
+            {(course.reviewCount ?? 0) > 0 && (
+              <div className="mt-3 flex items-center gap-2">
+                <StarRating value={course.averageRating ?? 0} size={16} />
+                <span className="text-sm text-[var(--muted-foreground)]">
+                  {(course.averageRating ?? 0).toFixed(1)} · {course.reviewCount} review
+                  {course.reviewCount === 1 ? "" : "s"}
+                </span>
+              </div>
             )}
 
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-[var(--muted-foreground)]">
@@ -246,6 +258,10 @@ export default function CourseDetailPage() {
             </CardContent>
           </Card>
         </aside>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-16">
+        <ReviewsSection slug={course.slug} viewerHasAccess={Boolean(course.viewerHasAccess)} />
       </section>
     </div>
   );

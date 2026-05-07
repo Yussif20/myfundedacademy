@@ -72,7 +72,9 @@ export type CourseSummary = {
     isFeatured: boolean;
     user: { id: string; fullName: string; profile: string };
   };
-  _count?: { sections: number };
+  _count?: { sections: number; reviews?: number };
+  averageRating?: number;
+  reviewCount?: number;
 };
 
 export type CourseDetail = CourseSummary & {

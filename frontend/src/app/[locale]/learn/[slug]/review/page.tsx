@@ -1,0 +1,167 @@
+"use client";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { StarRating } from "@/components/public/star-rating";
+import { Wordmark } from "@/components/brand/wordmark";
+import { LocaleSwitcher } from "@/components/locale-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { AuthGuard } from "@/components/auth-guard";
+import { Link, useRouter } from "@/i18n/navigation";
+import { extractApiError } from "@/lib/errors";
+import { useGetMyReviewQuery, useUpsertCourseReviewMutation } from "@/redux/api/reviewsApi";
+import { ChevronLeft, Loader2 } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
+export default function ReviewPage() {
+  return (
+    <AuthGuard>
+      <ReviewContent />
+    </AuthGuard>
+  );
+}
+
+function ReviewContent() {
+  const params = useParams();
+  const slug = String(params?.slug || "");
+  const router = useRouter();
+
+  const { data, isLoading } = useGetMyReviewQuery(slug, { skip: !slug });
+  const [upsert, { isLoading: saving }] = useUpsertCourseReviewMutation();
+
+  const existing = data?.data;
+
+  const [rating, setRating] = useState(0);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (existing) {
+      setRating(existing.rating);
+      setTitle(existing.title || "");
+      setBody(existing.body || "");
+    }
+  }, [existing]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (rating < 1) {
+      setError("Pick a rating between 1 and 5 stars.");
+      return;
+    }
+    try {
+      await upsert({ slug, rating, title, body }).unwrap();
+      router.push(`/courses/${slug}` as `/courses/${string}`);
+    } catch (err) {
+      setError(extractApiError(err));
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-[var(--background)]">
+        <Loader2 className="size-8 animate-spin text-[var(--primary)]" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+      <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--card)]/80 backdrop-blur">
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3 md:px-6">
+          <Link href="/" aria-label="Home" className="hidden md:block">
+            <Wordmark height={36} />
+          </Link>
+          <Link
+            href={`/learn/${slug}` as `/learn/${string}`}
+            className="flex items-center gap-2 text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+          >
+            <ChevronLeft className="size-4 rtl:rotate-180" />
+            Back to course
+          </Link>
+          <div className="flex items-center gap-2">
+            <LocaleSwitcher />
+            <ThemeToggle />
+          </div>
+        </div>
+      </header>
+
+      <section className="mx-auto max-w-2xl px-4 py-8 md:px-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>{existing ? "Update your review" : "Leave a review"}</CardTitle>
+            <CardDescription>
+              Your honest take helps other traders decide if this course is right for them.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={onSubmit} className="space-y-5">
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <div className="space-y-2">
+                <Label>Rating</Label>
+                <div className="flex items-center gap-3">
+                  <StarRating value={rating} size={28} onChange={setRating} />
+                  <span className="text-sm text-[var(--muted-foreground)]">
+                    {rating > 0 ? `${rating} / 5` : "Pick a rating"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="title">Title (optional)</Label>
+                <Input
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="A short summary of your experience"
+                  maxLength={160}
+                  disabled={saving}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="body">Review (optional)</Label>
+                <Textarea
+                  id="body"
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                  placeholder="What worked, what didn't, what surprised you?"
+                  rows={6}
+                  maxLength={2000}
+                  disabled={saving}
+                />
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <Button asChild variant="outline" disabled={saving}>
+                  <Link href={`/courses/${slug}` as `/courses/${string}`}>Cancel</Link>
+                </Button>
+                <Button type="submit" disabled={saving || rating < 1}>
+                  {saving
+                    ? existing
+                      ? "Updating…"
+                      : "Submitting…"
+                    : existing
+                      ? "Update review"
+                      : "Submit review"}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </section>
+    </div>
+  );
+}

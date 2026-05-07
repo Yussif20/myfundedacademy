@@ -18,7 +18,7 @@ const COURSE_LIST_INCLUDE = {
       user: { select: { id: true, fullName: true, profile: true } },
     },
   },
-  _count: { select: { sections: true } },
+  _count: { select: { sections: true, reviews: { where: { isDeleted: false } } } },
 } as const;
 
 const COURSE_DETAIL_INCLUDE = {
@@ -95,7 +95,7 @@ export const CoursesService = {
         : {}),
     };
 
-    const [total, data] = await Promise.all([
+    const [total, courses] = await Promise.all([
       prisma.course.count({ where }),
       prisma.course.findMany({
         where,
@@ -105,6 +105,18 @@ export const CoursesService = {
         orderBy: [{ isFeatured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
       }),
     ]);
+
+    // Annotate average rating per course (one DB roundtrip).
+    const { ReviewsService } = await import("@/app/reviews/reviews.service");
+    const summaries = await ReviewsService.summariesForCourses(courses.map((c) => c.id));
+    const data = courses.map((c) => {
+      const s = summaries.get(c.id);
+      return {
+        ...c,
+        averageRating: s?.avg ?? 0,
+        reviewCount: s?.count ?? 0,
+      };
+    });
 
     return {
       data,
@@ -135,12 +147,22 @@ export const CoursesService = {
       viewer?.role,
     );
 
+    // Annotate review summary
+    const { ReviewsService } = await import("@/app/reviews/reviews.service");
+    const summaries = await ReviewsService.summariesForCourses([course.id]);
+    const summary = summaries.get(course.id);
+    const reviewMeta = {
+      averageRating: summary?.avg ?? 0,
+      reviewCount: summary?.count ?? 0,
+    };
+
     // Hide vdoVideoId on non-preview lessons for public callers without
     // access — defence in depth so the raw ID can't be used by a determined
     // visitor. Admins and enrolled users see all video IDs.
     if (!isAdmin && !viewerHasAccess) {
       return {
         ...course,
+        ...reviewMeta,
         viewerHasAccess: false,
         sections: course.sections.map((s) => ({
           ...s,
@@ -151,7 +173,7 @@ export const CoursesService = {
         })),
       };
     }
-    return { ...course, viewerHasAccess: true };
+    return { ...course, ...reviewMeta, viewerHasAccess: true };
   },
 
   /**

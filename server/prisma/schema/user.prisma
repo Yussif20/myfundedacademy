@@ -34,6 +34,7 @@ model User {
   progress      Progress[]
   quizAttempts  QuizAttempt[]
   certificates  Certificate[]
+  reviews       Review[]
 
   @@map("users")
 }

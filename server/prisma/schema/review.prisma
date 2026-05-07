@@ -1,0 +1,21 @@
+model Review {
+  id          String @id @default(uuid())
+  userId      String
+  courseId    String
+  rating      Int
+  title       String @default("")
+  titleArabic String @default("")
+  body        String @default("")
+  bodyArabic  String @default("")
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([courseId, isDeleted])
+  @@map("reviews")
+}
