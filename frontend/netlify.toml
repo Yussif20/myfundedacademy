@@ -1,0 +1,8 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Netlify auto-detects Next.js but pinning the plugin avoids version drift
+# and ensures middleware (next-intl locale routing) runs on Edge Functions.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

@@ -2,7 +2,8 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // `output: "standalone"` would target Docker self-hosting; Netlify and
+  // Vercel handle build output their own way, so leave it default.
   async headers() {
     return [
       {
