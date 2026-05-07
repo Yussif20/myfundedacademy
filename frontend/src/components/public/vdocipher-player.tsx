@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2, PlayCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   /** VdoCipher OTP returned by the server */
@@ -16,7 +16,24 @@ type Props = {
   title?: string;
   /** Optional click handler — called when poster is clicked, e.g. to fetch OTP lazily */
   onActivate?: () => void;
+  /**
+   * Client-side watermark text overlaid on the player. Used as a visible
+   * deterrent against casual recording. VdoCipher's paid-tier dynamic
+   * watermark is more secure (burned into the video stream); this overlay
+   * is a "good enough" fallback that works on every plan.
+   */
+  watermarkText?: string;
 };
+
+const WATERMARK_POSITIONS: Array<{ top?: string; bottom?: string; left?: string; right?: string }> =
+  [
+    { top: "8%", left: "6%" },
+    { top: "8%", right: "6%" },
+    { bottom: "12%", left: "6%" },
+    { bottom: "12%", right: "6%" },
+    { top: "45%", left: "8%" },
+    { top: "45%", right: "8%" },
+  ];
 
 export function VdoCipherPlayer({
   otp,
@@ -25,9 +42,20 @@ export function VdoCipherPlayer({
   poster,
   title,
   onActivate,
+  watermarkText,
 }: Props) {
   const [activated, setActivated] = useState(false);
+  const [posIndex, setPosIndex] = useState(0);
   const ready = Boolean(otp && playbackInfo);
+
+  // Rotate the overlay watermark to a new corner every 5 seconds.
+  useEffect(() => {
+    if (!watermarkText || !ready) return;
+    const id = setInterval(() => {
+      setPosIndex((n) => (n + 1) % WATERMARK_POSITIONS.length);
+    }, 5000);
+    return () => clearInterval(id);
+  }, [watermarkText, ready]);
 
   const handleActivate = () => {
     setActivated(true);
@@ -67,9 +95,10 @@ export function VdoCipherPlayer({
   }
 
   const src = `https://player.vdocipher.com/v2/?otp=${encodeURIComponent(otp!)}&playbackInfo=${encodeURIComponent(playbackInfo!)}`;
+  const pos = WATERMARK_POSITIONS[posIndex];
 
   return (
-    <div className="aspect-video w-full overflow-hidden rounded-xl border border-[var(--border)] bg-black">
+    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[var(--border)] bg-black">
       <iframe
         src={src}
         title={title || "VdoCipher player"}
@@ -77,6 +106,19 @@ export function VdoCipherPlayer({
         allowFullScreen
         className="h-full w-full"
       />
+
+      {watermarkText && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute z-10 select-none rounded-md bg-black/30 px-2 py-1 text-xs font-medium text-white/70 backdrop-blur-[2px] transition-all duration-700"
+          style={{
+            ...pos,
+            textShadow: "0 1px 2px rgba(0,0,0,0.6)",
+          }}
+        >
+          {watermarkText}
+        </div>
+      )}
     </div>
   );
 }

@@ -20,6 +20,7 @@ import {
   type Lesson,
   type Section,
 } from "@/redux/api/coursesApi";
+import { useAppSelector } from "@/redux/store";
 import {
   CheckCircle2,
   ChevronDown,
@@ -317,6 +318,7 @@ function LessonView({
 }) {
   const locale = useLocale();
   const isAr = locale === "ar";
+  const user = useAppSelector((s) => s.auth.user);
 
   const [getOtp, { isLoading: otpLoading }] = useGetPlaybackOtpMutation();
   const [upsertProgress, { isLoading: marking }] = useUpsertLessonProgressMutation();
@@ -326,6 +328,7 @@ function LessonView({
   const [error, setError] = useState<string | null>(null);
 
   const completed = Boolean(progressByLesson.get(lesson.id)?.completedAt);
+  const watermarkText = user?.email || undefined;
 
   // Load OTP whenever the lesson changes (and there's a video).
   useEffect(() => {
@@ -394,6 +397,7 @@ function LessonView({
           isLoading={otpLoading}
           poster={course.thumbnail}
           title={title}
+          watermarkText={watermarkText}
         />
       )}
 
