@@ -38,7 +38,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FAFAF9" },
+    { media: "(prefers-color-scheme: light)", color: "#24A592" },
     { media: "(prefers-color-scheme: dark)", color: "#0A0F14" },
   ],
 };
@@ -58,6 +58,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     metadataBase: new URL(BASE_URL),
     title: { template: "%s | My Funded Academy", default: title },
     description,
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+        { url: "/favicon-48x48.png", sizes: "48x48", type: "image/png" },
+        { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      ],
+      apple: "/apple-touch-icon.png",
+    },
+    manifest: "/site.webmanifest",
     openGraph: {
       title,
       description,

@@ -1,24 +1,27 @@
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
-export function Wordmark({ className }: { className?: string }) {
+type Props = {
+  className?: string;
+  /** Pixel height of the rendered logo. Width is computed from the SVG aspect ratio. */
+  height?: number;
+};
+
+const NATURAL_WIDTH = 690;
+const NATURAL_HEIGHT = 370;
+
+export function Wordmark({ className, height = 40 }: Props) {
+  const width = Math.round((NATURAL_WIDTH / NATURAL_HEIGHT) * height);
   return (
-    <div className={cn("flex items-center gap-3 font-display", className)}>
-      <div
-        className={cn(
-          "grid place-items-center size-10 rounded-lg",
-          "bg-[var(--primary)] text-[var(--primary-foreground)]",
-          "font-bold text-lg tracking-tight",
-        )}
-        aria-hidden
-      >
-        MFA
-      </div>
-      <div className="flex flex-col leading-tight">
-        <span className="text-base font-semibold tracking-tight text-[var(--foreground)]">
-          My Funded Academy
-        </span>
-        <span className="text-xs text-[var(--muted-foreground)]">Trade. Learn. Get certified.</span>
-      </div>
+    <div className={cn("flex items-center", className)}>
+      <Image
+        src="/logo.svg"
+        alt="My Funded Academy"
+        width={width}
+        height={height}
+        priority
+        style={{ height, width: "auto" }}
+      />
     </div>
   );
 }
