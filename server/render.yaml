@@ -4,7 +4,9 @@ services:
     runtime: node
     plan: free
     region: frankfurt
-    buildCommand: npm ci && npx prisma generate && npm run build
+    # --include=dev forces devDeps install even with NODE_ENV=production
+    # (tsc, tsc-alias, @types, prisma CLI all live in devDependencies).
+    buildCommand: npm ci --include=dev && npx prisma generate && npm run build
     startCommand: node -r tsconfig-paths/register ./dist/server.js
     healthCheckPath: /health
     envVars:
