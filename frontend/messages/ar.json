@@ -11,7 +11,9 @@
     "instructors": "المدربون",
     "pricing": "الأسعار",
     "signIn": "تسجيل الدخول",
-    "signUp": "إنشاء حساب"
+    "signUp": "إنشاء حساب",
+    "account": "الحساب",
+    "signOut": "تسجيل الخروج"
   },
   "common": {
     "switchLocale": "اللغة",
@@ -20,6 +22,101 @@
     "arabic": "العربية",
     "light": "فاتح",
     "dark": "داكن",
-    "system": "النظام"
+    "system": "النظام",
+    "submit": "إرسال",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "saveChanges": "حفظ التغييرات",
+    "loading": "جارٍ التحميل…",
+    "back": "رجوع"
+  },
+  "auth": {
+    "login": {
+      "title": "مرحباً بعودتك",
+      "subtitle": "سجّل الدخول لمتابعة التعلم.",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "••••••••",
+      "submit": "تسجيل الدخول",
+      "submitting": "جارٍ تسجيل الدخول…",
+      "forgot": "نسيت كلمة المرور؟",
+      "noAccount": "لا تملك حساباً؟",
+      "signUpLink": "أنشئ واحداً"
+    },
+    "signup": {
+      "title": "أنشئ حسابك",
+      "subtitle": "ابدأ رحلتك في تعلّم التداول.",
+      "fullNameLabel": "الاسم الكامل",
+      "fullNamePlaceholder": "أحمد محمد",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "8 أحرف على الأقل",
+      "countryLabel": "الدولة",
+      "countryPlaceholder": "اختياري",
+      "submit": "إنشاء الحساب",
+      "submitting": "جارٍ إنشاء الحساب…",
+      "haveAccount": "لديك حساب بالفعل؟",
+      "signInLink": "سجّل الدخول"
+    },
+    "verify": {
+      "title": "تأكيد البريد الإلكتروني",
+      "verifying": "جارٍ تأكيد بريدك الإلكتروني…",
+      "success": "تم تأكيد البريد! يمكنك تسجيل الدخول الآن.",
+      "successCta": "تسجيل الدخول",
+      "failed": "تعذّر التحقق من هذا الرابط. ربما انتهت صلاحيته.",
+      "resendCta": "إعادة إرسال التأكيد"
+    },
+    "resend": {
+      "title": "إعادة إرسال رسالة التحقق",
+      "subtitle": "أدخل بريدك وسنرسل رابطاً جديداً.",
+      "submit": "إعادة الإرسال",
+      "submitting": "جارٍ الإرسال…",
+      "done": "إذا كان هناك حساب غير مفعّل بهذا البريد، فإن الرابط في طريقه إليك."
+    },
+    "forgot": {
+      "title": "إعادة تعيين كلمة المرور",
+      "subtitle": "سنرسل رابط إعادة التعيين إلى بريدك.",
+      "submit": "إرسال الرابط",
+      "submitting": "جارٍ الإرسال…",
+      "done": "إذا كان هناك حساب بهذا البريد، فإن الرابط في طريقه إليك.",
+      "backToLogin": "العودة لتسجيل الدخول"
+    },
+    "reset": {
+      "title": "كلمة مرور جديدة",
+      "subtitle": "اختر كلمة مرور قوية.",
+      "newPasswordLabel": "كلمة المرور الجديدة",
+      "newPasswordPlaceholder": "8 أحرف على الأقل",
+      "submit": "تحديث كلمة المرور",
+      "submitting": "جارٍ التحديث…",
+      "success": "تم تحديث كلمة المرور. يمكنك تسجيل الدخول الآن.",
+      "signIn": "تسجيل الدخول"
+    },
+    "checkEmail": {
+      "title": "تفقّد بريدك",
+      "body": "أرسلنا لك رابطاً. اضغط عليه للمتابعة.",
+      "noEmail": "لم تصلك الرسالة؟",
+      "resend": "إعادة الإرسال"
+    },
+    "errors": {
+      "passwordsDontMatch": "كلمتا المرور غير متطابقتين.",
+      "termsRequired": "يجب الموافقة على الشروط."
+    }
+  },
+  "account": {
+    "title": "حسابك",
+    "profileSection": "الملف الشخصي",
+    "profileDescription": "حدّث بياناتك العامة.",
+    "passwordSection": "كلمة المرور",
+    "passwordDescription": "غيّر كلمة المرور. ستُسجّل خروجك من الجلسات الأخرى.",
+    "fullNameLabel": "الاسم الكامل",
+    "bioLabel": "نبذة",
+    "countryLabel": "الدولة",
+    "preferredLocaleLabel": "اللغة المفضلة",
+    "currentPasswordLabel": "كلمة المرور الحالية",
+    "newPasswordLabel": "كلمة المرور الجديدة",
+    "saved": "تم حفظ الملف.",
+    "passwordChanged": "تم تحديث كلمة المرور."
   }
 }

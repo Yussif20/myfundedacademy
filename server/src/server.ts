@@ -3,10 +3,18 @@ import { env } from "@/env";
 import chalk from "chalk";
 import { createServer, Server as HTTPServer } from "http";
 import { customConsole } from "./utils/customConsole";
+import { seedAdmin } from "./lib/seed/seedAdmin";
+import { logger } from "./utils/logger";
 
 const port = env.PORT || 5000;
 
 async function main() {
+  try {
+    await seedAdmin();
+  } catch (err) {
+    logger.error(`Admin seed failed: ${(err as Error).message}`, { type: "SEED" });
+  }
+
   const server: HTTPServer = createServer(app).listen(port, () => {
     customConsole(port, "My Funded Academy (Server)");
   });

@@ -1,12 +1,14 @@
 import express, { Application, Router } from "express";
+import { AuthRoutes } from "./app/auth/auth.route";
+import { UsersRoutes } from "./app/users/users.route";
 
 const router: Router = express.Router();
 
 const moduleRoutes: ModuleRoute[] = [
-  // Modules will be registered here as they ship.
-  // Batch 1: AuthRoutes, UsersRoutes
+  { path: "/auth", route: AuthRoutes },
+  { path: "/users", route: UsersRoutes },
   // Batch 2: CoursesRoutes, SectionsRoutes, LessonsRoutes
-  // Batch 3: AdminModerationRoutes, CategoriesRoutes
+  // Batch 3: CategoriesRoutes
   // ...
 ];
 

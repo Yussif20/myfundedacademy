@@ -11,7 +11,9 @@
     "instructors": "Instructors",
     "pricing": "Pricing",
     "signIn": "Sign in",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "account": "Account",
+    "signOut": "Sign out"
   },
   "common": {
     "switchLocale": "Language",
@@ -20,6 +22,101 @@
     "arabic": "العربية",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saveChanges": "Save changes",
+    "loading": "Loading…",
+    "back": "Back"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue learning.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "submit": "Sign in",
+      "submitting": "Signing in…",
+      "forgot": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Create one"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Start your trading education journey.",
+      "fullNameLabel": "Full name",
+      "fullNamePlaceholder": "Jane Doe",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "countryLabel": "Country",
+      "countryPlaceholder": "Optional",
+      "submit": "Create account",
+      "submitting": "Creating account…",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    },
+    "verify": {
+      "title": "Verify your email",
+      "verifying": "Verifying your email…",
+      "success": "Email verified! You can sign in now.",
+      "successCta": "Sign in",
+      "failed": "We couldn't verify this link. It may have expired.",
+      "resendCta": "Resend verification"
+    },
+    "resend": {
+      "title": "Resend verification email",
+      "subtitle": "Enter your email and we'll send a new verification link.",
+      "submit": "Resend",
+      "submitting": "Sending…",
+      "done": "If an unverified account exists for that email, a new link is on its way."
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "subtitle": "We'll send a reset link to your email.",
+      "submit": "Send reset link",
+      "submitting": "Sending…",
+      "done": "If an account exists for that email, a reset link is on its way.",
+      "backToLogin": "Back to sign in"
+    },
+    "reset": {
+      "title": "Set a new password",
+      "subtitle": "Choose a strong password.",
+      "newPasswordLabel": "New password",
+      "newPasswordPlaceholder": "At least 8 characters",
+      "submit": "Update password",
+      "submitting": "Updating…",
+      "success": "Password updated. You can sign in now.",
+      "signIn": "Sign in"
+    },
+    "checkEmail": {
+      "title": "Check your inbox",
+      "body": "We sent you a link. Click it to continue.",
+      "noEmail": "Didn't get the email?",
+      "resend": "Resend"
+    },
+    "errors": {
+      "passwordsDontMatch": "Passwords don't match.",
+      "termsRequired": "You must agree to the terms."
+    }
+  },
+  "account": {
+    "title": "Your account",
+    "profileSection": "Profile",
+    "profileDescription": "Update your public details.",
+    "passwordSection": "Password",
+    "passwordDescription": "Change your password. You'll be signed out of other sessions.",
+    "fullNameLabel": "Full name",
+    "bioLabel": "Bio",
+    "countryLabel": "Country",
+    "preferredLocaleLabel": "Preferred language",
+    "currentPasswordLabel": "Current password",
+    "newPasswordLabel": "New password",
+    "saved": "Profile saved.",
+    "passwordChanged": "Password updated."
   }
 }

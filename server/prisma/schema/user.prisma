@@ -1,18 +1,45 @@
-// User skeleton — full auth/profile fields land in Batch 1.
 model User {
-  id        String       @id @default(uuid())
-  email     String
-  fullName  String
-  password  String?
-  role      UserRoleEnum @default(STUDENT)
-  status    UserStatus   @default(ACTIVE)
-  authType  AuthType     @default(EMAIL_PASSWORD)
+  id       String       @id @default(uuid())
+  email    String       @unique
+  fullName String
+  password String?
+  role     UserRoleEnum @default(STUDENT)
+  status   UserStatus   @default(ACTIVE)
+  authType AuthType     @default(EMAIL_PASSWORD)
 
-  isEmailVerified Boolean   @default(false)
-  isDeleted       Boolean   @default(false)
+  bio             String? @default("")
+  country         String? @default("")
+  profile         String? @default("")
+  preferredLocale String  @default("en")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  isEmailVerified               Boolean   @default(false)
+  emailVerificationToken        String?
+  emailVerificationTokenExpires DateTime?
+
+  resetPasswordToken        String?
+  resetPasswordTokenExpires DateTime?
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  refreshTokens RefreshToken[]
 
   @@map("users")
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid())
+  userId    String
+  tokenHash String
+  userAgent String?   @default("")
+  ip        String?   @default("")
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
 }
