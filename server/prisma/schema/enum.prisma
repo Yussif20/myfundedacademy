@@ -15,3 +15,29 @@ enum AuthType {
   GOOGLE
   MAGIC_LINK
 }
+
+enum CourseStatus {
+  DRAFT
+  PENDING
+  PUBLISHED
+  REJECTED
+}
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ALL_LEVELS
+}
+
+enum AccessTier {
+  FREE
+  STARTER
+  PRO
+}
+
+enum CourseLanguage {
+  EN
+  AR
+  BOTH
+}

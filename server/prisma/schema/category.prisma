@@ -1,0 +1,19 @@
+model Category {
+  id          String  @id @default(uuid())
+  slug        String  @unique
+  name        String
+  nameArabic  String  @default("")
+  description String  @default("")
+  descriptionArabic String @default("")
+  icon        String  @default("")
+  order       Int     @default(0)
+  isFeatured  Boolean @default(false)
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses Course[]
+
+  @@map("categories")
+}
