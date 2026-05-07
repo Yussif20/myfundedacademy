@@ -191,9 +191,156 @@ export const CoursesService = {
           alpha: "0.6",
           color: "0xFFFFFF",
           size: "12",
-          interval: "5000", // ms between watermark position randomisation
+          interval: "5000",
         },
       ],
+    });
+  },
+
+  /**
+   * Authenticated playback OTP for an enrolled student. Watermark burns
+   * the viewer's email + IP into every play so any leak is traceable.
+   * Free-preview lessons skip the access check (anyone can play those).
+   */
+  async getAuthenticatedPlaybackOtp(
+    lessonId: string,
+    viewer: { userId: string; email: string; role: UserRoleEnum; ip: string },
+  ) {
+    const lesson = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+      include: {
+        section: {
+          select: {
+            course: {
+              select: { id: true, status: true, isDeleted: true, accessTier: true },
+            },
+          },
+        },
+      },
+    });
+    if (!lesson) throw new AppError(httpStatus.NOT_FOUND, "Lesson not found.");
+    if (lesson.section.course.isDeleted || lesson.section.course.status !== "PUBLISHED") {
+      throw new AppError(httpStatus.NOT_FOUND, "Lesson not available.");
+    }
+    if (!lesson.vdoVideoId) {
+      throw new AppError(httpStatus.NOT_FOUND, "No video uploaded for this lesson yet.");
+    }
+
+    if (!lesson.isFreePreview) {
+      const has = await userHasCourseAccess(
+        viewer.userId,
+        { id: lesson.section.course.id, accessTier: lesson.section.course.accessTier },
+        viewer.role,
+      );
+      if (!has) {
+        throw new AppError(
+          httpStatus.FORBIDDEN,
+          "You don't have access to this course. Enroll or subscribe to start watching.",
+        );
+      }
+    }
+
+    const { getPlaybackOtp } = await import("@/lib/video/vdocipher");
+    return getPlaybackOtp({
+      videoId: lesson.vdoVideoId,
+      ttlSeconds: 600,
+      annotation: [
+        {
+          type: "rtext",
+          text: `${viewer.email} · ${viewer.ip}`,
+          alpha: "0.7",
+          color: "0xFFFFFF",
+          size: "14",
+          interval: "5000",
+        },
+      ],
+    });
+  },
+
+  /**
+   * Upserts a per-user, per-lesson progress row. Pass `completed: true` to
+   * mark the lesson done; `false` to undo. lastWatchedSeconds is monotonic
+   * — we never decrease it (so a brief seek-backwards doesn't lose state).
+   */
+  async upsertProgress(
+    userId: string,
+    lessonId: string,
+    input: { completed?: boolean; lastWatchedSeconds?: number },
+    viewerRole?: UserRoleEnum,
+  ) {
+    const lesson = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+      include: {
+        section: {
+          select: {
+            course: { select: { id: true, status: true, isDeleted: true, accessTier: true } },
+          },
+        },
+      },
+    });
+    if (!lesson) throw new AppError(httpStatus.NOT_FOUND, "Lesson not found.");
+    if (lesson.section.course.isDeleted) {
+      throw new AppError(httpStatus.NOT_FOUND, "Lesson not available.");
+    }
+
+    if (!lesson.isFreePreview) {
+      const has = await userHasCourseAccess(
+        userId,
+        { id: lesson.section.course.id, accessTier: lesson.section.course.accessTier },
+        viewerRole,
+      );
+      if (!has) {
+        throw new AppError(httpStatus.FORBIDDEN, "You don't have access to this course.");
+      }
+    }
+
+    const existing = await prisma.progress.findUnique({
+      where: { userId_lessonId: { userId, lessonId } },
+    });
+
+    const lastWatched =
+      input.lastWatchedSeconds !== undefined
+        ? Math.max(input.lastWatchedSeconds, existing?.lastWatchedSeconds ?? 0)
+        : (existing?.lastWatchedSeconds ?? 0);
+
+    const completedAt =
+      input.completed === true
+        ? (existing?.completedAt ?? new Date())
+        : input.completed === false
+          ? null
+          : (existing?.completedAt ?? null);
+
+    return prisma.progress.upsert({
+      where: { userId_lessonId: { userId, lessonId } },
+      create: { userId, lessonId, lastWatchedSeconds: lastWatched, completedAt },
+      update: { lastWatchedSeconds: lastWatched, completedAt },
+    });
+  },
+
+  /**
+   * All progress rows for a course, scoped to one user. Frontend uses this
+   * to render the curriculum tree with completion checkmarks.
+   */
+  async getCourseProgress(idOrSlug: string, userId: string) {
+    const course = await prisma.course.findFirst({
+      where: { isDeleted: false, OR: [{ id: idOrSlug }, { slug: idOrSlug }] },
+      select: {
+        id: true,
+        sections: {
+          select: {
+            lessons: { select: { id: true } },
+          },
+        },
+      },
+    });
+    if (!course) throw new AppError(httpStatus.NOT_FOUND, "Course not found.");
+
+    const lessonIds = course.sections.flatMap((s) => s.lessons.map((l) => l.id));
+    if (lessonIds.length === 0) return [];
+
+    return prisma.progress.findMany({
+      where: { userId, lessonId: { in: lessonIds } },
+      orderBy: { updatedAt: "desc" },
     });
   },
 

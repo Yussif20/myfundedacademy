@@ -282,6 +282,55 @@ export const coursesApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
+
+    getPlaybackOtp: builder.mutation<
+      { statusCode: number; success: boolean; data: { otp: string; playbackInfo: string } },
+      { lessonId: string }
+    >({
+      query: ({ lessonId }) => ({
+        url: `/courses/lessons/${lessonId}/playback-otp`,
+        method: "POST",
+      }),
+    }),
+
+    upsertLessonProgress: builder.mutation<
+      {
+        statusCode: number;
+        success: boolean;
+        data: {
+          id: string;
+          userId: string;
+          lessonId: string;
+          lastWatchedSeconds: number;
+          completedAt: string | null;
+        };
+      },
+      { lessonId: string; courseId: string; completed?: boolean; lastWatchedSeconds?: number }
+    >({
+      query: ({ lessonId, courseId: _c, ...body }) => ({
+        url: `/courses/lessons/${lessonId}/progress`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: (_r, _e, arg) => [{ type: "Course", id: `progress-${arg.courseId}` }],
+    }),
+
+    getCourseProgress: builder.query<
+      {
+        statusCode: number;
+        success: boolean;
+        data: Array<{
+          id: string;
+          lessonId: string;
+          lastWatchedSeconds: number;
+          completedAt: string | null;
+        }>;
+      },
+      string
+    >({
+      query: (idOrSlug) => ({ url: `/courses/${idOrSlug}/progress` }),
+      providesTags: (_r, _e, idOrSlug) => [{ type: "Course", id: `progress-${idOrSlug}` }],
+    }),
   }),
 });
 
@@ -300,4 +349,7 @@ export const {
   useUpdateLessonMutation,
   useDeleteLessonMutation,
   useGetPreviewOtpMutation,
+  useGetPlaybackOtpMutation,
+  useUpsertLessonProgressMutation,
+  useGetCourseProgressQuery,
 } = coursesApi;

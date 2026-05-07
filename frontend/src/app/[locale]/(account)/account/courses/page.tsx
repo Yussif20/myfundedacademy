@@ -48,7 +48,7 @@ export default function MyCoursesPage() {
             return (
               <li key={e.id}>
                 <Link
-                  href={{ pathname: `/courses/${c.slug}` }}
+                  href={`/learn/${c.slug}` as `/learn/${string}`}
                   className="group block overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] transition-colors hover:border-[var(--primary)]/40"
                 >
                   <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center">

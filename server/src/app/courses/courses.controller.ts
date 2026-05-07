@@ -1,6 +1,7 @@
 import catchAsync from "@/utils/catchAsync";
 import sendResponse from "@/utils/sendResponse";
 import httpStatus from "http-status";
+import AppError from "@/helpers/errors/AppError";
 import { CoursesService } from "./courses.service";
 
 export const CoursesController = {
@@ -25,6 +26,34 @@ export const CoursesController = {
       ip: req.ip || "",
       userAgent: req.headers["user-agent"] || "",
     });
+    sendResponse(res, { statusCode: httpStatus.OK, data });
+  }),
+
+  playbackOtp: catchAsync(async (req, res) => {
+    if (!req.user) throw new AppError(httpStatus.UNAUTHORIZED, "Sign in required.");
+    const data = await CoursesService.getAuthenticatedPlaybackOtp(String(req.params.id), {
+      userId: req.user.id,
+      email: req.user.email,
+      role: req.user.role,
+      ip: req.ip || "",
+    });
+    sendResponse(res, { statusCode: httpStatus.OK, data });
+  }),
+
+  upsertProgress: catchAsync(async (req, res) => {
+    if (!req.user) throw new AppError(httpStatus.UNAUTHORIZED, "Sign in required.");
+    const data = await CoursesService.upsertProgress(
+      req.user.id,
+      String(req.params.id),
+      req.body,
+      req.user.role,
+    );
+    sendResponse(res, { statusCode: httpStatus.OK, data });
+  }),
+
+  getCourseProgress: catchAsync(async (req, res) => {
+    if (!req.user) throw new AppError(httpStatus.UNAUTHORIZED, "Sign in required.");
+    const data = await CoursesService.getCourseProgress(String(req.params.idOrSlug), req.user.id);
     sendResponse(res, { statusCode: httpStatus.OK, data });
   }),
 

@@ -259,7 +259,7 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
   if (course.viewerHasAccess) {
     return (
       <Button asChild className="w-full" size="lg">
-        <Link href="/account/courses">{t("continueLearning")}</Link>
+        <Link href={`/learn/${course.slug}` as `/learn/${string}`}>{t("continueLearning")}</Link>
       </Button>
     );
   }

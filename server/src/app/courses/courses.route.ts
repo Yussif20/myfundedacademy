@@ -17,6 +17,29 @@ router.post(
   CoursesController.previewOtp,
 );
 
+// Authenticated playback OTP (access-checked, watermarked with viewer email)
+router.post(
+  "/lessons/:id/playback-otp",
+  requireAuth,
+  validateRequest(CoursesValidation.playbackOtp),
+  CoursesController.playbackOtp,
+);
+
+// Progress (auth)
+router.post(
+  "/lessons/:id/progress",
+  requireAuth,
+  validateRequest(CoursesValidation.upsertProgress),
+  CoursesController.upsertProgress,
+);
+
+router.get(
+  "/:idOrSlug/progress",
+  requireAuth,
+  validateRequest(CoursesValidation.getCourseProgress),
+  CoursesController.getCourseProgress,
+);
+
 const admin = [requireAuth, requireRole("ADMIN")];
 
 // Course CRUD

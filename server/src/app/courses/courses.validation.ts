@@ -28,6 +28,22 @@ export const CoursesValidation = {
     params: z.object({ id: z.string().uuid() }),
   }),
 
+  playbackOtp: z.object({
+    params: z.object({ id: z.string().uuid() }),
+  }),
+
+  upsertProgress: z.object({
+    params: z.object({ id: z.string().uuid() }),
+    body: z.object({
+      completed: z.boolean().optional(),
+      lastWatchedSeconds: z.number().int().min(0).optional(),
+    }),
+  }),
+
+  getCourseProgress: z.object({
+    params: z.object({ idOrSlug: z.string().min(1) }),
+  }),
+
   // ---- Course CRUD (admin) ----
   create: z.object({
     body: z.object({

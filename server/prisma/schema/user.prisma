@@ -31,6 +31,7 @@ model User {
   orders        Order[]
   subscription  Subscription?
   enrollments   Enrollment[]
+  progress      Progress[]
 
   @@map("users")
 }

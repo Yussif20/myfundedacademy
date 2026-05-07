@@ -80,6 +80,7 @@ model Lesson {
 
   section     Section            @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   attachments LessonAttachment[]
+  progress    Progress[]
 
   @@index([sectionId, order])
   @@map("lessons")
