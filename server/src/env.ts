@@ -12,6 +12,7 @@ const EnvSchema = z.object({
   BASE_URL_SERVER: z.string().url(),
   BASE_URL_CLIENT: z.string().url(),
   COOKIE_DOMAIN: z.string().optional().default(""),
+  CORS_ORIGINS: z.string().optional().default(""),
 
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
   REDIS_URL: z.string().min(1).optional(),

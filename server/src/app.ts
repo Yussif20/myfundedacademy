@@ -18,12 +18,16 @@ import { StripeWebhookController } from "@/app/webhooks/webhooks.controller";
 const app: Application = express();
 app.set("trust proxy", 1);
 
+// Local dev defaults plus anything configured via env. Production should
+// set CORS_ORIGINS to a comma-separated list including the apex domain
+// and any preview URLs (Vercel branch deploys).
 const corsOrigins = [
-  "https://myfundedacademy.com",
-  "https://www.myfundedacademy.com",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   env.BASE_URL_CLIENT,
+  ...env.CORS_ORIGINS.split(",")
+    .map((s: string) => s.trim())
+    .filter(Boolean),
 ].filter(Boolean);
 
 app.use(rateLimiterMiddleware);
