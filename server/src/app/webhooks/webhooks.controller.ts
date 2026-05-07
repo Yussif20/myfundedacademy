@@ -110,35 +110,37 @@ const upsertSubscription = async (sub: Stripe.Subscription) => {
 
   const status = stripeStatusMap[sub.status] || "INCOMPLETE";
 
-  await prisma.subscription.upsert({
-    where: { userId },
-    create: {
-      userId,
-      plan,
-      status,
-      stripeCustomerId: typeof sub.customer === "string" ? sub.customer : sub.customer.id,
-      stripeSubscriptionId: sub.id,
-      stripePriceId: priceId,
-      currentPeriodStart: sub.current_period_start
-        ? new Date(sub.current_period_start * 1000)
-        : null,
-      currentPeriodEnd: sub.current_period_end ? new Date(sub.current_period_end * 1000) : null,
-      cancelAtPeriodEnd: sub.cancel_at_period_end ?? false,
-      canceledAt: sub.canceled_at ? new Date(sub.canceled_at * 1000) : null,
-    },
-    update: {
-      plan,
-      status,
-      stripeSubscriptionId: sub.id,
-      stripePriceId: priceId,
-      currentPeriodStart: sub.current_period_start
-        ? new Date(sub.current_period_start * 1000)
-        : null,
-      currentPeriodEnd: sub.current_period_end ? new Date(sub.current_period_end * 1000) : null,
-      cancelAtPeriodEnd: sub.cancel_at_period_end ?? false,
-      canceledAt: sub.canceled_at ? new Date(sub.canceled_at * 1000) : null,
-    },
-  });
+  const data = {
+    plan,
+    status,
+    stripeCustomerId: typeof sub.customer === "string" ? sub.customer : sub.customer.id,
+    stripeSubscriptionId: sub.id,
+    stripePriceId: priceId,
+    currentPeriodStart: sub.current_period_start ? new Date(sub.current_period_start * 1000) : null,
+    currentPeriodEnd: sub.current_period_end ? new Date(sub.current_period_end * 1000) : null,
+    cancelAtPeriodEnd: sub.cancel_at_period_end ?? false,
+    canceledAt: sub.canceled_at ? new Date(sub.canceled_at * 1000) : null,
+  };
+
+  // Upsert with idempotent error handling. Stripe fires
+  // checkout.session.completed and customer.subscription.created in
+  // parallel; both can hit this code path before either commits, so
+  // both attempt CREATE and one loses on the unique constraint. When
+  // that happens, fall through to UPDATE — the data converges.
+  try {
+    await prisma.subscription.upsert({
+      where: { userId },
+      create: { userId, ...data },
+      update: data,
+    });
+  } catch (err) {
+    const code = (err as { code?: string }).code;
+    if (code === "P2002") {
+      await prisma.subscription.update({ where: { userId }, data });
+    } else {
+      throw err;
+    }
+  }
 
   logger.success(`Sync subscription: user=${userId} plan=${plan} status=${status}`, {
     type: "WEBHOOK",
@@ -163,12 +165,11 @@ export const StripeWebhookController = async (req: Request, res: Response, next:
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-        // Ensure subscription is hydrated for sub flow
-        if (session.mode === "subscription" && typeof session.subscription === "string") {
-          const stripe = getStripe();
-          const sub = await stripe.subscriptions.retrieve(session.subscription);
-          await upsertSubscription(sub);
-        }
+        // For subscription flow we used to also retrieve+upsert the
+        // subscription here, but that races with the
+        // customer.subscription.created event Stripe fires concurrently
+        // and produced a benign 409. Skip the inline upsert; the
+        // subscription handlers below will sync the row.
         await handleCheckoutSessionCompleted(session);
         break;
       }
