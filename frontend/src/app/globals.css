@@ -179,6 +179,18 @@
     background-color: color-mix(in oklch, var(--primary) 30%, transparent);
     color: var(--foreground);
   }
+  /* Force native <select> option panels to follow the theme. color-scheme
+     usually does this, but Chrome on Windows ignores it when the parent
+     <select> has an explicit background-color from a Tailwind class. */
+  .dark select,
+  .dark select option,
+  .dark select optgroup {
+    background-color: var(--card);
+    color: var(--foreground);
+  }
+  select option:checked {
+    background-color: color-mix(in oklch, var(--primary) 25%, transparent);
+  }
   @media print {
     .dark body::before {
       display: none;
