@@ -226,9 +226,24 @@
     },
     "earningsPage": {
       "title": "Earnings",
-      "subtitle": "Revenue from your courses + payout history.",
-      "comingSoonTitle": "Earnings unlock at production launch",
-      "comingSoonBody": "Stripe Connect integration is wired in alongside the live payments cutover. Until then this is a placeholder."
+      "subtitle": "Gross revenue your courses have generated.",
+      "disclaimerTitle": "Payouts via Stripe Connect at launch",
+      "disclaimerBody": "These figures show gross revenue your content generated for the platform. Per-instructor payout splits go live with Stripe Connect at production launch.",
+      "kpiTotalGross": "Total gross",
+      "kpiLast30": "Last 30 days",
+      "kpiOrderCount": "Paid orders",
+      "kpiTopCourse": "Top course",
+      "byCourseTitle": "Revenue by course",
+      "noEarnings": "No paid orders on your courses yet.",
+      "noCourses": "Publish a course to start generating revenue.",
+      "recentTitle": "Recent orders",
+      "colCourse": "Course",
+      "colOrders": "Orders",
+      "colGross": "Gross",
+      "colStudent": "Student",
+      "colAmount": "Amount",
+      "colPaid": "Paid",
+      "noRecent": "No recent orders."
     }
   },
   "admin": {

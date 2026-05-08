@@ -23,6 +23,7 @@ router.patch(
 router.get("/me/courses", ...instructor, InstructorsController.listMyCourses);
 router.get("/me/stats", ...instructor, InstructorsController.getMyStats);
 router.get("/me/students", ...instructor, InstructorsController.listMyStudents);
+router.get("/me/earnings", ...instructor, InstructorsController.getMyEarnings);
 
 router.get("/:id", validateRequest(InstructorsValidation.get), InstructorsController.get);
 

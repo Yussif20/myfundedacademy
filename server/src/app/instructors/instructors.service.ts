@@ -369,6 +369,121 @@ export const InstructorsService = {
     });
   },
 
+  /**
+   * Gross revenue across the instructor's courses. One-time COMPLETED
+   * orders only (subscription orders aren't course-attributed).
+   * NOTE: This is platform gross — payout split via Stripe Connect lands
+   * post-MVP. Frontend displays a clear disclaimer.
+   */
+  async getMyEarnings(userId: string) {
+    const profile = await prisma.instructorProfile.findFirst({
+      where: { userId },
+      select: { id: true },
+    });
+    if (!profile) {
+      throw new AppError(httpStatus.NOT_FOUND, "No instructor profile on file.");
+    }
+
+    const courses = await prisma.course.findMany({
+      where: { instructorId: profile.id, isDeleted: false },
+      select: { id: true, slug: true, title: true, titleArabic: true },
+    });
+    if (courses.length === 0) {
+      return {
+        totalGross: 0,
+        last30Gross: 0,
+        currency: "usd",
+        orderCount: 0,
+        byCourse: [] as Array<{
+          course: { id: string; slug: string; title: string; titleArabic: string };
+          orderCount: number;
+          gross: number;
+        }>,
+        recent: [] as Array<{
+          id: string;
+          amount: number;
+          currency: string;
+          paidAt: Date;
+          courseId: string | null;
+          courseTitle: string;
+          student: { id: string; fullName: string; email: string } | null;
+        }>,
+      };
+    }
+
+    const courseIds = courses.map((c) => c.id);
+    const courseById = new Map(courses.map((c) => [c.id, c]));
+
+    const since30 = new Date();
+    since30.setDate(since30.getDate() - 30);
+
+    const orders = await prisma.order.findMany({
+      where: {
+        courseId: { in: courseIds },
+        status: "COMPLETED",
+        type: "ONE_TIME",
+      },
+      orderBy: { paidAt: "desc" },
+      select: {
+        id: true,
+        amount: true,
+        currency: true,
+        courseId: true,
+        paidAt: true,
+        createdAt: true,
+        user: { select: { id: true, fullName: true, email: true } },
+      },
+    });
+
+    const totalGross = orders.reduce((s, o) => s + o.amount, 0);
+    const last30Gross = orders
+      .filter((o) => (o.paidAt ?? o.createdAt) >= since30)
+      .reduce((s, o) => s + o.amount, 0);
+
+    const byCourseMap = new Map<string, { count: number; gross: number }>();
+    for (const o of orders) {
+      if (!o.courseId) continue;
+      const m = byCourseMap.get(o.courseId) ?? { count: 0, gross: 0 };
+      m.count += 1;
+      m.gross += o.amount;
+      byCourseMap.set(o.courseId, m);
+    }
+    const byCourse = Array.from(byCourseMap.entries())
+      .map(([courseId, m]) => {
+        const c = courseById.get(courseId)!;
+        return {
+          course: {
+            id: c.id,
+            slug: c.slug,
+            title: c.title,
+            titleArabic: c.titleArabic,
+          },
+          orderCount: m.count,
+          gross: m.gross,
+        };
+      })
+      .sort((a, b) => b.gross - a.gross);
+
+    const recent = orders.slice(0, 10).map((o) => ({
+      id: o.id,
+      amount: o.amount,
+      currency: o.currency,
+      paidAt: o.paidAt ?? o.createdAt,
+      courseId: o.courseId,
+      courseTitle: o.courseId ? (courseById.get(o.courseId)?.title ?? "") : "",
+      student: o.user,
+    }));
+
+    return {
+      totalGross,
+      last30Gross,
+      currency: orders[0]?.currency ?? "usd",
+      orderCount: orders.length,
+      byCourse,
+      recent,
+    };
+  },
+
   async remove(id: string): Promise<void> {
     const profile = await prisma.instructorProfile.findUnique({
       where: { id },

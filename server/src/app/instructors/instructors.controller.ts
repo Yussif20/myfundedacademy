@@ -48,6 +48,12 @@ export const InstructorsController = {
     sendResponse(res, { statusCode: httpStatus.OK, data });
   }),
 
+  getMyEarnings: catchAsync(async (req, res) => {
+    if (!req.user) throw new AppError(httpStatus.UNAUTHORIZED, "Sign in required.");
+    const data = await InstructorsService.getMyEarnings(req.user.id);
+    sendResponse(res, { statusCode: httpStatus.OK, data });
+  }),
+
   create: catchAsync(async (req, res) => {
     const data = await InstructorsService.create(req.body);
     sendResponse(res, {
