@@ -204,8 +204,25 @@
     "studentsPage": {
       "title": "الطلاب",
       "subtitle": "كل من سجّل في دوراتك.",
-      "comingSoonTitle": "قريباً",
-      "comingSoonBody": "قائمة الطلاب وتحليلات الإكمال لكل دورة في الدفعة القادمة."
+      "searchPlaceholder": "ابحث بالاسم أو البريد أو الدورة…",
+      "noStudents": "لا يوجد طلاب مسجّلون بعد.",
+      "noMatches": "لا توجد نتائج مطابقة.",
+      "kpiTotal": "إجمالي التسجيلات",
+      "kpiUnique": "طلاب فريدون",
+      "kpiAvgProgress": "متوسط التقدّم",
+      "colStudent": "الطالب",
+      "colCourse": "الدورة",
+      "colEnrolled": "تاريخ التسجيل",
+      "colProgress": "التقدّم",
+      "colSource": "المصدر",
+      "lessonsCompleted": "{done}/{total} درس",
+      "source": {
+        "PURCHASE": "شراء",
+        "SUBSCRIPTION": "اشتراك",
+        "ADMIN": "ممنوح",
+        "FREE": "مجاني"
+      },
+      "expired": "منتهٍ"
     },
     "earningsPage": {
       "title": "الأرباح",

@@ -284,6 +284,91 @@ export const InstructorsService = {
     };
   },
 
+  /**
+   * Returns every (student, course) enrollment across the current
+   * instructor's courses, annotated with completion progress.
+   */
+  async listMyStudents(userId: string) {
+    const profile = await prisma.instructorProfile.findFirst({
+      where: { userId },
+      select: { id: true },
+    });
+    if (!profile) {
+      throw new AppError(httpStatus.NOT_FOUND, "No instructor profile on file.");
+    }
+
+    const courses = await prisma.course.findMany({
+      where: { instructorId: profile.id, isDeleted: false },
+      select: { id: true, slug: true, title: true, titleArabic: true, totalLessons: true },
+    });
+    if (courses.length === 0) return [];
+
+    const courseIdToMeta = new Map(courses.map((c) => [c.id, c]));
+    const courseIds = courses.map((c) => c.id);
+
+    const enrollments = await prisma.enrollment.findMany({
+      where: { courseId: { in: courseIds }, user: { isDeleted: false } },
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            fullName: true,
+            country: true,
+            profile: true,
+          },
+        },
+      },
+      orderBy: { enrolledAt: "desc" },
+    });
+    if (enrollments.length === 0) return [];
+
+    // Count completed lessons per (user, course) in one query and bucket
+    // them client-side to avoid N+1.
+    const userIds = Array.from(new Set(enrollments.map((e) => e.userId)));
+    const completed = await prisma.progress.findMany({
+      where: {
+        userId: { in: userIds },
+        completedAt: { not: null },
+        lesson: { section: { courseId: { in: courseIds } } },
+      },
+      select: {
+        userId: true,
+        lesson: { select: { section: { select: { courseId: true } } } },
+      },
+    });
+    const completionByKey = new Map<string, number>();
+    for (const p of completed) {
+      const key = `${p.userId}:${p.lesson.section.courseId}`;
+      completionByKey.set(key, (completionByKey.get(key) ?? 0) + 1);
+    }
+
+    return enrollments.map((e) => {
+      const course = courseIdToMeta.get(e.courseId)!;
+      const completedLessons = completionByKey.get(`${e.userId}:${e.courseId}`) ?? 0;
+      const progressPct =
+        course.totalLessons > 0
+          ? Math.min(100, Math.round((completedLessons / course.totalLessons) * 100))
+          : 0;
+      return {
+        enrollmentId: e.id,
+        enrolledAt: e.enrolledAt,
+        expiresAt: e.expiresAt,
+        source: e.source,
+        student: e.user,
+        course: {
+          id: course.id,
+          slug: course.slug,
+          title: course.title,
+          titleArabic: course.titleArabic,
+          totalLessons: course.totalLessons,
+        },
+        completedLessons,
+        progressPct,
+      };
+    });
+  },
+
   async remove(id: string): Promise<void> {
     const profile = await prisma.instructorProfile.findUnique({
       where: { id },

@@ -204,8 +204,25 @@
     "studentsPage": {
       "title": "Students",
       "subtitle": "Everyone enrolled in your courses.",
-      "comingSoonTitle": "Coming soon",
-      "comingSoonBody": "Student roster + per-course completion analytics ship in the next batch."
+      "searchPlaceholder": "Search by name, email, or course…",
+      "noStudents": "No students enrolled yet.",
+      "noMatches": "No students match your search.",
+      "kpiTotal": "Total enrollments",
+      "kpiUnique": "Unique students",
+      "kpiAvgProgress": "Avg. progress",
+      "colStudent": "Student",
+      "colCourse": "Course",
+      "colEnrolled": "Enrolled",
+      "colProgress": "Progress",
+      "colSource": "Source",
+      "lessonsCompleted": "{done}/{total} lessons",
+      "source": {
+        "PURCHASE": "Purchase",
+        "SUBSCRIPTION": "Subscription",
+        "ADMIN": "Granted",
+        "FREE": "Free"
+      },
+      "expired": "Expired"
     },
     "earningsPage": {
       "title": "Earnings",

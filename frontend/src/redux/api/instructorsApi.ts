@@ -142,8 +142,36 @@ export const instructorsApi = baseApi.injectEndpoints({
       query: () => ({ url: "/instructors/me/stats" }),
       providesTags: [{ type: "InstructorProfile", id: "STATS" }],
     }),
+
+    listMyStudents: builder.query<Envelope<MyStudentRow[]>, void>({
+      query: () => ({ url: "/instructors/me/students" }),
+      providesTags: [{ type: "Enrollments", id: "MY_STUDENTS" }],
+    }),
   }),
 });
+
+export type MyStudentRow = {
+  enrollmentId: string;
+  enrolledAt: string;
+  expiresAt: string | null;
+  source: "PURCHASE" | "SUBSCRIPTION" | "ADMIN" | "FREE";
+  student: {
+    id: string;
+    email: string;
+    fullName: string;
+    country: string;
+    profile: string;
+  };
+  course: {
+    id: string;
+    slug: string;
+    title: string;
+    titleArabic: string;
+    totalLessons: number;
+  };
+  completedLessons: number;
+  progressPct: number;
+};
 
 export const {
   useListInstructorsQuery,
@@ -155,4 +183,5 @@ export const {
   useUpdateMyInstructorProfileMutation,
   useListMyCoursesQuery,
   useGetMyInstructorStatsQuery,
+  useListMyStudentsQuery,
 } = instructorsApi;
