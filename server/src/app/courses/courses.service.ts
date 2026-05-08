@@ -9,6 +9,13 @@ import { userHasCourseAccess } from "@/lib/payments/access";
 
 type Actor = { id: string; role: UserRoleEnum };
 
+/** Adapt an Actor (writer side) to the viewer shape that get() expects. */
+const actorToViewer = (actor: Actor) => ({
+  isAdmin: actor.role === "ADMIN",
+  userId: actor.id,
+  role: actor.role,
+});
+
 /**
  * Resolves the InstructorProfile.id for a given user, or null if the user
  * doesn't have one. Cached implicitly per request via Prisma's connection.
@@ -188,15 +195,31 @@ export const CoursesService = {
 
   async get(idOrSlug: string, viewer?: { isAdmin: boolean; userId?: string; role?: UserRoleEnum }) {
     const isAdmin = viewer?.isAdmin === true;
+
+    // Instructors can fetch their own courses regardless of status so they
+    // can edit drafts; everyone else is locked to PUBLISHED.
+    const myInstructorProfileId =
+      viewer?.role === "INSTRUCTOR" && viewer?.userId
+        ? await getInstructorProfileId(viewer.userId)
+        : null;
+
     const course = await prisma.course.findFirst({
       where: {
-        isDeleted: false,
-        OR: [{ id: idOrSlug }, { slug: idOrSlug }],
-        ...(isAdmin ? {} : { status: "PUBLISHED" }),
+        AND: [
+          { isDeleted: false },
+          { OR: [{ id: idOrSlug }, { slug: idOrSlug }] },
+          isAdmin
+            ? {}
+            : myInstructorProfileId
+              ? { OR: [{ status: "PUBLISHED" }, { instructorId: myInstructorProfileId }] }
+              : { status: "PUBLISHED" },
+        ],
       },
       include: COURSE_DETAIL_INCLUDE,
     });
     if (!course) throw new AppError(httpStatus.NOT_FOUND, "Course not found.");
+
+    const isOwner = !!myInstructorProfileId && myInstructorProfileId === course.instructorId;
 
     const viewerHasAccess = await userHasCourseAccess(
       viewer?.userId,
@@ -215,8 +238,8 @@ export const CoursesService = {
 
     // Hide vdoVideoId on non-preview lessons for public callers without
     // access — defence in depth so the raw ID can't be used by a determined
-    // visitor. Admins and enrolled users see all video IDs.
-    if (!isAdmin && !viewerHasAccess) {
+    // visitor. Admins, owning instructors, and enrolled users see all IDs.
+    if (!isAdmin && !isOwner && !viewerHasAccess) {
       return {
         ...course,
         ...reviewMeta,
@@ -503,7 +526,7 @@ export const CoursesService = {
       },
     });
 
-    return CoursesService.get(course.id);
+    return CoursesService.get(course.id, actorToViewer(actor));
   },
 
   async update(
@@ -563,7 +586,7 @@ export const CoursesService = {
       data: safeInput as Prisma.CourseUpdateInput,
     });
 
-    return CoursesService.get(id);
+    return CoursesService.get(id, actorToViewer(actor));
   },
 
   async remove(id: string, actor: Actor): Promise<void> {
@@ -618,7 +641,7 @@ export const CoursesService = {
       where: { id },
       data: { status: "PUBLISHED", publishedAt: course.publishedAt || new Date() },
     });
-    return CoursesService.get(id);
+    return CoursesService.get(id, actorToViewer(actor));
   },
 
   async unpublish(id: string, actor: Actor) {
@@ -628,7 +651,7 @@ export const CoursesService = {
       throw new AppError(httpStatus.NOT_FOUND, "Course not found.");
     }
     await prisma.course.update({ where: { id }, data: { status: "DRAFT" } });
-    return CoursesService.get(id);
+    return CoursesService.get(id, actorToViewer(actor));
   },
 
   // ---------- Sections ----------
