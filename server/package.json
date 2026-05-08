@@ -13,7 +13,8 @@
     "prisma:gen": "prisma generate",
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
-    "gn-route": "ts-node ./scripts/gn-route.ts"
+    "gn-route": "ts-node ./scripts/gn-route.ts",
+    "backfill:tombstone-emails": "ts-node -r tsconfig-paths/register ./scripts/backfill-tombstone-emails.ts"
   },
   "type": "commonjs",
   "dependencies": {

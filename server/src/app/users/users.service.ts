@@ -159,9 +159,24 @@ const updateUser = async (id: string, input: UpdateUserInput) => {
 };
 
 const deleteUser = async (id: string): Promise<void> => {
+  // Soft-delete + free the unique email slot so the same address can sign up again.
+  // The tombstoned email keeps the original for forensics: deleted+<id>+<orig>@purged.local
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: { email: true, isDeleted: true },
+  });
+  if (!user) throw new AppError(httpStatus.NOT_FOUND, "User not found.");
+  if (user.isDeleted) return; // idempotent — already tombstoned
+
+  const tombstonedEmail = `deleted+${id}+${user.email}@purged.local`.toLowerCase();
+
   await prisma.user.update({
     where: { id },
-    data: { isDeleted: true, status: "DELETED" },
+    data: {
+      isDeleted: true,
+      status: "DELETED",
+      email: tombstonedEmail,
+    },
   });
   await prisma.refreshToken.updateMany({
     where: { userId: id, revokedAt: null },
