@@ -1,9 +1,16 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
   // `output: "standalone"` would target Docker self-hosting; Netlify and
   // Vercel handle build output their own way, so leave it default.
+  turbopack: {
+    // Pin the workspace root to the Next app. Without this, Turbopack walks up
+    // and picks the repo-root package-lock.json (husky/prettier devDeps),
+    // misanchoring the file watcher and causing stale-cache 404s on /en.
+    root: path.resolve(__dirname),
+  },
   async headers() {
     return [
       {
