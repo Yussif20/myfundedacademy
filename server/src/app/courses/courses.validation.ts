@@ -61,7 +61,10 @@ export const CoursesValidation = {
       accessTier: accessTier.optional().default("FREE"),
       isFeatured: z.boolean().optional().default(false),
       categoryId: z.string().uuid().nullable().optional(),
-      instructorId: z.string().uuid(),
+      // Optional at the validation layer. Service derives it from the auth
+      // context for role=INSTRUCTOR; admins must still pass one (service
+      // returns a clear 400 if missing).
+      instructorId: z.string().uuid().optional(),
     }),
   }),
 
