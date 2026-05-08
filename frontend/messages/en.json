@@ -131,6 +131,7 @@
     "yes": "Yes",
     "no": "No",
     "search": "Search",
+    "retry": "Retry",
     "actions": "Actions",
     "confirmDelete": "Are you sure you want to delete this? This action cannot be undone.",
     "showPassword": "Show password",

@@ -45,7 +45,13 @@ export function CourseEditor({ courseId, mode }: { courseId: string; mode: Cours
   const router = useRouter();
   const id = courseId;
 
-  const { data, isLoading, refetch } = useGetCourseQuery(id, { skip: !id });
+  const {
+    data,
+    isLoading,
+    isError,
+    error: fetchError,
+    refetch,
+  } = useGetCourseQuery(id, { skip: !id });
   const course = data?.data;
 
   const { data: instructorsData } = useListInstructorsQuery(undefined, { skip: mode !== "admin" });
@@ -94,7 +100,24 @@ export function CourseEditor({ courseId, mode }: { courseId: string; mode: Cours
       oneTimePrice: course.oneTimePrice,
       isFeatured: course.isFeatured,
     });
-  }, [course]);
+    // Initialise form once per course identity. Subsequent refetches (e.g.
+    // the thumbnail upload calls updateCourse, which invalidates the Course
+    // cache) MUST NOT clobber unsaved local edits.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [course?.id]);
+
+  if (isError) {
+    return (
+      <div className="space-y-4 py-8">
+        <Alert variant="destructive">
+          <AlertDescription>{extractApiError(fetchError)}</AlertDescription>
+        </Alert>
+        <Button type="button" variant="outline" onClick={() => refetch()}>
+          {tCommon("retry")}
+        </Button>
+      </div>
+    );
+  }
 
   if (isLoading || !course || !form) {
     return (
@@ -156,7 +179,6 @@ export function CourseEditor({ courseId, mode }: { courseId: string; mode: Cours
 
       await updateCourse({ id, patch: { thumbnail: presigned.data.publicUrl } }).unwrap();
       set("thumbnail", presigned.data.publicUrl);
-      refetch();
     } catch (err) {
       setError(extractApiError(err));
     } finally {
@@ -681,22 +703,32 @@ function LessonEditor({
 
   return (
     <div className="space-y-3 rounded-md border border-[var(--border)] bg-[var(--card)] p-3">
-      <div className="grid gap-2 md:grid-cols-[1fr_120px_auto_auto] md:items-center">
-        <Input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          onBlur={() => title !== lesson.title && title.trim() && persist({ title })}
-          placeholder={t("lessonTitle")}
-        />
-        <Input
-          type="number"
-          min={0}
-          value={duration}
-          onChange={(e) => setDuration(Number(e.target.value))}
-          onBlur={() => duration !== lesson.durationMin && persist({ durationMin: duration })}
-          placeholder={t("lessonDuration")}
-        />
-        <div className="flex items-center gap-2">
+      <div className="grid gap-2 md:grid-cols-[1fr_120px_auto_auto] md:items-end">
+        <div className="space-y-1">
+          <Label htmlFor={`title-${lesson.id}`} className="text-xs">
+            {t("lessonTitle")}
+          </Label>
+          <Input
+            id={`title-${lesson.id}`}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onBlur={() => title !== lesson.title && title.trim() && persist({ title })}
+          />
+        </div>
+        <div className="space-y-1">
+          <Label htmlFor={`duration-${lesson.id}`} className="text-xs">
+            {t("lessonDuration")}
+          </Label>
+          <Input
+            id={`duration-${lesson.id}`}
+            type="number"
+            min={0}
+            value={duration}
+            onChange={(e) => setDuration(Number(e.target.value))}
+            onBlur={() => duration !== lesson.durationMin && persist({ durationMin: duration })}
+          />
+        </div>
+        <div className="flex items-center gap-2 pb-2">
           <Switch
             checked={free}
             onCheckedChange={(v) => {
@@ -715,6 +747,7 @@ function LessonEditor({
           size="icon"
           onClick={onDelete}
           aria-label={tCommon("delete")}
+          className="mb-1"
         >
           <Trash2 className="size-4 text-[var(--destructive)]" />
         </Button>
