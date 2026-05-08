@@ -22,9 +22,9 @@ const courseTierLevel: Record<AccessTier, number> = {
 
 /**
  * Returns true if the given user can fully consume the given course's
- * paywalled content. Admins always pass. Per-course Enrollment is honoured.
- * Otherwise, an active subscription whose plan level >= the course's
- * accessTier grants access.
+ * paywalled content. Admins always pass; instructors who own the course
+ * always pass. Per-course Enrollment is honoured. Otherwise, an active
+ * subscription whose plan level >= the course's accessTier grants access.
  */
 export const userHasCourseAccess = async (
   userId: string | null | undefined,
@@ -33,6 +33,16 @@ export const userHasCourseAccess = async (
 ): Promise<boolean> => {
   if (userRole === "ADMIN") return true;
   if (!userId) return false;
+
+  // Instructors get free access to their own courses. One join via the
+  // instructor relation rather than two roundtrips.
+  if (userRole === "INSTRUCTOR") {
+    const owns = await prisma.course.findFirst({
+      where: { id: course.id, instructor: { userId } },
+      select: { id: true },
+    });
+    if (owns) return true;
+  }
 
   const enrollment = await prisma.enrollment.findUnique({
     where: { userId_courseId: { userId, courseId: course.id } },
