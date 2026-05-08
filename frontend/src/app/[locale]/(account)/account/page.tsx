@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { useRouter } from "@/i18n/navigation";
 import { extractApiError } from "@/lib/errors";
 import { useLogoutMutation } from "@/redux/api/authApi";
@@ -186,9 +187,8 @@ export default function AccountPage() {
             )}
             <div className="space-y-2">
               <Label htmlFor="currentPassword">{t("currentPasswordLabel")}</Label>
-              <Input
+              <PasswordInput
                 id="currentPassword"
-                type="password"
                 autoComplete="current-password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
@@ -198,9 +198,8 @@ export default function AccountPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="newPassword">{t("newPasswordLabel")}</Label>
-              <Input
+              <PasswordInput
                 id="newPassword"
-                type="password"
                 autoComplete="new-password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}

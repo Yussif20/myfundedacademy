@@ -132,7 +132,9 @@
     "no": "No",
     "search": "Search",
     "actions": "Actions",
-    "confirmDelete": "Are you sure you want to delete this? This action cannot be undone."
+    "confirmDelete": "Are you sure you want to delete this? This action cannot be undone.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "avatarUploader": {
     "upload": "Upload photo",
@@ -217,6 +219,7 @@
       "categories": "Categories",
       "instructors": "Instructors",
       "courses": "Courses",
+      "users": "Users",
       "profile": "Profile"
     },
     "dashboard": {
@@ -253,6 +256,46 @@
       "order": "Order",
       "isFeatured": "Feature on landing page",
       "noCategories": "No categories yet. Create the first one."
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "All registered accounts. Manage status and add admins.",
+      "newButton": "Add admin",
+      "newTitle": "Add user",
+      "newSubtitle": "Create an admin or student account. Email is auto-verified.",
+      "adminPrivilegeNote": "Admins have full access",
+      "filtersTitle": "Filters",
+      "listTitle": "All users",
+      "searchPlaceholder": "Search by name or email…",
+      "allRoles": "All roles",
+      "noUsers": "No users match your filters.",
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Initial password",
+      "passwordHelp": "The user can change this after first login.",
+      "country": "Country",
+      "preferredLocale": "Preferred locale",
+      "bio": "Bio",
+      "roleHelp": "Pick \"Admin\" to grant full panel access. Use the Instructors page to create instructor accounts.",
+      "you": "You",
+      "unverified": "Unverified",
+      "suspend": "Suspend account",
+      "reactivate": "Reactivate account",
+      "confirmSuspend": "Suspend this user? They will be signed out and cannot sign in until reactivated.",
+      "prev": "Previous",
+      "next": "Next",
+      "paginationLabel": "Page {page} of {totalPage} · {total} users",
+      "role": {
+        "label": "Role",
+        "STUDENT": "Student",
+        "INSTRUCTOR": "Instructor",
+        "ADMIN": "Admin"
+      },
+      "status": {
+        "ACTIVE": "Active",
+        "SUSPENDED": "Suspended",
+        "DELETED": "Deleted"
+      }
     },
     "instructors": {
       "title": "Instructors",

@@ -10,8 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Link } from "@/i18n/navigation";
 import { extractApiError } from "@/lib/errors";
 import { useResetPasswordMutation } from "@/redux/api/authApi";
@@ -60,9 +60,8 @@ export default function ResetPasswordPage() {
             )}
             <div className="space-y-2">
               <Label htmlFor="password">{t("newPasswordLabel")}</Label>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

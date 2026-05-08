@@ -2,7 +2,7 @@
 
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { BookOpen, LayoutDashboard, Tag, UserSquare2, Users } from "lucide-react";
+import { BookOpen, LayoutDashboard, ShieldCheck, Tag, UserSquare2, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 const items = [
@@ -10,6 +10,7 @@ const items = [
   { href: "/admin/categories", icon: Tag, key: "categories" as const },
   { href: "/admin/instructors", icon: Users, key: "instructors" as const },
   { href: "/admin/courses", icon: BookOpen, key: "courses" as const },
+  { href: "/admin/users", icon: ShieldCheck, key: "users" as const },
   { href: "/admin/profile", icon: UserSquare2, key: "profile" as const },
 ];
 
