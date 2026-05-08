@@ -148,12 +148,48 @@ export const instructorsApi = baseApi.injectEndpoints({
       providesTags: [{ type: "Enrollments", id: "MY_STUDENTS" }],
     }),
 
+    listMySubscribers: builder.query<Envelope<MySubscriberRow[]>, { search?: string } | void>({
+      query: (args) => {
+        const params = new URLSearchParams();
+        if (args && typeof args === "object" && args.search) params.set("search", args.search);
+        const qs = params.toString();
+        return { url: `/instructors/me/subscribers${qs ? `?${qs}` : ""}` };
+      },
+      providesTags: [{ type: "Subscription", id: "MY_SUBSCRIBERS" }],
+    }),
+
     getMyEarnings: builder.query<Envelope<MyEarnings>, void>({
       query: () => ({ url: "/instructors/me/earnings" }),
       providesTags: [{ type: "Order", id: "MY_EARNINGS" }],
     }),
   }),
 });
+
+export type MySubscriberRow = {
+  id: string;
+  plan: "STARTER_MONTHLY" | "PRO_MONTHLY" | "PRO_ANNUAL";
+  status:
+    | "INCOMPLETE"
+    | "ACTIVE"
+    | "TRIALING"
+    | "PAST_DUE"
+    | "CANCELED"
+    | "UNPAID"
+    | "INCOMPLETE_EXPIRED";
+  currentPeriodStart: string | null;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+  canceledAt: string | null;
+  createdAt: string;
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+    country: string;
+    profile: string;
+    createdAt: string;
+  };
+};
 
 export type MyEarnings = {
   totalGross: number;
@@ -210,5 +246,6 @@ export const {
   useListMyCoursesQuery,
   useGetMyInstructorStatsQuery,
   useListMyStudentsQuery,
+  useListMySubscribersQuery,
   useGetMyEarningsQuery,
 } = instructorsApi;

@@ -32,4 +32,12 @@ export const SubscriptionsController = {
     const data = await SubscriptionsService.billingPortal(req.user.id);
     sendResponse(res, { statusCode: httpStatus.OK, data });
   }),
+
+  listAll: catchAsync(async (req, res) => {
+    const data = await SubscriptionsService.listAll({
+      status: req.query.status as string | undefined,
+      search: req.query.search as string | undefined,
+    });
+    sendResponse(res, { statusCode: httpStatus.OK, data });
+  }),
 };

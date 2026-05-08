@@ -370,6 +370,85 @@ export const InstructorsService = {
   },
 
   /**
+   * Active subscribers whose plan tier grants access to at least one of
+   * the instructor's courses. Mirrors the plan/course tier mapping used
+   * in lib/payments/access.ts. Returns an empty list when the instructor
+   * only has FREE courses (subscriptions don't grant access to FREE
+   * tier — those still require explicit enrollment).
+   */
+  async listMySubscribers(userId: string, search?: string) {
+    const profile = await prisma.instructorProfile.findFirst({
+      where: { userId },
+      select: { id: true },
+    });
+    if (!profile) {
+      throw new AppError(httpStatus.NOT_FOUND, "No instructor profile on file.");
+    }
+
+    const courses = await prisma.course.findMany({
+      where: { instructorId: profile.id, isDeleted: false },
+      select: { accessTier: true },
+    });
+
+    const tierLevel: Record<"FREE" | "STARTER" | "PRO", number> = {
+      FREE: 0,
+      STARTER: 1,
+      PRO: 2,
+    };
+    const planLevel: Record<"STARTER_MONTHLY" | "PRO_MONTHLY" | "PRO_ANNUAL", number> = {
+      STARTER_MONTHLY: 1,
+      PRO_MONTHLY: 2,
+      PRO_ANNUAL: 2,
+    };
+
+    // Smallest paid tier the instructor offers; subscribers must meet or
+    // exceed it to view any of their content.
+    const paidLevels = courses
+      .map((c) => tierLevel[c.accessTier as keyof typeof tierLevel])
+      .filter((l) => l > 0);
+    if (paidLevels.length === 0) return [];
+
+    const minPaidLevel = Math.min(...paidLevels);
+    const eligiblePlans = (Object.keys(planLevel) as Array<keyof typeof planLevel>).filter(
+      (p) => planLevel[p] >= minPaidLevel,
+    );
+    if (eligiblePlans.length === 0) return [];
+
+    const trimmed = search?.trim();
+    return prisma.subscription.findMany({
+      where: {
+        plan: { in: eligiblePlans },
+        status: { in: ["ACTIVE", "TRIALING"] },
+        user: { isDeleted: false },
+        ...(trimmed
+          ? {
+              user: {
+                isDeleted: false,
+                OR: [
+                  { fullName: { contains: trimmed, mode: "insensitive" } },
+                  { email: { contains: trimmed, mode: "insensitive" } },
+                ],
+              },
+            }
+          : {}),
+      },
+      orderBy: [{ status: "asc" }, { createdAt: "desc" }],
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            fullName: true,
+            country: true,
+            profile: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+  },
+
+  /**
    * Gross revenue across the instructor's courses. One-time COMPLETED
    * orders only (subscription orders aren't course-attributed).
    * NOTE: This is platform gross — payout split via Stripe Connect lands

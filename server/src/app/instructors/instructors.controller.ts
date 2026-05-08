@@ -48,6 +48,15 @@ export const InstructorsController = {
     sendResponse(res, { statusCode: httpStatus.OK, data });
   }),
 
+  listMySubscribers: catchAsync(async (req, res) => {
+    if (!req.user) throw new AppError(httpStatus.UNAUTHORIZED, "Sign in required.");
+    const data = await InstructorsService.listMySubscribers(
+      req.user.id,
+      req.query.search as string | undefined,
+    );
+    sendResponse(res, { statusCode: httpStatus.OK, data });
+  }),
+
   getMyEarnings: catchAsync(async (req, res) => {
     if (!req.user) throw new AppError(httpStatus.UNAUTHORIZED, "Sign in required.");
     const data = await InstructorsService.getMyEarnings(req.user.id);

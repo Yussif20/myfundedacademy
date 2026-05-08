@@ -107,8 +107,83 @@ export const paymentsApi = baseApi.injectEndpoints({
       query: () => ({ url: "/enrollments/me" }),
       providesTags: [{ type: "Enrollment", id: "MINE" }],
     }),
+
+    listAllEnrollments: builder.query<
+      Envelope<AdminEnrollmentRow[]>,
+      { search?: string; courseId?: string } | void
+    >({
+      query: (args) => {
+        const params = new URLSearchParams();
+        if (args && typeof args === "object") {
+          if (args.search) params.set("search", args.search);
+          if (args.courseId) params.set("courseId", args.courseId);
+        }
+        const qs = params.toString();
+        return { url: `/enrollments${qs ? `?${qs}` : ""}` };
+      },
+      providesTags: [{ type: "Enrollments", id: "ALL" }],
+    }),
+
+    listAllSubscriptions: builder.query<
+      Envelope<AdminSubscriptionRow[]>,
+      { status?: "all"; search?: string } | void
+    >({
+      query: (args) => {
+        const params = new URLSearchParams();
+        if (args && typeof args === "object") {
+          if (args.status) params.set("status", args.status);
+          if (args.search) params.set("search", args.search);
+        }
+        const qs = params.toString();
+        return { url: `/subscriptions${qs ? `?${qs}` : ""}` };
+      },
+      providesTags: [{ type: "Subscription", id: "ALL" }],
+    }),
   }),
 });
+
+export type AdminSubscriptionRow = {
+  id: string;
+  plan: SubscriptionPlan;
+  status: SubscriptionStatus;
+  currentPeriodStart: string | null;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+  canceledAt: string | null;
+  createdAt: string;
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+    country: string;
+    profile: string;
+    createdAt: string;
+  };
+};
+
+export type AdminEnrollmentRow = {
+  enrollmentId: string;
+  enrolledAt: string;
+  expiresAt: string | null;
+  source: "PURCHASE" | "SUBSCRIPTION" | "ADMIN" | "FREE";
+  student: {
+    id: string;
+    email: string;
+    fullName: string;
+    country: string;
+    profile: string;
+  };
+  course: {
+    id: string;
+    slug: string;
+    title: string;
+    titleArabic: string;
+    totalLessons: number;
+    instructor: { id: string; fullName: string } | null;
+  };
+  completedLessons: number;
+  progressPct: number;
+};
 
 export const {
   useCheckoutCourseMutation,
@@ -119,4 +194,6 @@ export const {
   useCancelSubscriptionMutation,
   useBillingPortalMutation,
   useListMyEnrollmentsQuery,
+  useListAllEnrollmentsQuery,
+  useListAllSubscriptionsQuery,
 } = paymentsApi;

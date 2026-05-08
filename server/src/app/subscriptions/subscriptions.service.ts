@@ -38,6 +38,47 @@ export const SubscriptionsService = {
     return prisma.subscription.findUnique({ where: { userId } });
   },
 
+  /**
+   * Admin: every subscription, joined with user. Default scope is active
+   * (ACTIVE, TRIALING) to surface paying customers; pass status=all to
+   * see everything including canceled / past_due rows.
+   */
+  async listAll(query: { status?: string; search?: string }) {
+    const search = query.search?.trim();
+    const showAll = query.status === "all";
+
+    return prisma.subscription.findMany({
+      where: {
+        ...(showAll ? {} : { status: { in: ["ACTIVE", "TRIALING"] } }),
+        user: { isDeleted: false },
+        ...(search
+          ? {
+              user: {
+                isDeleted: false,
+                OR: [
+                  { fullName: { contains: search, mode: "insensitive" } },
+                  { email: { contains: search, mode: "insensitive" } },
+                ],
+              },
+            }
+          : {}),
+      },
+      orderBy: [{ status: "asc" }, { createdAt: "desc" }],
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            fullName: true,
+            country: true,
+            profile: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+  },
+
   async cancelAtPeriodEnd(userId: string) {
     const sub = await prisma.subscription.findUnique({ where: { userId } });
     if (!sub || !sub.stripeSubscriptionId) {
