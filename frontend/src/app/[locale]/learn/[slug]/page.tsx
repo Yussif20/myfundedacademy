@@ -3,6 +3,7 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Sheet } from "@/components/ui/sheet";
 import { VdoCipherPlayer } from "@/components/public/vdocipher-player";
 import { Wordmark } from "@/components/brand/wordmark";
 import { LocaleSwitcher } from "@/components/locale-switcher";
@@ -29,6 +30,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Circle,
+  List,
   Loader2,
   Lock,
   PlayCircle,
@@ -122,8 +124,11 @@ function ClassroomShell() {
   const totalCount = flatLessons.length;
   const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
+  const [curriculumOpen, setCurriculumOpen] = useState(false);
+
   const goToLesson = (lessonId: string) => {
     router.replace(`/learn/${slug}?lesson=${lessonId}`);
+    setCurriculumOpen(false);
   };
 
   const courseTitle = (isAr && course.titleArabic) || course.title;
@@ -161,17 +166,40 @@ function ClassroomShell() {
         </div>
       </header>
 
-      {/* Two-column body */}
+      {/* Mobile-only curriculum trigger */}
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 pt-4 lg:hidden">
+        <button
+          type="button"
+          onClick={() => setCurriculumOpen(true)}
+          className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+        >
+          <List className="size-4" aria-hidden />
+          {t("curriculumButton")}
+        </button>
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-24 overflow-hidden rounded-full bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]"
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+          <span className="text-xs font-medium text-[var(--muted-foreground)]">{pct}%</span>
+        </div>
+      </div>
+
+      {/* Two-column body (sidebar hidden on mobile — opens via Sheet instead) */}
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[320px_1fr] lg:px-6">
-        <CurriculumSidebar
-          course={course}
-          currentLessonId={currentLesson?.id || null}
-          progressByLesson={progressByLesson}
-          onPick={goToLesson}
-          totalLessons={totalCount}
-          completedCount={completedCount}
-          slug={slug}
-        />
+        <div className="hidden lg:block">
+          <CurriculumSidebar
+            course={course}
+            currentLessonId={currentLesson?.id || null}
+            progressByLesson={progressByLesson}
+            onPick={goToLesson}
+            totalLessons={totalCount}
+            completedCount={completedCount}
+            slug={slug}
+          />
+        </div>
 
         <main className="min-w-0">
           <AnimatePresence mode="wait">
@@ -201,6 +229,23 @@ function ClassroomShell() {
           </AnimatePresence>
         </main>
       </div>
+
+      <Sheet
+        open={curriculumOpen}
+        onOpenChange={setCurriculumOpen}
+        side="start"
+        title={t("curriculumButton")}
+      >
+        <CurriculumSidebar
+          course={course}
+          currentLessonId={currentLesson?.id || null}
+          progressByLesson={progressByLesson}
+          onPick={goToLesson}
+          totalLessons={totalCount}
+          completedCount={completedCount}
+          slug={slug}
+        />
+      </Sheet>
     </div>
   );
 }

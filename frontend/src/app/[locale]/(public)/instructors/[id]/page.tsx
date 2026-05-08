@@ -51,8 +51,8 @@ export default function InstructorProfilePage() {
   return (
     <div>
       <section className="border-b border-[var(--border)] bg-[var(--card)]/30">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-12 md:flex-row md:items-start">
-          <div className="relative size-32 shrink-0 overflow-hidden rounded-2xl bg-[var(--secondary)]">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 py-10 text-center sm:px-6 sm:py-12 md:flex-row md:items-start md:gap-8 md:text-start">
+          <div className="relative size-28 shrink-0 overflow-hidden rounded-2xl bg-[var(--secondary)] sm:size-32">
             {instructor.user.profile ? (
               <Image
                 src={instructor.user.profile}
@@ -70,8 +70,8 @@ export default function InstructorProfilePage() {
           </div>
 
           <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <h1 className="font-display text-4xl font-bold tracking-tight">{name}</h1>
+            <div className="flex items-center justify-center gap-2 md:justify-start">
+              <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">{name}</h1>
               {instructor.isFeatured && <Badge variant="warning">★</Badge>}
             </div>
             {headline && <p className="mt-2 text-lg text-[var(--muted-foreground)]">{headline}</p>}
@@ -81,7 +81,7 @@ export default function InstructorProfilePage() {
                 <p className="mb-2 text-xs font-medium uppercase tracking-wider text-[var(--muted-foreground)]">
                   {t("expertise")}
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap justify-center gap-2 md:justify-start">
                   {instructor.expertise.map((tag) => (
                     <span
                       key={tag}
@@ -95,7 +95,7 @@ export default function InstructorProfilePage() {
             )}
 
             {(instructor.twitterUrl || instructor.linkedinUrl || instructor.websiteUrl) && (
-              <div className="mt-6 flex items-center gap-3">
+              <div className="mt-6 flex items-center justify-center gap-3 md:justify-start">
                 {instructor.twitterUrl && (
                   <a
                     href={instructor.twitterUrl}

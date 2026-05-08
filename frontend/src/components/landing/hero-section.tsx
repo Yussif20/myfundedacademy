@@ -32,7 +32,7 @@ export function HeroSection() {
 
           <StaggerItem>
             <h1
-              className="font-display mt-6 text-balance text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl lg:text-[5.25rem]"
+              className="font-display mt-6 text-balance text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-7xl lg:text-[5.25rem]"
               style={{
                 textShadow: "0 1px 2px color-mix(in oklch, var(--background) 30%, transparent)",
               }}

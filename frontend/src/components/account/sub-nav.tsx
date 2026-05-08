@@ -18,7 +18,7 @@ export function AccountSubNav() {
   const pathname = usePathname();
   const t = useTranslations("accountNav");
   return (
-    <nav className="mb-8 flex gap-1 overflow-x-auto rounded-lg border border-[var(--border)] bg-[var(--card)] p-1">
+    <nav className="mask-fade-edges mb-8 flex gap-1 overflow-x-auto rounded-lg border border-[var(--border)] bg-[var(--card)] p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {items.map((it) => {
         const active = pathname === it.href;
         return (
@@ -26,7 +26,7 @@ export function AccountSubNav() {
             key={it.href}
             href={it.href}
             className={cn(
-              "rounded-md px-3 py-1.5 text-sm font-medium transition-colors whitespace-nowrap",
+              "rounded-md px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors sm:text-sm",
               active
                 ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
                 : "text-[var(--muted-foreground)] hover:bg-[var(--secondary)] hover:text-[var(--foreground)]",

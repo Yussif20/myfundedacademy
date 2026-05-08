@@ -186,9 +186,9 @@ export default function InstructorStudentsPage() {
       </Card>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between gap-4">
+        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <CardTitle className="text-lg">{t("enrollmentsTitle")}</CardTitle>
-          <div className="w-full max-w-sm">
+          <div className="w-full sm:max-w-sm">
             <Input
               placeholder={t("searchPlaceholder")}
               value={search}

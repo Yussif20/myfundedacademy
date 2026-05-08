@@ -109,7 +109,8 @@
     "signOut": "تسجيل الخروج",
     "studentDashboard": "لوحة الطالب",
     "instructorWorkspace": "مساحة المدرب",
-    "adminPanel": "لوحة الإدارة"
+    "adminPanel": "لوحة الإدارة",
+    "preferences": "التفضيلات"
   },
   "common": {
     "switchLocale": "اللغة",
@@ -135,7 +136,9 @@
     "actions": "إجراءات",
     "confirmDelete": "هل أنت متأكد من الحذف؟ لا يمكن التراجع عن هذا الإجراء.",
     "showPassword": "إظهار كلمة المرور",
-    "hidePassword": "إخفاء كلمة المرور"
+    "hidePassword": "إخفاء كلمة المرور",
+    "menu": "القائمة",
+    "close": "إغلاق"
   },
   "avatarUploader": {
     "upload": "رفع صورة",
@@ -638,7 +641,8 @@
     "allLessonsComplete": "اكتملت جميع الدروس",
     "takeFinalQuiz": "ابدأ الاختبار النهائي",
     "getCertificate": "احصل على الشهادة",
-    "couldntLoadLesson": "تعذّر تحميل هذا الدرس."
+    "couldntLoadLesson": "تعذّر تحميل هذا الدرس.",
+    "curriculumButton": "المحتوى"
   },
   "quizPage": {
     "title": "الاختبار النهائي",

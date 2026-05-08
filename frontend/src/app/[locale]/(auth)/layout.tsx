@@ -17,7 +17,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         style={{ background: "radial-gradient(circle, var(--accent) 0%, transparent 60%)" }}
       />
 
-      <header className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12">
+      <header className="relative z-10 flex items-center justify-between gap-2 px-4 py-5 sm:px-6 sm:py-6 md:px-12">
         <Link href="/" aria-label="Home">
           <Wordmark />
         </Link>
@@ -27,7 +27,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </div>
       </header>
 
-      <section className="relative z-10 mx-auto flex w-full max-w-md flex-col px-6 pb-16 pt-8 md:pt-16">
+      <section className="relative z-10 mx-auto flex w-full max-w-md flex-col px-4 pb-16 pt-6 sm:px-6 md:pt-16">
         {children}
       </section>
     </main>

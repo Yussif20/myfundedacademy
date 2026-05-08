@@ -109,7 +109,8 @@
     "signOut": "Sign out",
     "studentDashboard": "Student dashboard",
     "instructorWorkspace": "Instructor workspace",
-    "adminPanel": "Admin panel"
+    "adminPanel": "Admin panel",
+    "preferences": "Preferences"
   },
   "common": {
     "switchLocale": "Language",
@@ -135,7 +136,9 @@
     "actions": "Actions",
     "confirmDelete": "Are you sure you want to delete this? This action cannot be undone.",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "menu": "Menu",
+    "close": "Close"
   },
   "avatarUploader": {
     "upload": "Upload photo",
@@ -638,7 +641,8 @@
     "allLessonsComplete": "All lessons complete",
     "takeFinalQuiz": "Take final quiz",
     "getCertificate": "Get certificate",
-    "couldntLoadLesson": "Couldn't load this lesson."
+    "couldntLoadLesson": "Couldn't load this lesson.",
+    "curriculumButton": "Curriculum"
   },
   "quizPage": {
     "title": "Final assessment",

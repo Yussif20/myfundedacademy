@@ -99,7 +99,7 @@ export default function CourseDetailPage() {
 
       {/* Hero */}
       <section className="relative border-b border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_30%,transparent)]">
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 lg:grid-cols-[1fr_400px]">
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[1fr_400px]">
           <ScrollReveal>
             <div className="flex items-center gap-2 text-sm">
               {course.category && (
@@ -211,7 +211,7 @@ export default function CourseDetailPage() {
       </section>
 
       {/* Body */}
-      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-12 lg:grid-cols-[1fr_360px]">
+      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[1fr_360px]">
         <div className="space-y-12">
           {longDesc && (
             <ScrollReveal>

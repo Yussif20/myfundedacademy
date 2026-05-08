@@ -55,7 +55,7 @@ export function StickyCourseCta({ course, loggedIn, triggerRef }: Props) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: reduced ? 0 : 24, scale: reduced ? 1 : 0.96 }}
           transition={{ type: "spring", stiffness: 320, damping: 28 }}
-          className="pointer-events-none fixed inset-x-4 bottom-4 z-40 flex justify-center md:inset-x-auto md:bottom-6 md:right-6"
+          className="pointer-events-none fixed inset-x-3 bottom-3 z-40 flex justify-center sm:inset-x-4 sm:bottom-4 md:inset-x-auto md:bottom-6 md:right-6"
         >
           <div className="glass pointer-events-auto flex w-full max-w-md items-center gap-4 rounded-2xl p-3 pl-5 shadow-xl shadow-black/20 md:w-auto md:min-w-[420px]">
             <div className="min-w-0 flex-1">

@@ -21,8 +21,8 @@ export function HowItWorks() {
   const t = useTranslations("home.howItWorks");
 
   return (
-    <section className="relative py-24">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="relative py-20 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <ScrollReveal>
           <div className="mx-auto mb-14 max-w-2xl text-center">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--primary)]">
@@ -86,7 +86,7 @@ function StepCard({
         }}
       />
 
-      <div className="glass relative h-full rounded-2xl p-7 transition-transform duration-500 group-hover:-translate-y-1">
+      <div className="glass relative h-full rounded-2xl p-7 text-center transition-transform duration-500 group-hover:-translate-y-1 md:text-start">
         <motion.div
           animate={reduced ? {} : { y: [0, -6, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: index * 0.4 }}
@@ -111,7 +111,7 @@ function StepCard({
           </div>
         </motion.div>
 
-        <div className="mb-2 flex items-center gap-3">
+        <div className="mb-2 flex items-center justify-center gap-3 md:justify-start">
           <span className="font-display text-xs font-semibold tracking-[0.18em] text-[var(--muted-foreground)]">
             STEP {index.toString().padStart(2, "0")}
           </span>

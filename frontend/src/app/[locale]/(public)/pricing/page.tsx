@@ -165,7 +165,8 @@ export default function PricingPage() {
             </div>
           </ScrollReveal>
 
-          <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_60%,transparent)] backdrop-blur">
+          {/* Desktop / tablet table */}
+          <div className="hidden overflow-hidden rounded-2xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_60%,transparent)] backdrop-blur md:block">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -192,6 +193,44 @@ export default function PricingPage() {
                 </tbody>
               </table>
             </div>
+          </div>
+
+          {/* Mobile per-plan stack */}
+          <div className="space-y-4 md:hidden">
+            {plans.map((p) => (
+              <div
+                key={p.id}
+                className={`rounded-2xl border p-5 backdrop-blur ${
+                  p.highlighted
+                    ? "border-[color-mix(in_oklch,var(--primary)_45%,transparent)] bg-[color-mix(in_oklch,var(--card)_92%,transparent)]"
+                    : "border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_70%,transparent)]"
+                }`}
+              >
+                <h3
+                  className={`font-display text-base font-semibold ${
+                    p.highlighted ? "text-[var(--primary)]" : ""
+                  }`}
+                >
+                  {t(`${p.key}.name`)}
+                </h3>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {compareRows.map((row) => {
+                    const value = row[p.key as keyof CompareRow] as CompareValue;
+                    return (
+                      <li
+                        key={row.featKey}
+                        className="flex items-center justify-between gap-3 border-b border-[color-mix(in_oklch,var(--border)_50%,transparent)] py-1.5 last:border-0"
+                      >
+                        <span className="text-[var(--muted-foreground)]">
+                          {t(`feat.${row.featKey}`)}
+                        </span>
+                        <CompareCell value={value} t={t} />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </div>

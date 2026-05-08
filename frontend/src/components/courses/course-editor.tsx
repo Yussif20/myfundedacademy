@@ -395,7 +395,7 @@ export function CourseEditor({ courseId, mode }: { courseId: string; mode: Cours
 
             <div className="space-y-2 md:col-span-2">
               <Label>{t("thumbnail")}</Label>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 {form.thumbnail ? (
                   <div className="relative h-20 w-32 overflow-hidden rounded-md border border-[var(--border)] bg-[var(--secondary)]">
                     <Image
