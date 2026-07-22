@@ -1,10 +1,24 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+/* Theme-lab design directions — each file scopes a full visual identity
+   under html[data-direction="<key>"]. See components/theme-lab. */
+@import "./directions/phosphor.css";
+@import "./directions/ledger.css";
+@import "./directions/night.css";
+@import "./directions/holo.css";
+@import "./directions/burn.css";
+@import "./directions/acid.css";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --radius: 0.625rem;
+
+  /* Font indirection — design directions override these three to swap the
+     site's typography without touching the @theme mapping. */
+  --display-font: var(--font-sora);
+  --body-font: var(--font-inter);
+  --mono-font: var(--font-plex-mono);
   /* Tells the UA to render native form widgets (select option panels,
      scrollbars, date pickers) in light mode. Overridden by .dark below. */
   color-scheme: light;
@@ -88,8 +102,9 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-sora);
+  --font-sans: var(--body-font);
+  --font-display: var(--display-font);
+  --font-mono: var(--mono-font);
   --font-arabic: var(--font-plex-arabic);
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -174,6 +189,16 @@
   }
   html[lang="ar"] body {
     font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif;
+  }
+  /* Latin display faces (Sora, Archivo, Fraunces, …) have no Arabic glyphs —
+     Arabic headlines always render in IBM Plex Sans Arabic. */
+  html[lang="ar"] .font-display {
+    font-family: var(--font-arabic), var(--display-font), system-ui, sans-serif;
+  }
+  /* Theme lab: when a design direction is active, the variant home supplies
+     its own bespoke header/footer — hide the shared site chrome. */
+  html[data-direction] [data-site-chrome] {
+    display: none;
   }
   ::selection {
     background-color: color-mix(in oklch, var(--primary) 30%, transparent);

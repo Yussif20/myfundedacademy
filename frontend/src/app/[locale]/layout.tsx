@@ -5,7 +5,19 @@ import { routing } from "@/i18n/routing";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { IBM_Plex_Sans_Arabic, Inter, Sora } from "next/font/google";
+import {
+  Archivo,
+  Archivo_Black,
+  Big_Shoulders,
+  Fraunces,
+  IBM_Plex_Mono,
+  IBM_Plex_Sans,
+  IBM_Plex_Sans_Arabic,
+  Inter,
+  Newsreader,
+  Sora,
+  Space_Grotesk,
+} from "next/font/google";
 import { notFound } from "next/navigation";
 import { Providers } from "./providers";
 
@@ -27,6 +39,73 @@ const plexArabic = IBM_Plex_Sans_Arabic({
   weight: ["400", "500", "600", "700"],
   variable: "--font-plex-arabic",
   display: "swap",
+});
+
+/* Design-direction fonts (theme lab). preload:false — each face only downloads
+   when the active direction's tokens reference it. */
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-archivo",
+  display: "swap",
+  preload: false,
+});
+
+const archivoBlack = Archivo_Black({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-archivo-black",
+  display: "swap",
+  preload: false,
+});
+
+const bigShoulders = Big_Shoulders({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-big-shoulders",
+  display: "swap",
+  preload: false,
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-fraunces",
+  display: "swap",
+  preload: false,
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-newsreader",
+  display: "swap",
+  preload: false,
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+  preload: false,
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-mono",
+  display: "swap",
+  preload: false,
+});
+
+const plexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-plex-sans",
+  display: "swap",
+  preload: false,
 });
 
 type Props = {
@@ -108,7 +187,7 @@ export default async function RootLayout({ children, params }: Props) {
     >
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${sora.variable} ${plexArabic.variable} font-sans antialiased`}
+        className={`${inter.variable} ${sora.variable} ${plexArabic.variable} ${archivo.variable} ${archivoBlack.variable} ${bigShoulders.variable} ${fraunces.variable} ${newsreader.variable} ${spaceGrotesk.variable} ${plexMono.variable} ${plexSans.variable} font-sans antialiased`}
       >
         <ThemeProvider>
           <Providers>

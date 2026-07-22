@@ -12,7 +12,10 @@ export function PublicFooter() {
   const tF = useTranslations("footer");
 
   return (
-    <footer className="relative isolate overflow-hidden border-t border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_50%,transparent)]">
+    <footer
+      data-site-chrome="footer"
+      className="relative isolate overflow-hidden border-t border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_50%,transparent)]"
+    >
       {/* Soft background blob */}
       <div
         aria-hidden

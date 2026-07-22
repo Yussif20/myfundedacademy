@@ -1,0 +1,561 @@
+/* ============================================================
+   Direction "phosphor" — Phosphor Terminal Noir
+   A trading floor at 3am, cut like an A24 title sequence:
+   carbon black, one disciplined shot of phosphor chartreuse,
+   hairline borders, tabular mono numerals, instrumentation chrome.
+   Every rule is scoped under html[data-direction="phosphor"].
+   ============================================================ */
+
+/* ---------- Light theme: the paper terminal ---------- */
+html[data-direction="phosphor"] {
+  color-scheme: light;
+
+  /* Sharp radius philosophy: 2px surfaces, 0 chips, full only avatars */
+  --radius: 0.125rem;
+
+  /* Typography: Archivo display / IBM Plex Sans body / IBM Plex Mono data */
+  --display-font: var(--font-archivo);
+  --body-font: var(--font-plex-sans);
+  --mono-font: var(--font-plex-mono);
+
+  --background: #f4f5ef;
+  --foreground: #171b14;
+  --card: #fbfcf6;
+  --card-foreground: #171b14;
+  --popover: #fefefa;
+  --popover-foreground: #171b14;
+  --primary: #3c5a0c;
+  --primary-foreground: #f2ffd1;
+  --secondary: #e7eae0;
+  --secondary-foreground: #2a3324;
+  --muted: #eaede3;
+  --muted-foreground: #5a6450;
+  --accent: #0c6c9e;
+  --accent-foreground: #f0f9ff;
+  --destructive: #c4322e;
+  --destructive-foreground: #fff5f4;
+  --border: #d8dccb;
+  --input: #cbd1be;
+  --ring: #3c5a0c;
+
+  /* Identity-internal knobs */
+  --dxphosphor-glow: rgba(60, 90, 12, 0.18);
+  --dxphosphor-scanline: rgba(23, 27, 20, 0.045);
+  --dxphosphor-dot: rgba(23, 27, 20, 0.16);
+  --dxphosphor-quote-bg: #eaf7cb;
+  --dxphosphor-quote-fg: #3c5a0c;
+  --dxphosphor-quote-border: rgba(60, 90, 12, 0.35);
+}
+
+/* ---------- Dark theme: carbon terminal (the hero) ---------- */
+html[data-direction="phosphor"].dark {
+  color-scheme: dark;
+
+  --background: #0a0b09;
+  --foreground: #e8ede4;
+  --card: #121510;
+  --card-foreground: #e8ede4;
+  --popover: #161a14;
+  --popover-foreground: #edf1e8;
+  --primary: #c4f53c;
+  --primary-foreground: #0c1403;
+  --secondary: #1b1f18;
+  --secondary-foreground: #d9dfd1;
+  --muted: #161a15;
+  --muted-foreground: #9aa694;
+  --accent: #6bd1ff;
+  --accent-foreground: #05131c;
+  --destructive: #e5484d;
+  --destructive-foreground: #ffffff;
+  --border: #232823;
+  --input: #2a302a;
+  --ring: #c4f53c;
+
+  --dxphosphor-glow: rgba(196, 245, 60, 0.28);
+  --dxphosphor-scanline: rgba(255, 255, 255, 0.02);
+  --dxphosphor-dot: rgba(232, 237, 228, 0.11);
+  --dxphosphor-quote-bg: #0c0e0a;
+  --dxphosphor-quote-fg: #c4f53c;
+  --dxphosphor-quote-border: rgba(196, 245, 60, 0.35);
+}
+
+/* ---------- Global voice adjustments ---------- */
+
+/* Every numeral on the site aligns like an order book */
+html[data-direction="phosphor"] body {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Archivo headline cut: tight tracking, compressed leading */
+[data-direction="phosphor"] .font-display {
+  letter-spacing: -0.03em;
+}
+
+/* Kill the film grain — scanlines are this identity's texture */
+html[data-direction="phosphor"].dark body::before {
+  display: none;
+}
+
+/* Thumbnails and imagery sit slightly desaturated in the muted palette */
+[data-direction="phosphor"] main img {
+  filter: saturate(0.85);
+}
+
+/* ---------- Overrides of shared utility chrome ---------- */
+
+/* Brand gradient → bone → phosphor → radar cyan (spec), static, no drift */
+[data-direction="phosphor"] .text-gradient-brand {
+  background-image: linear-gradient(95deg, #2a3324 0%, #3c5a0c 52%, #0c6c9e 100%);
+  background-size: 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: none;
+}
+html[data-direction="phosphor"].dark .text-gradient-brand {
+  background-image: linear-gradient(95deg, #e9f0e2 0%, #c4f53c 52%, #6bd1ff 100%);
+}
+
+/* No glass, no blur: surfaces are flat carbon with hairlines */
+[data-direction="phosphor"] .glass,
+[data-direction="phosphor"] .glass-dark {
+  background: var(--card);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid var(--border);
+}
+
+/* The one permitted glow — CTA only */
+[data-direction="phosphor"] .brand-glow {
+  box-shadow: 0 0 32px var(--dxphosphor-glow);
+}
+
+/* No grain overlays inside sections */
+[data-direction="phosphor"] .grain::after {
+  content: none;
+}
+
+/* Aurora blobs and decorative blur orbs do not exist in this world */
+[data-direction="phosphor"] .animate-aurora,
+[data-direction="phosphor"] [aria-hidden="true"][class*="blur-["] {
+  display: none;
+}
+
+/* Sharp radius discipline on shared sections built with literal round classes.
+   .rounded-full is deliberately untouched — full radius is reserved for avatars. */
+[data-direction="phosphor"] .rounded-md,
+[data-direction="phosphor"] .rounded-lg,
+[data-direction="phosphor"] .rounded-xl,
+[data-direction="phosphor"] .rounded-2xl,
+[data-direction="phosphor"] .rounded-3xl {
+  border-radius: 2px;
+}
+
+/* ---------- Signature utilities ---------- */
+
+/* CRT scanlines: 1px horizontal lines at ~2% opacity */
+[data-direction="phosphor"] .dxphosphor-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--dxphosphor-scanline) 0,
+    var(--dxphosphor-scanline) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* 8px dot grid */
+[data-direction="phosphor"] .dxphosphor-dotgrid {
+  background-image: radial-gradient(var(--dxphosphor-dot) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+/* Hero mask: dot grid fades out radially toward the headline (inline-start) */
+[data-direction="phosphor"] .dxphosphor-hero-mask {
+  mask-image: radial-gradient(110% 100% at 28% 42%, transparent 0%, transparent 30%, black 78%);
+  -webkit-mask-image: radial-gradient(
+    110% 100% at 28% 42%,
+    transparent 0%,
+    transparent 30%,
+    black 78%
+  );
+}
+html[dir="rtl"][data-direction="phosphor"] .dxphosphor-hero-mask {
+  mask-image: radial-gradient(110% 100% at 72% 42%, transparent 0%, transparent 30%, black 78%);
+  -webkit-mask-image: radial-gradient(
+    110% 100% at 72% 42%,
+    transparent 0%,
+    transparent 30%,
+    black 78%
+  );
+}
+
+/* Square status LEDs: 6px squares, never dots */
+[data-direction="phosphor"] .dxphosphor-led {
+  display: inline-block;
+  flex: none;
+  width: 6px;
+  height: 6px;
+  background: var(--primary);
+  animation: dxphosphor-pulse 2s ease-in-out infinite;
+}
+[data-direction="phosphor"] .dxphosphor-led--cyan {
+  background: var(--accent);
+  animation: none;
+}
+[data-direction="phosphor"] .dxphosphor-led--static {
+  animation: none;
+}
+
+@keyframes dxphosphor-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 8px var(--dxphosphor-glow);
+  }
+  50% {
+    opacity: 0.4;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+/* Registration tick marks: tiny + crosshairs just outside the four corners */
+[data-direction="phosphor"] .dxphosphor-ticks {
+  position: relative;
+}
+[data-direction="phosphor"] .dxphosphor-ticks::after {
+  --dxt: var(--dxphosphor-tick, var(--primary));
+  content: "";
+  position: absolute;
+  inset: -3px;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--dxt), var(--dxt)), linear-gradient(var(--dxt), var(--dxt)),
+    linear-gradient(var(--dxt), var(--dxt)), linear-gradient(var(--dxt), var(--dxt)),
+    linear-gradient(var(--dxt), var(--dxt)), linear-gradient(var(--dxt), var(--dxt)),
+    linear-gradient(var(--dxt), var(--dxt)), linear-gradient(var(--dxt), var(--dxt));
+  background-size:
+    7px 1px,
+    1px 7px,
+    7px 1px,
+    1px 7px,
+    7px 1px,
+    1px 7px,
+    7px 1px,
+    1px 7px;
+  background-position:
+    left 0 top 3px,
+    left 3px top 0,
+    right 0 top 3px,
+    right 3px top 0,
+    left 0 bottom 3px,
+    left 3px bottom 0,
+    right 0 bottom 3px,
+    right 3px bottom 0;
+  background-repeat: no-repeat;
+  opacity: 0.85;
+}
+/* Hover-revealed variant for interactive surfaces */
+[data-direction="phosphor"] .dxphosphor-ticks--hover::after {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+[data-direction="phosphor"] .dxphosphor-ticks--hover:hover::after {
+  opacity: 0.85;
+}
+
+/* Hairline-framed instrument panel */
+[data-direction="phosphor"] .dxphosphor-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+
+/* Mono micro-chip: 0 radius, uppercase, 11px, +0.08em tracking */
+[data-direction="phosphor"] .dxphosphor-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  padding: 0.3rem 0.65rem;
+  font-family: var(--mono-font), monospace;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Live-quote chip: phosphor numerals on near-black (inverts on paper) */
+[data-direction="phosphor"] .dxphosphor-quote {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0;
+  padding: 0.3rem 0.65rem;
+  background: var(--dxphosphor-quote-bg);
+  color: var(--dxphosphor-quote-fg);
+  border: 1px solid var(--dxphosphor-quote-border);
+  font-family: var(--mono-font), monospace;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ticker tape: hairline-bounded marquee strip */
+[data-direction="phosphor"] .dxphosphor-ticker {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+[data-direction="phosphor"] .dxphosphor-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: dxphosphor-marquee 48s linear infinite;
+}
+[data-direction="phosphor"] .dxphosphor-ticker:hover .dxphosphor-ticker-track {
+  animation-play-state: paused;
+}
+/* Tape reverses direction on RTL pages */
+html[dir="rtl"][data-direction="phosphor"] .dxphosphor-ticker-track {
+  animation-direction: reverse;
+}
+
+@keyframes dxphosphor-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Sparkline draw-on: the hero's only decorative animation */
+[data-direction="phosphor"] .dxphosphor-draw {
+  stroke-dasharray: 640;
+  stroke-dashoffset: 640;
+  animation: dxphosphor-draw 1.5s 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes dxphosphor-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Hairline rule with centered flex label (section chrome) */
+[data-direction="phosphor"] .dxphosphor-rule {
+  height: 1px;
+  background: var(--border);
+  flex: 1 1 0%;
+}
+
+/* ---------- Bespoke page tokens (amber telemetry, card shadow) ---------- */
+html[data-direction="phosphor"] {
+  --dxphosphor-amber: #8a6400;
+  --dxphosphor-card-shadow: rgba(23, 27, 20, 0.14);
+}
+html[data-direction="phosphor"].dark {
+  --dxphosphor-amber: #ffc53d;
+  --dxphosphor-card-shadow: rgba(0, 0, 0, 0.55);
+}
+
+/* Amber status LED (ratings) — square, never a dot, never pulsing */
+[data-direction="phosphor"] .dxphosphor-led--amber {
+  background: var(--dxphosphor-amber);
+  animation: none;
+}
+
+/* ---------- Course / roster card: lifted carbon, warming hairline ---------- */
+[data-direction="phosphor"] .dxphosphor-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+[data-direction="phosphor"] .dxphosphor-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklch, var(--primary) 45%, var(--border));
+  box-shadow: 0 12px 32px var(--dxphosphor-card-shadow);
+}
+
+/* Thumbnail scanline sheen: sweeps once per hover (250ms), direction-agnostic */
+[data-direction="phosphor"] .dxphosphor-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+[data-direction="phosphor"] .dxphosphor-sheen::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: -45%;
+  inline-size: 40%;
+  opacity: 0;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(232, 237, 228, 0.09) 45%,
+      rgba(232, 237, 228, 0.09) 55%,
+      transparent
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.05) 0,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
+[data-direction="phosphor"] .dxphosphor-card:hover .dxphosphor-sheen::after {
+  animation: dxphosphor-sheen 0.25s ease-out forwards;
+}
+@keyframes dxphosphor-sheen {
+  from {
+    inset-inline-start: -45%;
+    opacity: 1;
+  }
+  to {
+    inset-inline-start: 105%;
+    opacity: 1;
+  }
+}
+
+/* ---------- Hero calibration sequence: crosshair hairlines lock on ---------- */
+/* Base styles ARE the resting state; keyframes only describe the approach,
+   so reduced-motion (animation: none) lands on the final composition. */
+[data-direction="phosphor"] .dxphosphor-cal-h,
+[data-direction="phosphor"] .dxphosphor-cal-v {
+  position: absolute;
+  background: color-mix(in oklch, var(--primary) 35%, var(--border));
+}
+[data-direction="phosphor"] .dxphosphor-cal-h {
+  inset-inline: 0;
+  block-size: 1px;
+  inset-block-start: 33%;
+  opacity: 0.3;
+  animation: dxphosphor-cal-h 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes dxphosphor-cal-h {
+  from {
+    inset-block-start: 6%;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.55;
+  }
+  to {
+    inset-block-start: 33%;
+    opacity: 0.3;
+  }
+}
+[data-direction="phosphor"] .dxphosphor-cal-v {
+  inset-block: 0;
+  inline-size: 1px;
+  inset-inline-start: 61%;
+  opacity: 0.3;
+  animation: dxphosphor-cal-v 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes dxphosphor-cal-v {
+  from {
+    inset-inline-start: 96%;
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.55;
+  }
+  to {
+    inset-inline-start: 61%;
+    opacity: 0.3;
+  }
+}
+/* Lock marker at the crosshair intersection: a small + that lands last */
+[data-direction="phosphor"] .dxphosphor-cal-dot {
+  position: absolute;
+  inset-block-start: 33%;
+  inset-inline-start: 61%;
+  inline-size: 9px;
+  block-size: 9px;
+  margin-block-start: -4px;
+  margin-inline-start: -4px;
+  opacity: 0.9;
+  background-image:
+    linear-gradient(var(--primary), var(--primary)), linear-gradient(var(--primary), var(--primary));
+  background-size:
+    9px 1px,
+    1px 9px;
+  background-position:
+    0 4px,
+    4px 0;
+  background-repeat: no-repeat;
+  animation: dxphosphor-cal-dot 0.4s 1.5s ease-out both;
+}
+@keyframes dxphosphor-cal-dot {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.9;
+  }
+}
+
+/* ---------- Order-book depth bars (hero instrument) ---------- */
+[data-direction="phosphor"] .dxphosphor-depth {
+  block-size: 6px;
+  background: color-mix(in oklch, var(--primary) 32%, transparent);
+  transform-origin: left;
+  animation: dxphosphor-grow 0.8s 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+[data-direction="phosphor"] .dxphosphor-depth--ask {
+  background: color-mix(in oklch, var(--accent) 32%, transparent);
+}
+@keyframes dxphosphor-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* ---------- Command-line newsletter input ---------- */
+[data-direction="phosphor"] .dxphosphor-input {
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--input);
+  border-radius: 2px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+[data-direction="phosphor"] .dxphosphor-input:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+/* ---------- Reduced motion: freeze the instruments ---------- */
+@media (prefers-reduced-motion: reduce) {
+  [data-direction="phosphor"] .dxphosphor-ticker-track {
+    animation: none;
+  }
+  [data-direction="phosphor"] .dxphosphor-led {
+    animation: none;
+  }
+  [data-direction="phosphor"] .dxphosphor-draw {
+    animation: none;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+  [data-direction="phosphor"] .dxphosphor-cal-h,
+  [data-direction="phosphor"] .dxphosphor-cal-v,
+  [data-direction="phosphor"] .dxphosphor-cal-dot,
+  [data-direction="phosphor"] .dxphosphor-depth {
+    animation: none;
+  }
+  [data-direction="phosphor"] .dxphosphor-card:hover .dxphosphor-sheen::after {
+    animation: none;
+  }
+}

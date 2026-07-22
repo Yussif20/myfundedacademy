@@ -81,7 +81,7 @@ function StatItem({
 
   return (
     <li ref={ref} className="text-center">
-      <p className="font-display text-4xl font-bold tracking-tight md:text-5xl">
+      <p dir="ltr" className="font-display text-4xl font-bold tracking-tight md:text-5xl">
         <span className="text-gradient-brand">{formatted}</span>
         <span className="text-[var(--accent)]">{suffix}</span>
       </p>

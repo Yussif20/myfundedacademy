@@ -1,0 +1,646 @@
+/* ============================================================================
+   Direction "acid" — ACID LEDGER
+   Ledger / graph-paper / terminal vernacular run through acid neo-brutalism.
+   Ink-olive + bone base, one screaming chartreuse (#D6FF3F) and one clashing
+   hot magenta (#FF5CAA). Flat, hard-edged, 2px borders, zero-blur offset
+   shadows. No blur, no glow, no grain, no aurora — ever.
+   Every rule scoped under [data-direction="acid"]; custom classes dxacid-*.
+   ========================================================================== */
+
+/* ---------- Tokens: LIGHT (bone paper) ---------- */
+html[data-direction="acid"] {
+  color-scheme: light;
+
+  --radius: 2px;
+  /* Flatten Tailwind's larger fixed radii inside this identity */
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+  --radius-4xl: 2px;
+
+  --display-font: var(--font-archivo-black);
+  --body-font: var(--font-space-grotesk);
+  --mono-font: var(--font-plex-mono);
+
+  --background: #f3f1e6;
+  --foreground: #15170d;
+  --card: #fbfaf2;
+  --card-foreground: #15170d;
+  --popover: #fdfcf6;
+  --popover-foreground: #15170d;
+  --primary: #a6c800;
+  --primary-foreground: #12140a;
+  --secondary: #eae7d8;
+  --secondary-foreground: #15170d;
+  --muted: #e6e3d2;
+  --muted-foreground: #565a48;
+  --accent: #b8125f;
+  --accent-foreground: #fff3f9;
+  --destructive: #c41f1f;
+  --destructive-foreground: #fff6f4;
+  --border: #1b1e12;
+  --input: #1b1e12;
+  --ring: #7e9a00;
+
+  /* Identity-private vars */
+  --dxacid-flip: 1; /* multiplies shadow x-offsets and sticker tilts; -1 in RTL */
+  --dxacid-line: var(--foreground); /* 2px border + hard-shadow color */
+  --dxacid-acid: #d6ff3f; /* chartreuse FILL only (ink text on top) */
+  --dxacid-ink: #0b0c08; /* ink text on chartreuse fills */
+  --dxacid-up: #7e9a00; /* text-level up-move (WCAG-safe on bone) */
+  --dxacid-down: #b8125f; /* text-level down-move */
+  --dxacid-hover-shadow: #a6c800; /* hover hard-shadow color */
+  --dxacid-grad-a: #7e9a00; /* gradient text, light = darkened pair */
+  --dxacid-grad-b: #b8125f;
+}
+
+/* ---------- Tokens: DARK (ink-olive, the hero theme) ---------- */
+html[data-direction="acid"].dark {
+  color-scheme: dark;
+
+  --background: #0b0c08;
+  --foreground: #f2f3ec;
+  --card: #15170f;
+  --card-foreground: #f2f3ec;
+  --popover: #191c11;
+  --popover-foreground: #f2f3ec;
+  --primary: #d6ff3f;
+  --primary-foreground: #0b0c08;
+  --secondary: #262a1a;
+  --secondary-foreground: #e6e9d9;
+  --muted: #1e2115;
+  --muted-foreground: #a9af9b;
+  --accent: #ff5caa;
+  --accent-foreground: #1c0510;
+  --destructive: #ff5c5c;
+  --destructive-foreground: #1c0606;
+  --border: #454b36;
+  --input: #454b36;
+  --ring: #d6ff3f;
+
+  --dxacid-line: #f2f3ec;
+  --dxacid-up: #d6ff3f;
+  --dxacid-down: #ff5caa;
+  --dxacid-hover-shadow: #d6ff3f;
+  --dxacid-grad-a: #d6ff3f;
+  --dxacid-grad-b: #ff5caa;
+}
+
+/* RTL: flip hard-shadow offsets and sticker tilts */
+html[data-direction="acid"][dir="rtl"] {
+  --dxacid-flip: -1;
+}
+
+/* ============================================================================
+   TYPOGRAPHY DISCIPLINE
+   Archivo Black is a single-weight (400) black face: ALL-CAPS, tight, huge.
+   Never letterspace or fake-bold Arabic — IBM Plex Sans Arabic 700 takes over.
+   ========================================================================== */
+html[data-direction="acid"]:not([lang="ar"]) .font-display {
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+html[data-direction="acid"][lang="ar"] .font-display {
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ============================================================================
+   STRIP THE OLD TEAL LANGUAGE — no glass, no glow, no grain, no aurora.
+   (Unlayered rules here beat Tailwind's layered utilities.)
+   ========================================================================== */
+[data-direction="acid"] .text-gradient-brand {
+  background: linear-gradient(
+    104deg,
+    var(--dxacid-grad-a) 0%,
+    var(--dxacid-grad-a) 58%,
+    var(--dxacid-grad-b) 58%,
+    var(--dxacid-grad-b) 100%
+  );
+  background-size: 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: none;
+}
+
+[data-direction="acid"] .glass,
+[data-direction="acid"] .glass-dark {
+  background: var(--card);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+}
+
+[data-direction="acid"] .brand-glow {
+  box-shadow: calc(4px * var(--dxacid-flip)) 4px 0 0 var(--dxacid-line);
+}
+
+[data-direction="acid"] .grain::after {
+  content: none;
+}
+/* Kill the global dark-mode film grain overlay */
+html[data-direction="acid"].dark body::before {
+  content: none;
+}
+
+/* Decorative aurora blobs / blurred halos / inline noise textures: gone */
+[data-direction="acid"] [aria-hidden][class*="blur-"],
+[data-direction="acid"] [aria-hidden][style*="fractalNoise"] {
+  display: none;
+}
+[data-direction="acid"] [class*="backdrop-blur"] {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+[data-direction="acid"] .animate-aurora,
+[data-direction="acid"] .animate-float,
+[data-direction="acid"] .animate-shimmer {
+  animation: none;
+}
+
+/* Soft shadows become hard document stacks */
+[data-direction="acid"]
+  :is(
+    .shadow-2xs,
+    .shadow-xs,
+    .shadow-sm,
+    .shadow,
+    .shadow-md,
+    .shadow-lg,
+    .shadow-xl,
+    .shadow-2xl
+  ) {
+  box-shadow: calc(4px * var(--dxacid-flip)) 4px 0 0
+    color-mix(in srgb, var(--foreground) 85%, transparent);
+}
+
+/* Radius philosophy: perfect circles are reserved for avatars (elements that
+   contain/are an image) and live-status pulse dots — round = human/alive.
+   Everything else squares off. */
+[data-direction="acid"] .rounded-full:not(img):not(.animate-pulse):not(:has(img)) {
+  border-radius: 2px;
+}
+
+[data-direction="acid"] ::selection {
+  background: var(--dxacid-acid);
+  color: var(--dxacid-ink);
+}
+
+/* ============================================================================
+   SIGNATURE: hard-shadow stack
+   ========================================================================== */
+[data-direction="acid"] .dxacid-hard {
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  box-shadow: calc(4px * var(--dxacid-flip)) 4px 0 0 var(--dxacid-line);
+  background: var(--card);
+}
+
+[data-direction="acid"] .dxacid-hard-int {
+  transition:
+    transform 120ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+[data-direction="acid"] .dxacid-hard-int:hover {
+  transform: translate(calc(-2px * var(--dxacid-flip)), -2px);
+  box-shadow: calc(6px * var(--dxacid-flip)) 6px 0 0 var(--dxacid-hover-shadow);
+}
+[data-direction="acid"] .dxacid-hard-int:active {
+  transform: translate(calc(2px * var(--dxacid-flip)), 2px);
+  box-shadow: 0 0 0 0 var(--dxacid-line);
+}
+
+/* ============================================================================
+   SIGNATURE: sticker / stamp badges (mono, 2px border, rotated; flips in RTL)
+   Set --dxacid-tilt inline to vary the rotation per sticker.
+   ========================================================================== */
+[data-direction="acid"] .dxacid-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-family: var(--mono-font), monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: calc(3px * var(--dxacid-flip)) 3px 0 0 var(--dxacid-line);
+  transform: rotate(calc(var(--dxacid-tilt, -2deg) * var(--dxacid-flip)));
+}
+/* chartreuse fill = money / primary */
+[data-direction="acid"] .dxacid-sticker-acid {
+  background: var(--dxacid-acid);
+  color: var(--dxacid-ink);
+}
+/* magenta fill = urgency */
+[data-direction="acid"] .dxacid-sticker-mag {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* ============================================================================
+   SIGNATURE: chartreuse highlighter block (hero headline, line-two device)
+   Ink text on #D6FF3F, 2px border, 6px hard shadow in clashing magenta.
+   ========================================================================== */
+[data-direction="acid"] .dxacid-highlight {
+  display: inline-block;
+  background: var(--dxacid-acid);
+  color: var(--dxacid-ink);
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  padding: 0.02em 0.16em;
+  box-shadow: calc(6px * var(--dxacid-flip)) 6px 0 0 var(--accent);
+  transform: rotate(calc(-1deg * var(--dxacid-flip)));
+  -webkit-text-stroke: 0;
+}
+
+/* ============================================================================
+   SIGNATURE: graph-paper ground (24px grid, ~7% foreground, pure CSS)
+   ========================================================================== */
+[data-direction="acid"] .dxacid-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--foreground) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--foreground) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 24px 24px;
+}
+
+/* Oversized hollow outline watermark glyph behind sections */
+[data-direction="acid"] .dxacid-watermark {
+  position: absolute;
+  font-family: var(--display-font), var(--body-font), sans-serif;
+  font-weight: 400;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--foreground) 16%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+html[data-direction="acid"][dir="rtl"] .dxacid-watermark {
+  transform: scaleX(-1);
+}
+
+/* ============================================================================
+   SIGNATURE: ticker-tape divider (marquee; LTR data regardless of locale)
+   ========================================================================== */
+[data-direction="acid"] .dxacid-ticker {
+  direction: ltr;
+  overflow: hidden;
+  border-block: 2px solid var(--dxacid-line);
+  background: var(--card);
+}
+[data-direction="acid"] .dxacid-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: dxacid-scroll 36s linear infinite;
+}
+[data-direction="acid"] .dxacid-ticker:hover .dxacid-ticker-track {
+  animation-play-state: paused;
+}
+[data-direction="acid"] .dxacid-tick {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+  white-space: nowrap;
+  padding: 0.65rem 1.25rem;
+  font-family: var(--mono-font), monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  border-inline-end: 2px solid color-mix(in srgb, var(--dxacid-line) 35%, transparent);
+}
+[data-direction="acid"] .dxacid-up {
+  color: var(--dxacid-up);
+}
+[data-direction="acid"] .dxacid-down {
+  color: var(--dxacid-down);
+}
+
+@keyframes dxacid-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-direction="acid"] .dxacid-ticker-track {
+    animation: none;
+  }
+}
+
+/* ============================================================================
+   SIGNATURE: ledger section headers — full-width 2px rule, mono tab on the line
+   ========================================================================== */
+[data-direction="acid"] .dxacid-rule {
+  position: relative;
+  border-top: 2px solid var(--dxacid-line);
+}
+[data-direction="acid"] .dxacid-rule-tab {
+  position: absolute;
+  top: 0;
+  inset-inline-start: 1.5rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--mono-font), monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 0.35rem 0.65rem;
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* ============================================================================
+   SIGNATURE: acid buttons — the element physically "clicks"
+   ========================================================================== */
+[data-direction="acid"] .dxacid-btn {
+  font-family: var(--mono-font), monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--dxacid-acid);
+  color: var(--dxacid-ink);
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  box-shadow: calc(6px * var(--dxacid-flip)) 6px 0 0 var(--dxacid-line);
+  transition:
+    transform 120ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+[data-direction="acid"] .dxacid-btn:hover {
+  background: var(--dxacid-acid);
+  transform: translate(calc(-2px * var(--dxacid-flip)), -2px);
+  box-shadow: calc(8px * var(--dxacid-flip)) 8px 0 0 var(--dxacid-line);
+}
+[data-direction="acid"] .dxacid-btn:active {
+  transform: translate(calc(3px * var(--dxacid-flip)), 3px);
+  box-shadow: 0 0 0 0 var(--dxacid-line);
+}
+
+[data-direction="acid"] .dxacid-btn-ghost {
+  font-family: var(--mono-font), monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: transparent;
+  color: var(--foreground);
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  box-shadow: calc(4px * var(--dxacid-flip)) 4px 0 0 var(--dxacid-line);
+  transition:
+    transform 120ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+[data-direction="acid"] .dxacid-btn-ghost:hover {
+  background: transparent;
+  transform: translate(calc(-2px * var(--dxacid-flip)), -2px);
+  box-shadow: calc(6px * var(--dxacid-flip)) 6px 0 0 var(--dxacid-hover-shadow);
+}
+[data-direction="acid"] .dxacid-btn-ghost:active {
+  transform: translate(calc(3px * var(--dxacid-flip)), 3px);
+  box-shadow: 0 0 0 0 var(--dxacid-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-direction="acid"] .dxacid-btn,
+  [data-direction="acid"] .dxacid-btn-ghost,
+  [data-direction="acid"] .dxacid-hard-int {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   Ledger stat cells (bordered strip under the ticker)
+   ========================================================================== */
+[data-direction="acid"] .dxacid-cell {
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  background: var(--card);
+  font-family: var(--mono-font), monospace;
+}
+
+/* Square live-status LED (the one non-circle indicator) */
+[data-direction="acid"] .dxacid-led {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--dxacid-acid);
+  border: 1px solid var(--dxacid-ink);
+}
+
+/* ============================================================================
+   BESPOKE CHROME — header, footer, and full-page section utilities
+   ========================================================================== */
+
+/* Brand block: chartreuse tile with the M↗ mark, hard shadow, flips in RTL */
+[data-direction="acid"] .dxacid-brand-block {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--dxacid-acid);
+  color: var(--dxacid-ink);
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  box-shadow: calc(3px * var(--dxacid-flip)) 3px 0 0 var(--dxacid-line);
+  font-family: var(--display-font), var(--body-font), sans-serif;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Nav link: mono uppercase; hover = highlighter block that physically pops */
+[data-direction="acid"] .dxacid-navlink {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--mono-font), monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  border: 2px solid transparent;
+  border-radius: 2px;
+}
+[data-direction="acid"] .dxacid-navlink:hover {
+  background: var(--dxacid-acid);
+  color: var(--dxacid-ink);
+  border-color: var(--dxacid-line);
+  box-shadow: calc(3px * var(--dxacid-flip)) 3px 0 0 var(--dxacid-line);
+}
+[data-direction="acid"] .dxacid-navlink-idx {
+  font-size: 0.625rem;
+  color: var(--dxacid-up);
+}
+[data-direction="acid"] .dxacid-navlink:hover .dxacid-navlink-idx {
+  color: var(--dxacid-ink);
+}
+
+/* Flat mono chip — no tilt, no shadow (metadata, expertise tags) */
+[data-direction="acid"] .dxacid-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.2rem 0.45rem;
+  font-family: var(--mono-font), monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  border: 2px solid color-mix(in srgb, var(--dxacid-line) 55%, transparent);
+  border-radius: 2px;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+/* Bordered mono input (newsletter) — focus snaps a chartreuse hard shadow */
+[data-direction="acid"] .dxacid-input {
+  height: 2.75rem;
+  width: 100%;
+  padding-inline: 0.85rem;
+  background: var(--card);
+  color: var(--foreground);
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  font-family: var(--mono-font), monospace;
+  font-size: 0.8125rem;
+}
+[data-direction="acid"] .dxacid-input::placeholder {
+  color: var(--muted-foreground);
+}
+[data-direction="acid"] .dxacid-input:focus-visible {
+  outline: none;
+  box-shadow: calc(3px * var(--dxacid-flip)) 3px 0 0 var(--dxacid-acid);
+}
+
+/* Square social button */
+[data-direction="acid"] .dxacid-social {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background: var(--card);
+  color: var(--muted-foreground);
+  border: 2px solid var(--dxacid-line);
+  border-radius: 2px;
+  box-shadow: calc(2px * var(--dxacid-flip)) 2px 0 0 var(--dxacid-line);
+}
+[data-direction="acid"] .dxacid-social:hover {
+  background: var(--dxacid-acid);
+  color: var(--dxacid-ink);
+}
+
+/* Ink-reveal underline, grows from inline-start (RTL-correct) */
+[data-direction="acid"] .dxacid-underline {
+  padding-bottom: 2px;
+  background-image: linear-gradient(var(--dxacid-up), var(--dxacid-up));
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  background-position: 0% 100%;
+  transition: background-size 160ms cubic-bezier(0.2, 0, 0, 1);
+}
+html[data-direction="acid"][dir="rtl"] .dxacid-underline {
+  background-position: 100% 100%;
+}
+[data-direction="acid"] .group:hover .dxacid-underline,
+[data-direction="acid"] .dxacid-underline:hover {
+  background-size: 100% 2px;
+}
+
+/* Dotted ledger leader (label …… value) */
+[data-direction="acid"] .dxacid-leader {
+  flex: 1 1 auto;
+  min-width: 1.25rem;
+  height: 0.7em;
+  margin-inline: 0.5em;
+  border-bottom: 2px dotted color-mix(in srgb, var(--dxacid-line) 45%, transparent);
+}
+
+/* Chartreuse-on-ink duotone for thumbnails — forces imagery on-brand.
+   Overlay children (stickers) must sit at z-index 2+. */
+[data-direction="acid"] .dxacid-duotone {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--secondary);
+}
+[data-direction="acid"] .dxacid-duotone img {
+  filter: grayscale(1) contrast(1.1) brightness(0.95);
+}
+[data-direction="acid"] .dxacid-duotone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--dxacid-acid);
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Hollow outline numerals (section counters, step numbers) */
+[data-direction="acid"] .dxacid-outline-num {
+  font-family: var(--display-font), var(--body-font), sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--foreground) 35%, transparent);
+}
+
+/* Rubber stamp: magenta double ring, mono, meant to be tilted + slammed */
+[data-direction="acid"] .dxacid-stamp {
+  display: inline-block;
+  padding: 0.5rem 0.8rem;
+  font-family: var(--mono-font), monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--background) 85%, transparent);
+  border: 2px solid var(--accent);
+  border-radius: 2px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Tilt wrapper — rotation flips sign in RTL via --dxacid-flip */
+[data-direction="acid"] .dxacid-tiltwrap {
+  transform: rotate(calc(var(--dxacid-tilt, 0deg) * var(--dxacid-flip)));
+}
+
+/* Slower marquee (trusted-by band) */
+[data-direction="acid"] .dxacid-ticker-slow .dxacid-ticker-track {
+  animation-duration: 72s;
+}
+
+/* Highlighter invert on hover — needed because .dxacid-hard's unlayered
+   background beats Tailwind's layered hover: utilities */
+[data-direction="acid"] .dxacid-invert:hover {
+  background: var(--dxacid-acid);
+  color: var(--dxacid-ink);
+}
