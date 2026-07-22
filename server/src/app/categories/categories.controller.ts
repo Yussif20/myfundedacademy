@@ -6,7 +6,9 @@ import { CategoriesService } from "./categories.service";
 export const CategoriesController = {
   list: catchAsync(async (req, res) => {
     const data = await CategoriesService.list({
-      featured: req.query.featured as unknown as boolean | undefined,
+      // Express 5 exposes req.query as a getter, so the Zod middleware can't
+      // write the coerced value back — parse the raw string here.
+      featured: req.query.featured === undefined ? undefined : req.query.featured === "true",
     });
     sendResponse(res, { statusCode: httpStatus.OK, data });
   }),
