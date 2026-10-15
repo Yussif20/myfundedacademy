@@ -106,6 +106,14 @@ export type ListCoursesArgs = {
   search?: string;
 };
 
+/**
+ * What the player needs for a lesson: a VdoCipher OTP (DRM) or, for lessons
+ * whose video ID is `mp4:<url>` (demo courses), a plain MP4 URL.
+ */
+export type PlaybackSource =
+  | { provider: "vdocipher"; otp: string; playbackInfo: string }
+  | { provider: "mp4"; url: string };
+
 export const coursesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     listCourses: builder.query<Paginated<CourseSummary[]>, ListCoursesArgs | void>({
@@ -276,7 +284,7 @@ export const coursesApi = baseApi.injectEndpoints({
     }),
 
     getPreviewOtp: builder.mutation<
-      { statusCode: number; success: boolean; data: { otp: string; playbackInfo: string } },
+      { statusCode: number; success: boolean; data: PlaybackSource },
       { lessonId: string }
     >({
       query: ({ lessonId }) => ({
@@ -286,7 +294,7 @@ export const coursesApi = baseApi.injectEndpoints({
     }),
 
     getPlaybackOtp: builder.mutation<
-      { statusCode: number; success: boolean; data: { otp: string; playbackInfo: string } },
+      { statusCode: number; success: boolean; data: PlaybackSource },
       { lessonId: string }
     >({
       query: ({ lessonId }) => ({

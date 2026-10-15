@@ -8,6 +8,12 @@ type Props = {
   otp?: string;
   /** Base64 playback info returned by the server */
   playbackInfo?: string;
+  /**
+   * Plain MP4 URL (the free "mp4:" provider used by demo courses). When set,
+   * a native <video> element is rendered instead of the VdoCipher iframe; the
+   * same watermark overlay sits on top.
+   */
+  videoUrl?: string;
   /** Loading state controlled by parent (e.g. while requesting OTP) */
   isLoading?: boolean;
   /** Optional: thumbnail to show before the player loads */
@@ -38,6 +44,7 @@ const WATERMARK_POSITIONS: Array<{ top?: string; bottom?: string; left?: string;
 export function VdoCipherPlayer({
   otp,
   playbackInfo,
+  videoUrl,
   isLoading,
   poster,
   title,
@@ -46,7 +53,7 @@ export function VdoCipherPlayer({
 }: Props) {
   const [activated, setActivated] = useState(false);
   const [posIndex, setPosIndex] = useState(0);
-  const ready = Boolean(otp && playbackInfo);
+  const ready = Boolean(videoUrl || (otp && playbackInfo));
 
   // Rotate the overlay watermark to a new corner every 5 seconds.
   useEffect(() => {
@@ -94,18 +101,33 @@ export function VdoCipherPlayer({
     );
   }
 
-  const src = `https://player.vdocipher.com/v2/?otp=${encodeURIComponent(otp!)}&playbackInfo=${encodeURIComponent(playbackInfo!)}`;
   const pos = WATERMARK_POSITIONS[posIndex];
 
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[var(--border)] bg-black">
-      <iframe
-        src={src}
-        title={title || "VdoCipher player"}
-        allow="encrypted-media"
-        allowFullScreen
-        className="h-full w-full"
-      />
+      {videoUrl ? (
+        <video
+          key={videoUrl}
+          src={videoUrl}
+          poster={poster}
+          title={title}
+          controls
+          autoPlay={activated}
+          playsInline
+          preload="metadata"
+          controlsList="nodownload"
+          onContextMenu={(e) => e.preventDefault()}
+          className="h-full w-full"
+        />
+      ) : (
+        <iframe
+          src={`https://player.vdocipher.com/v2/?otp=${encodeURIComponent(otp!)}&playbackInfo=${encodeURIComponent(playbackInfo!)}`}
+          title={title || "VdoCipher player"}
+          allow="encrypted-media"
+          allowFullScreen
+          className="h-full w-full"
+        />
+      )}
 
       {watermarkText && (
         <div

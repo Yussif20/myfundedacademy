@@ -30,6 +30,11 @@ export const authApi = baseApi.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
+    demoLogin: builder.mutation<AuthResponse, { role: "student" | "instructor" | "admin" }>({
+      query: (body) => ({ url: "/auth/demo-login", method: "POST", body }),
+      invalidatesTags: ["User"],
+    }),
+
     logout: builder.mutation<SimpleResponse, void>({
       query: () => ({ url: "/auth/logout", method: "POST" }),
       invalidatesTags: ["User"],
@@ -56,6 +61,7 @@ export const authApi = baseApi.injectEndpoints({
 export const {
   useSignupMutation,
   useLoginMutation,
+  useDemoLoginMutation,
   useLogoutMutation,
   useVerifyEmailMutation,
   useResendVerificationMutation,

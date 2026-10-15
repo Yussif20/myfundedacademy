@@ -483,8 +483,16 @@
         "ADVANCED": "Advanced",
         "ALL_LEVELS": "All levels"
       },
-      "language": { "EN": "English", "AR": "Arabic", "BOTH": "English + Arabic" },
-      "tier": { "FREE": "Free", "STARTER": "Starter", "PRO": "Pro" },
+      "language": {
+        "EN": "English",
+        "AR": "Arabic",
+        "BOTH": "English + Arabic"
+      },
+      "tier": {
+        "FREE": "Free",
+        "STARTER": "Starter",
+        "PRO": "Pro"
+      },
       "status": {
         "DRAFT": "Draft",
         "PENDING": "Pending review",
@@ -565,6 +573,14 @@
     "errors": {
       "passwordsDontMatch": "Passwords don't match.",
       "termsRequired": "You must agree to the terms."
+    },
+    "demo": {
+      "title": "Try the demo",
+      "subtitle": "No sign-up needed. Explore with a ready-made account.",
+      "student": "Try as student",
+      "instructor": "Try as instructor",
+      "admin": "Admin (read-only)",
+      "or": "or sign in with email"
     }
   },
   "account": {
@@ -821,5 +837,10 @@
     "privacy": "Privacy Policy",
     "refund": "Refund Policy",
     "contact": "Contact"
+  },
+  "demoBanner": {
+    "text": "Demo: data resets nightly",
+    "card": "Stripe test card 4242 4242 4242 4242",
+    "blocked": "This action is disabled in the demo."
   }
 }

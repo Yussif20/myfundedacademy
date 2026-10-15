@@ -442,14 +442,19 @@ function PreviewPlayer({ lesson, thumbnail }: { lesson: Lesson; thumbnail: strin
   const [getOtp, { isLoading }] = useGetPreviewOtpMutation();
   const [otp, setOtp] = useState<string | undefined>();
   const [playbackInfo, setPlaybackInfo] = useState<string | undefined>();
+  const [videoUrl, setVideoUrl] = useState<string | undefined>();
   const [error, setError] = useState<string | null>(null);
 
   const onActivate = async () => {
     setError(null);
     try {
       const res = await getOtp({ lessonId: lesson.id }).unwrap();
-      setOtp(res.data.otp);
-      setPlaybackInfo(res.data.playbackInfo);
+      if (res.data.provider === "mp4") {
+        setVideoUrl(res.data.url);
+      } else {
+        setOtp(res.data.otp);
+        setPlaybackInfo(res.data.playbackInfo);
+      }
     } catch (err) {
       setError(extractApiError(err, t("previewError")));
     }
@@ -460,6 +465,7 @@ function PreviewPlayer({ lesson, thumbnail }: { lesson: Lesson; thumbnail: strin
       <VdoCipherPlayer
         otp={otp}
         playbackInfo={playbackInfo}
+        videoUrl={videoUrl}
         isLoading={isLoading}
         poster={thumbnail}
         title={lesson.title}

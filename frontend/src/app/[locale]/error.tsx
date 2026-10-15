@@ -45,7 +45,7 @@ export default function ErrorBoundary({
           transition={{ duration: 0.5, delay: 0.15 }}
           className="font-display text-balance text-2xl font-semibold tracking-tight md:text-3xl"
         >
-          Margin called.
+          Something went wrong.
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}

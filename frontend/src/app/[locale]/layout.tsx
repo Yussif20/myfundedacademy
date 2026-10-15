@@ -1,3 +1,4 @@
+import { DemoBanner } from "@/components/demo-banner";
 import "@/app/globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { BASE_URL } from "@/config";
@@ -192,6 +193,7 @@ export default async function RootLayout({ children, params }: Props) {
         <ThemeProvider>
           <Providers>
             <NextIntlClientProvider locale={locale} messages={messages}>
+              <DemoBanner />
               {children}
             </NextIntlClientProvider>
           </Providers>

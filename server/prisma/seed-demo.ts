@@ -4,6 +4,7 @@
  *
  * Usage: npm run seed:demo
  */
+import "dotenv/config";
 import { prisma } from "../src/lib/db/db";
 import { resetDemoData } from "../src/app/demo/demo.seed";
 

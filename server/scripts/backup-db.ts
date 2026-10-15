@@ -6,6 +6,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import "dotenv/config";
 import { prisma } from "../src/lib/db/db";
 
 const MODELS = [
