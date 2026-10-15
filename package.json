@@ -1,8 +1,8 @@
 {
-  "name": "myfundedacademy",
+  "name": "nibras",
   "version": "0.1.0",
   "private": true,
-  "description": "My Funded Academy — multi-instructor trading courses marketplace.",
+  "description": "Nibras · نبراس — a bilingual course platform for any instructor.",
   "scripts": {
     "prepare": "husky",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",

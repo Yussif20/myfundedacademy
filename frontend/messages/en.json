@@ -1,17 +1,17 @@
 {
   "site": {
-    "name": "My Funded Academy",
-    "tagline": "Master prop trading. Built by traders, for traders.",
+    "name": "Nibras",
+    "tagline": "Courses from instructors who light the way.",
     "comingSoon": "Coming soon",
-    "comingSoonBlurb": "We're building the most-secure trading academy on the web. Premium courses, DRM-protected video, certified by traders who've been there."
+    "comingSoonBlurb": "We're building a home for great teaching on the web. Premium courses, protected video and certificates anyone can verify."
   },
   "home": {
-    "heroEyebrow": "Trade smarter, not harder",
-    "heroTitle": "Master <accent>prop trading</accent> with traders who've been there.",
-    "heroSubtitle": "Premium courses, DRM-protected videos, real certification — built by funded traders for funded traders.",
+    "heroEyebrow": "Learn anything, from people who teach it well",
+    "heroTitle": "Learn new skills with <accent>instructors</accent> who light the way.",
+    "heroSubtitle": "Video courses from independent instructors, quizzes that make it stick, and certificates anyone can verify — in English and Arabic.",
     "heroCta": "Browse courses",
     "heroSecondary": "Watch a free preview",
-    "trustedBy": "Trusted by traders from",
+    "trustedBy": "Topics our learners are studying",
     "stats": {
       "courses": "Courses",
       "instructors": "Instructors",
@@ -20,7 +20,7 @@
     },
     "howItWorks": {
       "title": "Three steps to certified",
-      "subtitle": "From your first lesson to a verifiable certificate — fast, focused, and built around how traders actually learn.",
+      "subtitle": "From your first lesson to a verifiable certificate — focused, flexible, and built around how people actually learn.",
       "browseTitle": "Browse the library",
       "browseBody": "Filter by topic, level, or language. Watch free previews on every course.",
       "learnTitle": "Learn at your pace",
@@ -29,8 +29,8 @@
       "certifyBody": "Pass the quiz, earn a certificate with a public verification URL you can share."
     },
     "testimonials": {
-      "title": "Traders who shipped it",
-      "subtitle": "Real students. Real results."
+      "title": "Learners who finished the course",
+      "subtitle": "Illustrative stories from learners and instructors."
     },
     "pricingTeaser": {
       "title": "One subscription, the whole library",
@@ -38,14 +38,14 @@
       "cta": "See plans"
     },
     "featuredCourses": "Featured courses",
-    "featuredCoursesSub": "Hand-picked by our team. Start with the fundamentals or jump into advanced strategies.",
+    "featuredCoursesSub": "Hand-picked by our team. Start with the basics or go deeper in a subject you love.",
     "browseAll": "Browse all",
     "categories": "Browse by topic",
-    "categoriesSub": "Find your edge — every course is grouped by what it teaches.",
+    "categoriesSub": "Find your next skill — every course is grouped by what it teaches.",
     "featuredInstructors": "Meet the instructors",
-    "featuredInstructorsSub": "Real traders teaching real strategies they trade themselves.",
-    "ctaTitle": "Stop guessing. Start training.",
-    "ctaSubtitle": "Get instant access to DRM-protected video courses certified by funded traders.",
+    "featuredInstructorsSub": "Practitioners teaching what they do every day.",
+    "ctaTitle": "Stop putting it off. Start learning.",
+    "ctaSubtitle": "Get instant access to video courses, quizzes and certificates you can share.",
     "ctaButton": "Create free account"
   },
   "catalog": {
@@ -86,7 +86,7 @@
   },
   "instructorsPage": {
     "title": "Instructors",
-    "subtitle": "Meet the traders teaching at My Funded Academy.",
+    "subtitle": "Meet the instructors teaching on Nibras.",
     "noInstructors": "No instructors listed yet.",
     "coursesByInstructor": "Courses by {name}",
     "noCoursesByInstructor": "This instructor hasn't published any courses yet.",
@@ -180,7 +180,7 @@
       "publicProfile": "Public profile",
       "fullName": "Full name",
       "headline": "Headline",
-      "headlinePlaceholder": "Funded prop trader · 6 years",
+      "headlinePlaceholder": "Product designer · 6 years",
       "headlineArabic": "Headline (Arabic)",
       "bio": "Bio",
       "bioArabic": "Bio (Arabic)",
@@ -287,7 +287,7 @@
     },
     "dashboard": {
       "title": "Admin dashboard",
-      "subtitle": "Manage everything that powers the academy.",
+      "subtitle": "Manage everything that powers the platform.",
       "categoriesCard": "Categories",
       "categoriesDesc": "Group courses for browsing and SEO.",
       "instructorsCard": "Instructors",
@@ -428,7 +428,7 @@
       "bio": "Bio (English)",
       "bioArabic": "Bio (Arabic)",
       "expertise": "Areas of expertise",
-      "expertiseHelp": "Comma-separated. e.g. Forex, Risk management.",
+      "expertiseHelp": "Comma-separated. e.g. UI design, Figma.",
       "twitter": "X / Twitter URL",
       "linkedin": "LinkedIn URL",
       "website": "Website URL",
@@ -509,7 +509,7 @@
     },
     "signup": {
       "title": "Create your account",
-      "subtitle": "Start your trading education journey.",
+      "subtitle": "Start your learning journey.",
       "fullNameLabel": "Full name",
       "fullNamePlaceholder": "Jane Doe",
       "emailLabel": "Email",
@@ -669,18 +669,18 @@
     "backToCourse": "Back to course",
     "printPdf": "Print / Save as PDF",
     "title": "Certificate of Completion",
-    "subtitle": "My Funded Academy",
+    "subtitle": "Nibras",
     "thisCertifies": "This certifies that",
     "hasCompleted": "has successfully completed",
     "instructedBy": "Instructed by {name}",
     "issuedOn": "Issued on",
     "verificationCode": "Verification code",
-    "verifyOnline": "Verify online at myfundedacademy.com/verify/{code}"
+    "verifyOnline": "Verify online at nibras.yousefayman.com/verify/{code}"
   },
   "reviewWrite": {
     "leaveTitle": "Leave a review",
     "updateTitle": "Update your review",
-    "subtitle": "Your honest take helps other traders decide if this course is right for them.",
+    "subtitle": "Your honest take helps other learners decide if this course is right for them.",
     "ratingLabel": "Rating",
     "pickRating": "Pick a rating",
     "starsOf": "{rating} / 5",
@@ -770,7 +770,7 @@
     "proAnnual": {
       "name": "Pro · Annual",
       "cadence": "per year",
-      "description": "Two months free vs monthly Pro. Best for the serious trader.",
+      "description": "Two months free vs monthly Pro. Best for committed learners.",
       "f1": "Everything in Pro",
       "f2": "Save ~17% vs monthly",
       "f3": "Single annual charge",
@@ -802,16 +802,16 @@
     "drmTitle": "DRM-protected",
     "drmBody": "Widevine + FairPlay + PlayReady. Watermarked per viewer.",
     "instructorsTitle": "Real instructors",
-    "instructorsBody": "Funded traders teaching strategies they actually trade.",
+    "instructorsBody": "Practitioners teaching skills they use every day.",
     "certsTitle": "Verified certificates",
     "certsBody": "Every completion gets a certificate with a public verification URL."
   },
   "footer": {
-    "tagline": "DRM-protected prop trading courses. Built by traders, for traders.",
+    "tagline": "Video courses from independent instructors, in English and Arabic.",
     "rights": "All rights reserved.",
-    "newsletterTitle": "Get our weekly trade brief",
-    "newsletterSub": "One email a week — setups, market color, no fluff.",
-    "newsletterPlaceholder": "you@trader.com",
+    "newsletterTitle": "Get our weekly learning digest",
+    "newsletterSub": "One email a week — new courses, study tips, no fluff.",
+    "newsletterPlaceholder": "you@example.com",
     "newsletterCta": "Subscribe",
     "newsletterSuccess": "You're on the list. Watch your inbox.",
     "explore": "Explore",

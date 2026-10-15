@@ -10,8 +10,8 @@ import { LayoutDashboard, LogOut, ShieldCheck, UserSquare2 } from "lucide-react"
 import type { useTranslations } from "next-intl";
 
 /**
- * Signed-in account dropdown, shared by the public header and every theme-lab
- * variant header. Token-driven so it restyles with the active direction.
+ * Signed-in account dropdown used by the public header. Token-driven so it
+ * follows the light/dark theme.
  */
 export function UserMenu({
   user,

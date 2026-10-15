@@ -1,21 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-/* Theme-lab design directions — each file scopes a full visual identity
-   under html[data-direction="<key>"]. See components/theme-lab. */
-@import "./directions/phosphor.css";
-@import "./directions/ledger.css";
-@import "./directions/night.css";
-@import "./directions/holo.css";
-@import "./directions/burn.css";
-@import "./directions/acid.css";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --radius: 0.625rem;
 
-  /* Font indirection — design directions override these three to swap the
-     site's typography without touching the @theme mapping. */
+  /* Font indirection — swap the site's typography here without touching the
+     @theme mapping. */
   --display-font: var(--font-sora);
   --body-font: var(--font-inter);
   --mono-font: var(--font-plex-mono);
@@ -31,7 +23,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.02 240);
 
-  /* Brand: deep teal */
+  /* Brand: Nibras deep teal (lamp glass) */
   --primary: oklch(0.51 0.09 180);
   --primary-foreground: oklch(0.98 0.005 280);
 
@@ -40,7 +32,7 @@
   --muted: oklch(0.96 0.01 250);
   --muted-foreground: oklch(0.5 0.02 240);
 
-  /* Accent: warm amber */
+  /* Accent: warm amber (lamp flame) */
   --accent: oklch(0.78 0.16 70);
   --accent-foreground: oklch(0.2 0.05 60);
 
@@ -194,11 +186,6 @@
      Arabic headlines always render in IBM Plex Sans Arabic. */
   html[lang="ar"] .font-display {
     font-family: var(--font-arabic), var(--display-font), system-ui, sans-serif;
-  }
-  /* Theme lab: when a design direction is active, the variant home supplies
-     its own bespoke header/footer — hide the shared site chrome. */
-  html[data-direction] [data-site-chrome] {
-    display: none;
   }
   ::selection {
     background-color: color-mix(in oklch, var(--primary) 30%, transparent);

@@ -117,7 +117,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#24A592" },
+    { media: "(prefers-color-scheme: light)", color: "#0B7768" },
     { media: "(prefers-color-scheme: dark)", color: "#0A0F14" },
   ],
 };
@@ -127,15 +127,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const isAr = locale === "ar";
 
   const title = isAr
-    ? "ماي فاندد أكاديمي — أتقن تداول البروب"
-    : "My Funded Academy — Master Prop Trading";
+    ? "نبراس — دورات من مدربين يضيئون لك الطريق"
+    : "Nibras — Courses from instructors who light the way";
   const description = isAr
-    ? "دورات تداول احترافية محمية بـ DRM، شهادات معتمدة، ومجتمع متداولين حقيقي."
-    : "DRM-protected prop trading courses, verified certificates, and a real trader community.";
+    ? "منصة دورات لأي مدرّب: فيديو محمي، اختبارات، وشهادات قابلة للتحقق، بالعربية والإنجليزية."
+    : "A course platform for any instructor: protected video, quizzes and verifiable certificates, in English and Arabic.";
 
   return {
     metadataBase: new URL(BASE_URL),
-    title: { template: "%s | My Funded Academy", default: title },
+    title: { template: isAr ? "%s | نبراس" : "%s | Nibras", default: title },
     description,
     icons: {
       icon: [
@@ -153,7 +153,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url: BASE_URL,
-      siteName: "My Funded Academy",
+      siteName: isAr ? "نبراس" : "Nibras",
       locale: isAr ? "ar_SA" : "en_US",
       alternateLocale: isAr ? "en_US" : "ar_SA",
       type: "website",

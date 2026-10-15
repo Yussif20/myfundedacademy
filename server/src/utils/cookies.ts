@@ -2,7 +2,7 @@ import { Response } from "express";
 import { env } from "@/env";
 import { parseDuration } from "./tokens";
 
-export const REFRESH_COOKIE_NAME = "mfa_rt";
+export const REFRESH_COOKIE_NAME = "nb_rt";
 
 // In dev: Lax (works on localhost, http allowed).
 // In prod: None+Secure (frontend and API are on different origins —

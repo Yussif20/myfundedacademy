@@ -16,7 +16,7 @@ async function main() {
   }
 
   const server: HTTPServer = createServer(app).listen(port, () => {
-    customConsole(port, "My Funded Academy (Server)");
+    customConsole(port, "Nibras (Server)");
   });
 
   const exitHandler = () => {

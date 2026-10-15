@@ -1,7 +1,7 @@
 {
-  "name": "mfa-server",
+  "name": "nibras-server",
   "version": "0.1.0",
-  "description": "My Funded Academy backend (Express 5 + TS + Prisma).",
+  "description": "Nibras backend (Express 5 + TS + Prisma).",
   "private": true,
   "main": "dist/server.js",
   "scripts": {

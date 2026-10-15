@@ -24,10 +24,7 @@ export function PublicHeader() {
   }, [pathname]);
 
   return (
-    <header
-      data-site-chrome="header"
-      className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur"
-    >
+    <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
         <Link href="/" aria-label="Home">
           <Wordmark height={52} />
