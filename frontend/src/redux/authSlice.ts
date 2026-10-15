@@ -5,6 +5,8 @@ export type AuthUser = {
   email: string;
   fullName: string;
   role: "STUDENT" | "INSTRUCTOR" | "ADMIN";
+  /** Seeded "Try the demo" account (data resets nightly, some writes blocked). */
+  isDemo?: boolean;
 } | null;
 
 type AuthState = {

@@ -13,6 +13,7 @@ import express, { Application } from "express";
 import helmet from "helmet";
 import path from "path";
 import rateLimiterMiddleware from "./middlewares/rateLimiter";
+import { demoGuard } from "@/app/demo/demo.guard";
 import { StripeWebhookController } from "@/app/webhooks/webhooks.controller";
 
 const app: Application = express();
@@ -61,7 +62,7 @@ app.get("/health", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-app.use("/api/v1", router);
+app.use("/api/v1", demoGuard, router);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

@@ -14,7 +14,10 @@
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
     "gn-route": "ts-node ./scripts/gn-route.ts",
-    "backfill:tombstone-emails": "ts-node -r tsconfig-paths/register ./scripts/backfill-tombstone-emails.ts"
+    "backfill:tombstone-emails": "ts-node -r tsconfig-paths/register ./scripts/backfill-tombstone-emails.ts",
+    "db:backup": "ts-node -r tsconfig-paths/register ./scripts/backup-db.ts",
+    "seed:demo": "ts-node -r tsconfig-paths/register ./prisma/seed-demo.ts",
+    "test": "vitest run"
   },
   "type": "commonjs",
   "dependencies": {
@@ -49,10 +52,13 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.18.1",
     "eslint": "^9.17.0",
+    "supertest": "^7.1.4",
     "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "vitest": "^3.2.4"
   }
 }

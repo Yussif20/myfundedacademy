@@ -98,6 +98,9 @@ function ClassroomShell() {
       ? flatLessons[currentIndex + 1]
       : null;
 
+  // Must stay above the early returns below (Rules of Hooks).
+  const [curriculumOpen, setCurriculumOpen] = useState(false);
+
   if (courseLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[var(--background)]">
@@ -123,8 +126,6 @@ function ClassroomShell() {
   const completedCount = progress.filter((p) => p.completedAt).length;
   const totalCount = flatLessons.length;
   const pct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
-
-  const [curriculumOpen, setCurriculumOpen] = useState(false);
 
   const goToLesson = (lessonId: string) => {
     router.replace(`/learn/${slug}?lesson=${lessonId}`);
@@ -438,6 +439,7 @@ function LessonView({
 
   const [otp, setOtp] = useState<string | undefined>();
   const [playbackInfo, setPlaybackInfo] = useState<string | undefined>();
+  const [videoUrl, setVideoUrl] = useState<string | undefined>();
   const [error, setError] = useState<string | null>(null);
 
   const completed = Boolean(progressByLesson.get(lesson.id)?.completedAt);
@@ -447,6 +449,7 @@ function LessonView({
   useEffect(() => {
     setOtp(undefined);
     setPlaybackInfo(undefined);
+    setVideoUrl(undefined);
     setError(null);
     if (!lesson.vdoVideoId) return;
 
@@ -455,8 +458,12 @@ function LessonView({
       try {
         const res = await getOtp({ lessonId: lesson.id }).unwrap();
         if (!active) return;
-        setOtp(res.data.otp);
-        setPlaybackInfo(res.data.playbackInfo);
+        if (res.data.provider === "mp4") {
+          setVideoUrl(res.data.url);
+        } else {
+          setOtp(res.data.otp);
+          setPlaybackInfo(res.data.playbackInfo);
+        }
       } catch (err) {
         if (!active) return;
         setError(extractApiError(err, t("couldntLoadLesson")));
@@ -507,6 +514,7 @@ function LessonView({
         <VdoCipherPlayer
           otp={otp}
           playbackInfo={playbackInfo}
+          videoUrl={videoUrl}
           isLoading={otpLoading}
           poster={course.thumbnail}
           title={title}

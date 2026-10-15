@@ -113,7 +113,8 @@ export const getPlaybackOtp = async (input: PlaybackOtpInput) => {
 };
 
 export const deleteVideo = async (videoId: string): Promise<void> => {
-  if (!videoId) return;
+  // "mp4:" IDs are plain public files (see ./provider.ts), nothing to delete.
+  if (!videoId || videoId.startsWith("mp4:")) return;
   const url = `${BASE_URL}/videos?videos=${encodeURIComponent(videoId)}`;
   const res = await fetch(url, {
     method: "DELETE",

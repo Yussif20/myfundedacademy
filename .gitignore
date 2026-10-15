@@ -49,3 +49,6 @@ nibras-dev.log
 
 # DB
 *.backup
+
+# DB backups (contain real user data)
+server/backups/

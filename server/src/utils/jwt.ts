@@ -6,6 +6,8 @@ export type AccessTokenPayload = {
   sub: string;
   email: string;
   role: UserRoleEnum;
+  /** Set for seeded demo accounts; the demo guard keys off this. */
+  demo?: boolean;
 };
 
 export type RefreshTokenPayload = {

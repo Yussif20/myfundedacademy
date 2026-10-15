@@ -6,9 +6,11 @@ import { QuizzesValidation } from "./quizzes.validation";
 
 const router = express.Router();
 
-const admin = [requireAuth, requireRole("ADMIN")];
+// Course quiz authoring. The controller enforces ownership for instructors;
+// the "/admin" prefix is kept so existing frontend calls don't change.
+const admin = [requireAuth, requireRole("ADMIN", "INSTRUCTOR")];
 
-// ---- Admin: course quiz authoring ----
+// ---- Course quiz authoring ----
 router.get("/admin/courses/:courseId", ...admin, QuizzesController.getCourseQuizForAdmin);
 router.put(
   "/admin/courses/:courseId",

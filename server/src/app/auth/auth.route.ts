@@ -20,6 +20,13 @@ router.post(
   AuthController.login,
 );
 
+router.post(
+  "/demo-login",
+  requestsLimiter(900, 30, "Too many demo sign-ins. Try again in 15 minutes."),
+  validateRequest(AuthValidation.demoLogin),
+  AuthController.demoLogin,
+);
+
 router.post("/refresh-token", requestsLimiter(60, 60), AuthController.refreshToken);
 
 router.post("/logout", AuthController.logout);

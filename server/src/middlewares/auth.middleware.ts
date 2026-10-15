@@ -11,6 +11,7 @@ declare module "express-serve-static-core" {
       id: string;
       email: string;
       role: UserRoleEnum;
+      isDemo?: boolean;
     };
   }
 }
@@ -25,7 +26,12 @@ export const requireAuth = (req: Request, _res: Response, next: NextFunction) =>
 
   try {
     const payload = verifyAccessToken(bearer);
-    req.user = { id: payload.sub, email: payload.email, role: payload.role };
+    req.user = {
+      id: payload.sub,
+      email: payload.email,
+      role: payload.role,
+      isDemo: payload.demo === true,
+    };
     return next();
   } catch (err) {
     if (err instanceof TokenExpiredError) {

@@ -25,6 +25,12 @@ export const AuthValidation = {
     }),
   }),
 
+  demoLogin: z.object({
+    body: z.object({
+      role: z.enum(["student", "instructor", "admin"]),
+    }),
+  }),
+
   verifyEmail: z.object({
     body: z.object({
       token: z.string().min(10, "Verification token is required."),

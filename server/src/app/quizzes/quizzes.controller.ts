@@ -3,20 +3,31 @@ import sendResponse from "@/utils/sendResponse";
 import httpStatus from "http-status";
 import AppError from "@/helpers/errors/AppError";
 import { QuizzesService } from "./quizzes.service";
+import { assertCourseOwnership } from "@/app/courses/courses.service";
+import { Request } from "express";
+
+/** Admins pass; instructors must own the course (403 otherwise). */
+const assertCanAuthorQuiz = async (req: Request) => {
+  if (!req.user) throw new AppError(httpStatus.UNAUTHORIZED, "Sign in required.");
+  await assertCourseOwnership(String(req.params.courseId), { id: req.user.id, role: req.user.role });
+};
 
 export const QuizzesController = {
-  // Admin
+  // Authoring (admin, or the instructor who owns the course)
   upsertCourseQuiz: catchAsync(async (req, res) => {
+    await assertCanAuthorQuiz(req);
     const data = await QuizzesService.upsertCourseQuiz(String(req.params.courseId), req.body);
     sendResponse(res, { statusCode: httpStatus.OK, message: "Quiz saved.", data });
   }),
 
   getCourseQuizForAdmin: catchAsync(async (req, res) => {
+    await assertCanAuthorQuiz(req);
     const data = await QuizzesService.getCourseQuizForAdmin(String(req.params.courseId));
     sendResponse(res, { statusCode: httpStatus.OK, data });
   }),
 
   removeCourseQuiz: catchAsync(async (req, res) => {
+    await assertCanAuthorQuiz(req);
     await QuizzesService.removeCourseQuiz(String(req.params.courseId));
     sendResponse(res, { statusCode: httpStatus.OK, message: "Quiz removed.", data: null });
   }),

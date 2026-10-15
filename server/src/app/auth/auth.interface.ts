@@ -7,6 +7,7 @@ export type SafeUser = {
   role: UserRoleEnum;
   preferredLocale: string;
   isEmailVerified: boolean;
+  isDemo: boolean;
   bio: string;
   country: string;
   profile: string;
