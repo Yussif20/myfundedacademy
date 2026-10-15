@@ -1,0 +1,35 @@
+name: Nightly demo reset
+
+# Re-seeds the public "Try the demo" data. Free alternative to a Render cron:
+# the API endpoint only deletes demo-owned rows (users with isDemo = true and
+# the courses they own) and rolls back if any other data would change.
+#
+# Setup (once):
+#   - Render env:        DEMO_RESET_SECRET=<long random string>
+#   - GitHub secret:     DEMO_RESET_SECRET (same value)
+#   - GitHub variable:   API_URL, e.g. https://nibras-api.onrender.com
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # 02:00 UTC daily
+  workflow_dispatch:
+
+jobs:
+  reset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Wake the API (Render free tier sleeps)
+        run: |
+          for i in $(seq 1 12); do
+            if curl -fsS "${{ vars.API_URL }}/health" > /dev/null; then exit 0; fi
+            sleep 10
+          done
+          echo "API did not wake up" && exit 1
+      - name: Reset demo data
+        env:
+          SECRET: ${{ secrets.DEMO_RESET_SECRET }}
+        run: |
+          curl -fsS -X POST "${{ vars.API_URL }}/api/v1/internal/demo-reset" \
+            -H "x-demo-reset-secret: $SECRET" \
+            --max-time 180

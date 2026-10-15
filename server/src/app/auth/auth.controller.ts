@@ -2,6 +2,7 @@ import catchAsync from "@/utils/catchAsync";
 import sendResponse from "@/utils/sendResponse";
 import httpStatus from "http-status";
 import { AuthService } from "./auth.service";
+import { DEMO_ACCOUNTS, DemoRole } from "@/app/demo/demo.constants";
 import { REFRESH_COOKIE_NAME, clearRefreshCookie, setRefreshCookie } from "@/utils/cookies";
 
 const signup = catchAsync(async (req, res) => {
@@ -24,6 +25,21 @@ const login = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     message: "Signed in successfully.",
+    data: { user: result.user, accessToken: result.accessToken },
+  });
+});
+
+const demoLogin = catchAsync(async (req, res) => {
+  const role = req.body.role as DemoRole;
+  const result = await AuthService.demoLogin(
+    DEMO_ACCOUNTS[role],
+    req.headers["user-agent"] || "",
+    req.ip || "",
+  );
+  setRefreshCookie(res, result.refreshToken);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: "Signed in to the demo.",
     data: { user: result.user, accessToken: result.accessToken },
   });
 });
@@ -93,6 +109,7 @@ const resetPassword = catchAsync(async (req, res) => {
 export const AuthController = {
   signup,
   login,
+  demoLogin,
   refreshToken,
   logout,
   verifyEmail,

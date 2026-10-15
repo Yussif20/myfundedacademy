@@ -8,8 +8,11 @@ on:
 
 jobs:
   server:
-    name: Server (lint + typecheck)
+    name: Server (lint + typecheck + test)
     runs-on: ubuntu-latest
+    env:
+      # prisma.config.ts requires it; nothing connects during CI.
+      DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
     defaults:
       run:
         working-directory: server
@@ -23,6 +26,7 @@ jobs:
       - run: npm ci
       - run: npx prisma generate
       - run: npm run typecheck
+      - run: npm test
       - run: npm run lint || true
 
   frontend:

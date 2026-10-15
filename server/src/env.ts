@@ -45,6 +45,10 @@ const EnvSchema = z.object({
   S3_REGION: z.string().optional().default("auto"),
   S3_ENDPOINT: z.string().optional().default(""),
   S3_PUBLIC_URL: z.string().optional().default(""),
+
+  // Shared secret for POST /api/v1/internal/demo-reset (nightly GitHub Action).
+  // Empty disables the endpoint.
+  DEMO_RESET_SECRET: z.string().optional().default(""),
 });
 
 type EnvBase = z.infer<typeof EnvSchema>;

@@ -32,7 +32,7 @@ async function getInstructorProfileId(userId: string): Promise<string | null> {
  * Throws 403 unless the actor owns the course (instructor) or is an admin.
  * Call as the FIRST thing inside any mutation that touches a course.
  */
-async function assertCourseOwnership(courseId: string, actor: Actor): Promise<void> {
+export async function assertCourseOwnership(courseId: string, actor: Actor): Promise<void> {
   if (actor.role === "ADMIN") return;
   if (actor.role !== "INSTRUCTOR") {
     throw new AppError(httpStatus.FORBIDDEN, "You do not have permission for this action.");
@@ -282,8 +282,8 @@ export const CoursesService = {
       throw new AppError(httpStatus.NOT_FOUND, "No video uploaded for this lesson yet.");
     }
 
-    const { getPlaybackOtp } = await import("@/lib/video/vdocipher");
-    return getPlaybackOtp({
+    const { getPlaybackSource } = await import("@/lib/video/provider");
+    return getPlaybackSource({
       videoId: lesson.vdoVideoId,
       ttlSeconds: 300,
       annotation: [
@@ -342,8 +342,8 @@ export const CoursesService = {
       }
     }
 
-    const { getPlaybackOtp } = await import("@/lib/video/vdocipher");
-    return getPlaybackOtp({
+    const { getPlaybackSource } = await import("@/lib/video/provider");
+    return getPlaybackSource({
       videoId: lesson.vdoVideoId,
       ttlSeconds: 600,
       annotation: [

@@ -12,7 +12,12 @@ const attachUser = (req: Request, _res: Response, next: NextFunction) => {
   if (!bearer) return next();
   try {
     const payload = verifyAccessToken(bearer);
-    req.user = { id: payload.sub, email: payload.email, role: payload.role };
+    req.user = {
+      id: payload.sub,
+      email: payload.email,
+      role: payload.role,
+      isDemo: payload.demo === true,
+    };
   } catch {
     // Invalid/expired token — proceed as anonymous.
   }

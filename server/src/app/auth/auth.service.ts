@@ -20,6 +20,7 @@ const toSafeUser = (u: {
   role: any;
   preferredLocale: string;
   isEmailVerified: boolean;
+  isDemo: boolean;
   bio: string | null;
   country: string | null;
   profile: string | null;
@@ -31,6 +32,7 @@ const toSafeUser = (u: {
   role: u.role,
   preferredLocale: u.preferredLocale,
   isEmailVerified: u.isEmailVerified,
+  isDemo: u.isDemo,
   bio: u.bio || "",
   country: u.country || "",
   profile: u.profile || "",
@@ -100,7 +102,7 @@ const login = async (input: LoginInput): Promise<LoginResult> => {
 };
 
 const issueTokens = async (
-  user: { id: string; email: string; role: any; fullName: string },
+  user: { id: string; email: string; role: any; fullName: string; isDemo?: boolean },
   userAgent?: string,
   ip?: string,
 ): Promise<LoginResult> => {
@@ -121,6 +123,7 @@ const issueTokens = async (
     sub: user.id,
     email: user.email,
     role: user.role,
+    ...(user.isDemo ? { demo: true } : {}),
   });
 
   const fullUser = await prisma.user.findUniqueOrThrow({ where: { id: user.id } });
@@ -252,8 +255,9 @@ const resendVerification = async (email: string): Promise<void> => {
 
 const forgotPassword = async (email: string): Promise<void> => {
   const user = await prisma.user.findFirst({ where: { email, isDeleted: false } });
-  // Silent no-op if user doesn't exist — prevents enumeration.
-  if (!user) return;
+  // Silent no-op if user doesn't exist — prevents enumeration. Demo accounts
+  // are password-less and their inboxes don't exist, so they're skipped too.
+  if (!user || user.isDemo) return;
 
   const token = generateRandomToken();
   await prisma.user.update({
@@ -309,9 +313,44 @@ const resetPassword = async (token: string, newPassword: string): Promise<void> 
   await sendEmail({ to: user.email, ...tpl });
 };
 
+/**
+ * Password-less sign-in for the seeded "Try the demo" accounts. Only users
+ * flagged isDemo can be reached this way. Old tokens are pruned first because
+ * a shared demo account collects one refresh token per visitor, and refresh()
+ * bcrypt-compares against every live one.
+ */
+const demoLogin = async (email: string, userAgent?: string, ip?: string): Promise<LoginResult> => {
+  const user = await prisma.user.findFirst({
+    where: { email, isDemo: true, isDeleted: false, status: "ACTIVE" },
+  });
+  if (!user) {
+    throw new AppError(
+      httpStatus.SERVICE_UNAVAILABLE,
+      "The demo is being reset. Please try again in a minute.",
+    );
+  }
+
+  const KEEP_LIVE_TOKENS = 9;
+  await prisma.refreshToken.deleteMany({
+    where: { userId: user.id, OR: [{ revokedAt: { not: null } }, { expiresAt: { lt: new Date() } }] },
+  });
+  const stale = await prisma.refreshToken.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+    skip: KEEP_LIVE_TOKENS,
+    select: { id: true },
+  });
+  if (stale.length) {
+    await prisma.refreshToken.deleteMany({ where: { id: { in: stale.map((t) => t.id) } } });
+  }
+
+  return issueTokens(user, userAgent, ip);
+};
+
 export const AuthService = {
   signup,
   login,
+  demoLogin,
   refresh,
   logout,
   verifyEmail,
