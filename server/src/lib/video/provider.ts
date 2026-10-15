@@ -1,11 +1,12 @@
 import AppError from "@/helpers/errors/AppError";
-import { ALLOWED_MP4_HOSTS } from "@/app/demo/demo.constants";
+import { ALLOWED_MP4_HOSTS, LOCAL_MP4_PATH } from "@/app/demo/demo.constants";
 import httpStatus from "http-status";
 import { getPlaybackOtp, PlaybackOtpInput } from "./vdocipher";
 
 /**
  * Lesson video IDs select the playback provider:
- *   - `mp4:<https url>` → plain MP4 (free; used by the demo courses). The
+ *   - `mp4:/demo/videos/<name>.mp4` → a clip bundled with the frontend, or
+ *     `mp4:<https url>` on an allow-listed host → plain MP4 (free). The
  *     frontend overlays the viewer watermark on top of a <video> element.
  *   - anything else     → a VdoCipher video ID (DRM, server-burned watermark).
  */
@@ -17,9 +18,11 @@ export type PlaybackSource =
 
 export const isDirectVideoId = (videoId: string): boolean => videoId.startsWith(MP4_PREFIX);
 
-/** Returns the MP4 URL when the ID is a direct video on an allowed host, else null. */
+/** Returns the MP4 URL (or same-origin path) when the ID is an allowed direct video, else null. */
 export const parseDirectVideoUrl = (videoId: string): string | null => {
   if (!isDirectVideoId(videoId)) return null;
+  const target = videoId.slice(MP4_PREFIX.length);
+  if (LOCAL_MP4_PATH.test(target)) return target;
   try {
     const url = new URL(videoId.slice(MP4_PREFIX.length));
     if (url.protocol !== "https:" || !ALLOWED_MP4_HOSTS.includes(url.hostname)) return null;

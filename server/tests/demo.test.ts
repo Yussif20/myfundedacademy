@@ -131,11 +131,11 @@ describe("demo reset endpoint", () => {
 });
 
 describe("plain MP4 video provider", () => {
-  it("accepts HTTPS URLs on allowed hosts only", () => {
-    const ok = "mp4:https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4";
-    expect(parseDirectVideoUrl(ok)).toMatch(/^https:\/\/commondatastorage/);
+  it("accepts bundled demo clips and nothing else by default", () => {
+    expect(parseDirectVideoUrl("mp4:/demo/videos/tears-of-steel-1.mp4")).toBe("/demo/videos/tears-of-steel-1.mp4");
+    expect(parseDirectVideoUrl("mp4:/demo/videos/../../secret.mp4")).toBeNull();
+    expect(parseDirectVideoUrl("mp4://evil.example.net/demo/videos/x.mp4")).toBeNull();
     expect(parseDirectVideoUrl("mp4:https://evil.example.net/x.mp4")).toBeNull();
-    expect(parseDirectVideoUrl("mp4:http://commondatastorage.googleapis.com/x.mp4")).toBeNull();
     expect(parseDirectVideoUrl("a1b2c3vdocipherid")).toBeNull();
   });
 });

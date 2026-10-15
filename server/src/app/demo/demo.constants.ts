@@ -11,7 +11,10 @@ export const DEMO_ACCOUNTS = {
 export type DemoRole = keyof typeof DEMO_ACCOUNTS;
 
 /**
- * Hosts the plain-MP4 video provider may stream from. Lesson video IDs of the
- * form `mp4:<url>` are only honoured when the URL is HTTPS on one of these.
+ * Extra HTTPS hosts the plain-MP4 provider may stream from (`mp4:https://…`).
+ * Empty by default: demo clips ship with the frontend under /demo/videos/.
  */
-export const ALLOWED_MP4_HOSTS = ["commondatastorage.googleapis.com"];
+export const ALLOWED_MP4_HOSTS: string[] = [];
+
+/** Same-origin clips bundled in frontend/public, e.g. `mp4:/demo/videos/x.mp4`. */
+export const LOCAL_MP4_PATH = /^\/demo\/videos\/[a-z0-9-]+\.mp4$/;

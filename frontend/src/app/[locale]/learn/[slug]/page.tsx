@@ -423,7 +423,7 @@ function LessonView({
 }: {
   lesson: Lesson;
   course: CourseDetail;
-  progressByLesson: Map<string, { completedAt: string | null }>;
+  progressByLesson: Map<string, { completedAt: string | null; lastWatchedSeconds?: number }>;
   prevLesson: Lesson | null;
   nextLesson: Lesson | null;
   onComplete: () => void;
@@ -515,6 +515,14 @@ function LessonView({
           otp={otp}
           playbackInfo={playbackInfo}
           videoUrl={videoUrl}
+          startAt={progressByLesson.get(lesson.id)?.lastWatchedSeconds}
+          onProgress={(seconds) => {
+            void upsertProgress({
+              lessonId: lesson.id,
+              courseId: course.slug,
+              lastWatchedSeconds: seconds,
+            });
+          }}
           isLoading={otpLoading}
           poster={course.thumbnail}
           title={title}

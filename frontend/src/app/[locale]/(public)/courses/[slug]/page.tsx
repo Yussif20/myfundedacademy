@@ -35,6 +35,7 @@ export default function CourseDetailPage() {
 
   const t = useTranslations("courseDetail");
   const tField = useTranslations("admin.fields");
+  const tReviews = useTranslations("reviewsSection");
 
   const { data, isLoading, isError } = useGetCourseQuery(slug, { skip: !slug });
   const course = data?.data;
@@ -130,8 +131,8 @@ export default function CourseDetailPage() {
               <div className="mt-3 flex items-center gap-2">
                 <StarRating value={course.averageRating ?? 0} size={16} />
                 <span className="text-sm text-[var(--muted-foreground)]">
-                  {(course.averageRating ?? 0).toFixed(1)} · {course.reviewCount} review
-                  {course.reviewCount === 1 ? "" : "s"}
+                  {(course.averageRating ?? 0).toFixed(1)} ·{" "}
+                  {tReviews("reviewsCount", { count: course.reviewCount ?? 0 })}
                 </span>
               </div>
             )}

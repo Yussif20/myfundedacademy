@@ -19,6 +19,9 @@ export default [
     rules: {
       ...tseslint.configs.recommended.rules,
       "@typescript-eslint/no-explicit-any": "off",
+      // TypeScript already reports undefined names; core no-undef doesn't know
+      // Node globals (process, Buffer, URL) — typescript-eslint recommends off.
+      "no-undef": "off",
       "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     },
   },
