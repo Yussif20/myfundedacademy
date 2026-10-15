@@ -5,7 +5,7 @@ import { logger } from "./utils/logger";
 
 const EnvSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  PROJECT_NAME: z.string().min(1).default("My Funded Academy"),
+  PROJECT_NAME: z.string().min(1).default("Nibras"),
   PORT: z.coerce.number().positive().max(65536).default(5000),
 
   BASE_URL_SERVER_DEV: z.string().url(),
@@ -28,7 +28,7 @@ const EnvSchema = z.object({
   ADMIN_PASSWORD: z.string().min(1),
 
   RESEND_API_KEY: z.string().optional().default(""),
-  EMAIL_FROM: z.string().optional().default("no-reply@myfundedacademy.com"),
+  EMAIL_FROM: z.string().optional().default("no-reply@nibras.yousefayman.com"),
 
   STRIPE_SECRET_KEY: z.string().optional().default(""),
   STRIPE_WEBHOOK_SECRET: z.string().optional().default(""),

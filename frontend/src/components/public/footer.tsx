@@ -1,6 +1,7 @@
 "use client";
 
 import { Wordmark } from "@/components/brand/wordmark";
+import { CONTACT_EMAIL } from "@/config";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight, Github, Linkedin, Mail, Twitter, Youtube } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -12,10 +13,7 @@ export function PublicFooter() {
   const tF = useTranslations("footer");
 
   return (
-    <footer
-      data-site-chrome="footer"
-      className="relative isolate overflow-hidden border-t border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_50%,transparent)]"
-    >
+    <footer className="relative isolate overflow-hidden border-t border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_50%,transparent)]">
       {/* Soft background blob */}
       <div
         aria-hidden
@@ -70,15 +68,15 @@ export function PublicFooter() {
 
         <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-[color-mix(in_oklch,var(--border)_60%,transparent)] pt-6 text-xs text-[var(--muted-foreground)] md:flex-row">
           <p>
-            © {new Date().getFullYear()} My Funded Academy. {tF("rights")}
+            © {new Date().getFullYear()} Nibras. {tF("rights")}
           </p>
           <p className="flex items-center gap-2">
             <Mail className="size-3.5" />
             <a
-              href="mailto:hello@myfundedacademy.com"
+              href={`mailto:${CONTACT_EMAIL}`}
               className="transition-colors hover:text-[var(--foreground)]"
             >
-              hello@myfundedacademy.com
+              {CONTACT_EMAIL}
             </a>
           </p>
         </div>

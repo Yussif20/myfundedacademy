@@ -1,6 +1,6 @@
 {
-    "name": "My Funded Academy",
-    "short_name": "MFA",
+    "name": "Nibras · نبراس",
+    "short_name": "Nibras",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#24A592",
+    "theme_color": "#0B7768",
     "background_color": "#ffffff",
     "display": "standalone"
 }

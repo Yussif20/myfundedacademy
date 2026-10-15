@@ -1,22 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { showcaseTopics } from "@/lib/showcase";
+import { useLocale, useTranslations } from "next-intl";
 
-const firms = [
-  "FTMO",
-  "MyForexFunds",
-  "The Funded Trader",
-  "TopStep",
-  "Apex Trader",
-  "Earn2Trade",
-  "City Traders Imperium",
-  "Funding Pips",
-  "FundedNext",
-  "E8 Funding",
-];
-
-export function TrustedBy() {
+export function TopicsMarquee() {
   const t = useTranslations("home");
+  const isAr = useLocale() === "ar";
 
   return (
     <section className="relative py-12">
@@ -26,12 +15,12 @@ export function TrustedBy() {
         </p>
         <div className="mask-fade-edges relative overflow-hidden">
           <div className="flex w-max animate-marquee gap-12 hover:[animation-play-state:paused]">
-            {[...firms, ...firms].map((firm, i) => (
+            {[...showcaseTopics, ...showcaseTopics].map((topic, i) => (
               <span
                 key={i}
                 className="flex shrink-0 items-center px-2 font-display text-xl font-semibold tracking-tight text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)] md:text-2xl"
               >
-                {firm}
+                {isAr ? topic.ar : topic.en}
               </span>
             ))}
           </div>

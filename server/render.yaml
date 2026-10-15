@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: mfa-api
+    name: nibras-api
     runtime: node
     plan: free
     region: frankfurt
@@ -13,7 +13,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: PROJECT_NAME
-        value: My Funded Academy
+        value: Nibras
       - key: PORT
         value: 5000
       # All other secrets are set via the Render dashboard, not committed:

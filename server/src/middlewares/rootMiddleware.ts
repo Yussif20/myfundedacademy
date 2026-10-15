@@ -6,7 +6,7 @@ import httpStatus from "http-status";
 const rootMiddleware = async (_req: Request, res: Response, _next: NextFunction) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "My Funded Academy API is running",
+    message: "Nibras API is running",
     data: {
       server_url: env.SERVER_URL,
       version: "v1",

@@ -6,7 +6,7 @@ const wrap = (locale: Locale, content: string, preheader: string) => `
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>My Funded Academy</title>
+    <title>${locale === "ar" ? "نبراس" : "Nibras"}</title>
   </head>
   <body style="margin:0;padding:0;background:#0A0F14;color:#FAFAF9;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;">
     <span style="display:none;visibility:hidden;opacity:0;color:transparent;height:0;width:0;">${preheader}</span>
@@ -16,8 +16,8 @@ const wrap = (locale: Locale, content: string, preheader: string) => `
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#111720;border:1px solid #1F2937;border-radius:12px;padding:40px 32px;">
             <tr>
               <td>
-                <div style="display:inline-block;padding:8px 12px;background:#0F766E;color:#FAFAF9;font-weight:700;letter-spacing:0.05em;border-radius:8px;font-size:14px;">MFA</div>
-                <h1 style="margin:24px 0 8px 0;font-size:24px;font-weight:700;letter-spacing:-0.02em;">My Funded Academy</h1>
+                <div style="display:inline-block;padding:8px 12px;background:#0F766E;color:#FAFAF9;font-weight:700;letter-spacing:0.05em;border-radius:8px;font-size:14px;">NB</div>
+                <h1 style="margin:24px 0 8px 0;font-size:24px;font-weight:700;letter-spacing:-0.02em;">${locale === "ar" ? "نبراس" : "Nibras"}</h1>
                 ${content}
                 <p style="margin:32px 0 0 0;font-size:12px;color:#9CA3AF;">If you didn't request this, you can safely ignore this email.</p>
               </td>
@@ -42,7 +42,7 @@ export function verifyEmailTemplate(opts: { fullName: string; link: string; loca
     ? `
       <p style="margin:16px 0;font-size:16px;color:#E5E7EB;">مرحباً ${fullName}،</p>
       <p style="margin:16px 0;font-size:14px;color:#9CA3AF;line-height:1.6;">
-        شكراً لإنشاء حسابك في ماي فاندد أكاديمي. اضغط على الزر أدناه لتأكيد بريدك الإلكتروني.
+        شكراً لإنشاء حسابك في نبراس. اضغط على الزر أدناه لتأكيد بريدك الإلكتروني.
       </p>
       ${button(link, "تأكيد البريد الإلكتروني")}
       <p style="margin:16px 0;font-size:12px;color:#9CA3AF;">هذا الرابط صالح لمدة 24 ساعة.</p>
@@ -50,14 +50,14 @@ export function verifyEmailTemplate(opts: { fullName: string; link: string; loca
     : `
       <p style="margin:16px 0;font-size:16px;color:#E5E7EB;">Hi ${fullName},</p>
       <p style="margin:16px 0;font-size:14px;color:#9CA3AF;line-height:1.6;">
-        Thanks for joining My Funded Academy. Click the button below to verify your email address and activate your account.
+        Thanks for joining Nibras. Click the button below to verify your email address and activate your account.
       </p>
       ${button(link, "Verify your email")}
       <p style="margin:16px 0;font-size:12px;color:#9CA3AF;">This link expires in 24 hours.</p>
     `;
 
   return {
-    subject: isAr ? "فعّل حسابك في ماي فاندد أكاديمي" : "Verify your My Funded Academy account",
+    subject: isAr ? "فعّل حسابك في نبراس" : "Verify your Nibras account",
     html: wrap(locale, content, isAr ? "أكّد بريدك الإلكتروني" : "Verify your email"),
     text: isAr
       ? `مرحباً ${fullName}،\n\nأكّد بريدك الإلكتروني عبر الرابط:\n${link}\n\nهذا الرابط صالح لمدة 24 ساعة.`
@@ -88,7 +88,7 @@ export function passwordResetTemplate(opts: { fullName: string; link: string; lo
     `;
 
   return {
-    subject: isAr ? "إعادة تعيين كلمة المرور" : "Reset your My Funded Academy password",
+    subject: isAr ? "إعادة تعيين كلمة المرور" : "Reset your Nibras password",
     html: wrap(locale, content, isAr ? "إعادة تعيين كلمة المرور" : "Reset your password"),
     text: isAr
       ? `مرحباً ${fullName}،\n\nأعد تعيين كلمة المرور عبر:\n${link}\n\nالرابط صالح لمدة ساعة.`

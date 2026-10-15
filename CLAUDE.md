@@ -1,17 +1,16 @@
-# My Funded Academy (MFA) — Project Reference
+# Nibras · نبراس — Project Reference
 
-A **multi-instructor trading courses marketplace**. DRM-protected video lessons, one-time + subscription purchases, certificates, quizzes, English + Arabic with RTL.
+A **bilingual course platform for any instructor**. DRM-protected video lessons, one-time + subscription purchases, certificates, quizzes, English + Arabic with RTL. The name means "lamp" in Arabic.
 
-Sister project to [Funded For You](https://github.com/Yussif20/fundedforyou) — runs on its own infrastructure (separate repo, DB, Stripe account, host).
-
-> **Status: MVP for client demo.** Built on $0/mo free-tier infra to validate the product with a client. Scope is intentionally trimmed (no Stripe Connect, no instructor self-signup, no queues, no discussions). Once the client greenlights the project, the stack and scope expand.
+> **Status: MVP, portfolio product.** Runs on $0/mo free-tier infra (except VdoCipher after its trial). Scope is intentionally trimmed (no Stripe Connect, no instructor self-signup, no queues, no discussions). See `docs/PROJECT_STATUS.md` for what's built and the roadmap.
 
 ## Project Structure
 
 ```
-myfundedacademy/
+nibras/
 ├── frontend/          # Next.js 16 (React 19) client application
 ├── server/            # Express 5 + TypeScript REST API
+├── docs/              # PROJECT_STATUS.md — status and roadmap
 └── CLAUDE.md          # This file
 ```
 
@@ -47,10 +46,9 @@ cp .env.example .env       # fill in DATABASE_URL + secrets
 npx prisma generate
 npm run dev                # http://localhost:5000
 
-# Frontend
+# Frontend (optional NEXT_PUBLIC_* vars in .env.local — see README)
 cd frontend
 npm install
-cp .env.example .env
 npm run dev                # http://localhost:3000
 ```
 
@@ -60,27 +58,27 @@ npm run dev                # http://localhost:3000
 - **Health check**: `http://localhost:5000/health`
 - **Frontend dev**: `http://localhost:3000`
 
-## Domain Modules (planned, by batch)
+## Build History (MVP batches)
 
 | Batch | MVP scope                                                                         |
 | ----: | --------------------------------------------------------------------------------- |
 |  0 ✅ | Scaffolding (shipped)                                                             |
-|     1 | `auth` (signup/login/email-verify/pwd-reset) + roles + admin seed                 |
-|     2 | Admin-managed instructors + course CRUD (admin-only authoring) + VdoCipher upload |
-|     3 | Categories + featured courses + admin publishing                                  |
-|     4 | Catalog + Stripe Checkout (one-time) + Stripe Billing (subscription) + webhooks   |
-|     5 | Course player with DRM OTP + watermark + progress tracking                        |
-|     6 | Quizzes + auto-generated certificates + public verification page                  |
-|     7 | Reviews/ratings                                                                   |
-|     8 | Arabic translations + RTL polish                                                  |
-|     9 | Demo deploy (Vercel + Render + UptimeRobot) + seed demo data                      |
+|  1 ✅ | `auth` (signup/login/email-verify/pwd-reset) + roles + admin seed                 |
+|  2 ✅ | Admin-managed instructors + course CRUD (admin-only authoring) + VdoCipher upload |
+|  3 ✅ | Categories + featured courses + admin publishing                                  |
+|  4 ✅ | Catalog + Stripe Checkout (one-time) + Stripe Billing (subscription) + webhooks   |
+|  5 ✅ | Course player with DRM OTP + watermark + progress tracking                        |
+|  6 ✅ | Quizzes + auto-generated certificates + public verification page                  |
+|  7 ✅ | Reviews/ratings                                                                   |
+|  8 ✅ | Arabic translations + RTL polish                                                  |
+|  9 ✅ | Demo deploy (Netlify + Render + UptimeRobot)                                      |
 
-**Cut from MVP, deferred until client signoff:** Stripe Connect (revenue splits), instructor self-signup application flow, BullMQ + Redis queues, discussions/Q&A, wishlist, coupons.
+**Not built yet:** Stripe Connect (revenue splits), instructor self-signup application flow, BullMQ + Redis queues, discussions/Q&A, wishlist, coupons.
 
 ## User Roles
 
 - `STUDENT` — Default. Buys courses, takes them.
-- `INSTRUCTOR` — Authors courses. **Admin-seeded for MVP** (no public application flow). Payouts handled manually until Stripe Connect lands post-signoff.
+- `INSTRUCTOR` — Authors courses. **Admin-seeded for MVP** (no public application flow). Payouts handled manually until Stripe Connect lands.
 - `ADMIN` — Approves courses, moderates content, creates instructor accounts.
 
 ## Subscription Tiers
@@ -96,8 +94,10 @@ One-time course purchases work at any tier and grant **lifetime access** that by
 
 ## Brand
 
-- Primary: deep teal `#0F766E` — `oklch(0.51 0.09 180)` light / `oklch(0.65 0.11 180)` dark
-- Accent: warm amber `#F59E0B` — `oklch(0.78 0.16 70)`
+- Name: **Nibras · نبراس** (always bilingual in the logo; "Nibras" in English copy, "نبراس" in Arabic copy)
+- Logo: lamp mark (amber flame over a teal bowl) + wordmark — `frontend/public/logo.svg` (light), `logo-dark.svg` (dark), `logo-mark.svg`, `favicon.svg`. Text is outlined, so the SVGs don't depend on installed fonts.
+- Primary: deep teal (lamp glass) `#0B7768` — `oklch(0.51 0.09 180)` light / `#24A592` — `oklch(0.65 0.11 180)` dark
+- Accent: warm amber (flame) `#F7A224` — `oklch(0.78 0.16 70)`
 - Default theme: **dark**
 - Display font: **Sora** • Body: **Inter** • Arabic: **IBM Plex Sans Arabic**
 
@@ -141,6 +141,8 @@ npm run lint
 - RTK base API: `frontend/src/redux/api/baseApi.ts`
 - App config (backend URL): `frontend/src/config.ts`
 - Brand tokens: `frontend/src/app/globals.css`
+- Home page: `frontend/src/components/landing/home.tsx`
+- Illustrative marketing content (invented testimonials, topic marquee): `frontend/src/lib/showcase.ts`
 
 ## DRM Honest Caveat
 
@@ -154,14 +156,17 @@ It **does not** stop a determined user with a second phone camera. The defense f
 
 ## Hosting (MVP — all $0/mo)
 
-- **Frontend** → Vercel free tier (apex `myfundedacademy.com`)
-- **Backend** → Render free tier on `api.myfundedacademy.com`, kept warm by a UptimeRobot HTTP pinger every 10 min
+- **Frontend** → Netlify free tier (planned demo domain: `nibras.yousefayman.com`)
+- **Backend** → Render free tier (`server/render.yaml`), kept warm by a UptimeRobot HTTP pinger
 - **DB** → Neon free tier (3 GB)
 - **Storage** → Cloudflare R2 free tier (10 GB, zero egress fees)
 - **Video** → VdoCipher free trial CDN
 - **Email** → Resend free tier
 - **DNS / WAF** → Cloudflare free tier
 
-Post-signoff, this stack is expected to migrate to a paid host (Hostinger VPS, Hetzner, or similar) chosen with the client's input.
+See `server/.env.example` for the server's environment variables and `README.md` for the frontend's. Never commit real secrets: `.env.example` holds placeholders only.
 
-See `server/.env.example` and `frontend/.env.example` for required environment variables.
+## Identifiers
+
+- Refresh-token cookie: `nb_rt` (server `utils/cookies.ts`); persisted auth key: `nibras-auth` (frontend `redux/store`).
+- Certificate codes: `NB-XXXXXXXX`. Older `MFA-` codes still verify because lookup is by exact code.

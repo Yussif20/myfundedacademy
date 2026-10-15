@@ -23,7 +23,7 @@ const createNoopStorage = () => ({
 
 const storage = typeof window !== "undefined" ? createWebStorage("local") : createNoopStorage();
 
-const authPersistConfig = { key: "mfa-auth", storage };
+const authPersistConfig = { key: "nibras-auth", storage };
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 

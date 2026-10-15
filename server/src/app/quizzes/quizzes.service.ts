@@ -281,7 +281,9 @@ export const QuizzesService = {
         userId: user.id,
         courseId: course.id,
         passedQuiz,
-        code: `MFA-${generateRandomToken(6)
+        // Codes are looked up verbatim, so certificates issued under the old
+        // "MFA-" prefix still verify.
+        code: `NB-${generateRandomToken(6)
           .toUpperCase()
           .replace(/[^A-Z0-9]/g, "0")
           .slice(0, 8)}`,
