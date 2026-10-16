@@ -23,7 +23,7 @@ export default function InstructorCoursesPage() {
           <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
         </div>
-        <Button asChild className="brand-glow gap-2">
+        <Button asChild className="gap-2">
           <Link href="/instructor/courses/new">
             <Plus className="size-4" />
             {t("newCourse")}
@@ -41,7 +41,7 @@ export default function InstructorCoursesPage() {
           title={t("emptyTitle")}
           description={t("emptyBody")}
           action={
-            <Button asChild className="brand-glow gap-2">
+            <Button asChild className="gap-2">
               <Link href="/instructor/courses/new">
                 <Plus className="size-4" />
                 {t("newCourse")}
@@ -86,7 +86,7 @@ export default function InstructorCoursesPage() {
                       </p>
                     </div>
                     <Badge variant={c.status === "PUBLISHED" ? "success" : "outline"}>
-                      {c.status === "PUBLISHED" && <Sparkles className="mr-1 size-3" />}
+                      {c.status === "PUBLISHED" && <Sparkles className="me-1 size-3" />}
                       {c.status}
                     </Badge>
                     <Button asChild size="sm" variant="outline" className="gap-2">

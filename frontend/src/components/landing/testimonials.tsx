@@ -57,15 +57,7 @@ function TestimonialCard({
 
   return (
     <div className="group relative h-full">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 rounded-2xl opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-60"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 0%, color-mix(in oklch, var(--primary) 30%, transparent), transparent 70%)",
-        }}
-      />
-      <article className="glass relative flex h-full flex-col gap-5 rounded-2xl p-7 transition-transform duration-500 group-hover:-translate-y-1">
+      <article className="bg-card border border-border relative flex h-full flex-col gap-5 rounded-2xl p-7 transition-transform duration-500 group-hover:-translate-y-1">
         <Quote className="size-7 text-[var(--primary)] opacity-40" aria-hidden />
         <p className="flex-1 text-[15px] leading-relaxed text-[var(--foreground)]">{body}</p>
         <div className="flex items-center justify-between border-t border-[color-mix(in_oklch,var(--border)_60%,transparent)] pt-4">

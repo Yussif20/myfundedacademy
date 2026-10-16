@@ -45,6 +45,8 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run lint || true
+      - run: npm run lint:rtl
+      - run: npm run lint:tokens
       - run: npm run build
         env:
           NEXT_PUBLIC_BASE_SERVER_URL_DEV: http://localhost:5000

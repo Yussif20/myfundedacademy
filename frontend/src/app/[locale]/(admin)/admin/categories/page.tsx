@@ -179,7 +179,7 @@ export default function AdminCategoriesPage() {
                       <p className="font-medium">
                         {cat.name}
                         {cat.nameArabic && (
-                          <span className="ml-2 text-sm text-[var(--muted-foreground)]">
+                          <span className="ms-2 text-sm text-[var(--muted-foreground)]">
                             ({cat.nameArabic})
                           </span>
                         )}

@@ -2,7 +2,6 @@
 
 import { ScrollReveal } from "@/components/motion";
 import { CourseCard } from "@/components/public/course-card";
-import { TiltCard } from "@/components/landing/tilt-card";
 import { ShimmerCard } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
@@ -55,9 +54,7 @@ export function FeaturedCourses() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {courses.map((c, i) => (
               <ScrollReveal key={c.id} delay={i * 0.06} amount={0.2}>
-                <TiltCard>
-                  <CourseCard course={c} />
-                </TiltCard>
+                <CourseCard course={c} />
               </ScrollReveal>
             ))}
           </div>

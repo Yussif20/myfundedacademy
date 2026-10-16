@@ -52,11 +52,7 @@ export function UserMenu({
       <DropdownMenu.Trigger asChild>
         <button
           aria-label="Account menu"
-          className="ml-1 grid size-9 place-items-center rounded-full text-sm font-semibold text-[var(--primary)] transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]"
-          style={{
-            background: "color-mix(in oklch, var(--primary) 15%, transparent)",
-            border: "1px solid color-mix(in oklch, var(--primary) 30%, transparent)",
-          }}
+          className="ms-1 grid size-9 place-items-center rounded-full border border-primary/30 bg-primary/10 font-display text-base text-primary transition-colors hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           {initial}
         </button>
@@ -65,29 +61,22 @@ export function UserMenu({
         <DropdownMenu.Content
           align="end"
           sideOffset={8}
-          className="z-40 w-64 overflow-hidden rounded-xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_92%,transparent)] p-1 shadow-xl shadow-black/20 backdrop-blur"
+          className="z-40 w-64 overflow-hidden rounded-xl border border-border bg-popover p-1 shadow-lg shadow-foreground/5"
         >
           <div className="mb-1 px-3 py-2.5">
-            <p className="line-clamp-1 text-sm font-semibold">{user.fullName || "—"}</p>
-            <p className="line-clamp-1 text-xs text-[var(--muted-foreground)]">{user.email}</p>
-            <span
-              className="mt-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.1em]"
-              style={{
-                background: "color-mix(in oklch, var(--primary) 12%, transparent)",
-                color: "var(--primary)",
-                border: "1px solid color-mix(in oklch, var(--primary) 25%, transparent)",
-              }}
-            >
+            <p className="line-clamp-1 font-display text-base">{user.fullName || "—"}</p>
+            <p className="line-clamp-1 text-xs text-muted-foreground">{user.email}</p>
+            <span className="eyebrow mt-2 inline-flex items-center rounded-full border border-gold/40 px-2 py-0.5">
               {user.role || "STUDENT"}
             </span>
           </div>
-          <DropdownMenu.Separator className="my-1 h-px bg-[color-mix(in_oklch,var(--border)_70%,transparent)]" />
+          <DropdownMenu.Separator className="my-1 h-px bg-border" />
           <DropdownMenu.Item asChild>
             <Link
               href={home as "/account" | "/instructor" | "/admin"}
-              className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm outline-none transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_8%,transparent)] focus:bg-[color-mix(in_oklch,var(--primary)_8%,transparent)]"
+              className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm outline-none transition-colors hover:bg-paper-2 focus:bg-paper-2"
             >
-              <DashIcon className="size-4 text-[var(--primary)]" />
+              <DashIcon className="size-4 text-primary" />
               {dashLabel}
             </Link>
           </DropdownMenu.Item>
@@ -95,7 +84,7 @@ export function UserMenu({
             <button
               type="button"
               onClick={onSignOut}
-              className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-[var(--destructive)] outline-none transition-colors hover:bg-[color-mix(in_oklch,var(--destructive)_8%,transparent)] focus:bg-[color-mix(in_oklch,var(--destructive)_8%,transparent)]"
+              className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive outline-none transition-colors hover:bg-destructive/8 focus:bg-destructive/8"
             >
               <LogOut className="size-4" />
               {t("signOut")}

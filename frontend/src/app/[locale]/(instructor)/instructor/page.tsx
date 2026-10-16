@@ -114,7 +114,7 @@ export default function InstructorDashboardPage() {
                 title={t("noCoursesYetTitle")}
                 description={t("noCoursesYetBody")}
                 action={
-                  <Button asChild className="brand-glow">
+                  <Button asChild>
                     <Link href="/instructor/courses/new" className="gap-2">
                       <Plus className="size-4" />
                       {t("newCourse")}

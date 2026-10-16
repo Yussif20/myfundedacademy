@@ -14,24 +14,7 @@ export function FinalCta() {
         <ScrollReveal>
           <div className="relative overflow-hidden rounded-3xl border border-[color-mix(in_oklch,var(--primary)_25%,transparent)] bg-[color-mix(in_oklch,var(--card)_70%,transparent)] p-12 text-center backdrop-blur-xl md:p-16">
             {/* Animated gradient blob — top */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -top-32 left-1/2 size-[600px] -translate-x-1/2 rounded-full opacity-50 blur-[110px] animate-aurora"
-              style={{
-                background:
-                  "radial-gradient(circle, color-mix(in oklch, var(--primary) 50%, transparent) 0%, transparent 60%)",
-              }}
-            />
             {/* Amber blob — bottom right */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -bottom-20 -right-20 size-[300px] rounded-full opacity-30 blur-[90px]"
-              style={{
-                background:
-                  "radial-gradient(circle, color-mix(in oklch, var(--accent) 50%, transparent) 0%, transparent 60%)",
-              }}
-            />
-            {/* Subtle grain */}
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 opacity-[0.05]"
@@ -57,7 +40,7 @@ export function FinalCta() {
                 <Magnetic>
                   <Link
                     href="/pricing"
-                    className="group inline-flex h-12 items-center gap-2 rounded-md bg-[var(--primary)] px-7 font-medium text-[var(--primary-foreground)] brand-glow transition-shadow hover:shadow-2xl hover:shadow-[color-mix(in_oklch,var(--primary)_50%,transparent)]"
+                    className="group inline-flex h-12 items-center gap-2 rounded-md bg-[var(--primary)] px-7 font-medium text-[var(--primary-foreground)] transition-shadow hover:shadow-2xl hover:shadow-[color-mix(in_oklch,var(--primary)_50%,transparent)]"
                   >
                     {t("pricingTeaser.cta")}
                     <ArrowRight className="size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />

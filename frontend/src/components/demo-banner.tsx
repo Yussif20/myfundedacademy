@@ -19,11 +19,13 @@ export function DemoBanner() {
     <div
       role="status"
       data-testid="demo-banner"
-      className="flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 bg-[var(--primary)] px-4 py-1.5 text-center text-xs font-medium text-[var(--primary-foreground)]"
+      className="flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 border-b border-gold/40 bg-paper-2 px-4 py-1.5 text-center text-xs font-medium text-foreground"
     >
-      <FlaskConical className="size-3.5 shrink-0" aria-hidden />
+      <FlaskConical className="size-3.5 shrink-0 text-accent" aria-hidden />
       <span>{t("text")}</span>
-      <span aria-hidden>·</span>
+      <span aria-hidden className="text-gold">
+        ·
+      </span>
       <span>{t("card")}</span>
     </div>
   );

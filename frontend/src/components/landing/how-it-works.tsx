@@ -39,7 +39,7 @@ export function HowItWorks() {
           {/* Connecting line — desktop only */}
           <div
             aria-hidden
-            className="pointer-events-none absolute left-[16%] top-12 hidden h-px w-[68%] md:block"
+            className="pointer-events-none absolute start-[16%] top-12 hidden h-px w-[68%] md:block"
             style={{
               background:
                 "linear-gradient(to right, transparent, color-mix(in oklch, var(--primary) 35%, transparent), transparent)",
@@ -86,7 +86,7 @@ function StepCard({
         }}
       />
 
-      <div className="glass relative h-full rounded-2xl p-7 text-center transition-transform duration-500 group-hover:-translate-y-1 md:text-start">
+      <div className="bg-card border border-border relative h-full rounded-2xl p-7 text-center transition-transform duration-500 group-hover:-translate-y-1 md:text-start">
         <motion.div
           animate={reduced ? {} : { y: [0, -6, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: index * 0.4 }}

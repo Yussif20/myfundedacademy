@@ -109,7 +109,7 @@ export function Sheet({ open, onOpenChange, side = "start", title, children, cla
             exit={{ opacity: 0 }}
             transition={{ duration: reduced ? 0 : 0.18 }}
             onClick={() => onOpenChange(false)}
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-foreground/25"
           />
           <motion.div
             ref={panelRef}
@@ -122,22 +122,22 @@ export function Sheet({ open, onOpenChange, side = "start", title, children, cla
             exit={exit}
             transition={reduced ? { duration: 0 } : { type: "spring", stiffness: 320, damping: 32 }}
             className={cn(
-              "z-50 flex flex-col border-[var(--border)] bg-[var(--card)] shadow-2xl shadow-black/30",
+              "z-50 flex flex-col border-border bg-card",
               "focus-visible:outline-none",
               side === "bottom" ? "border-t" : side === "end" ? "border-s" : "border-e",
               panelClasses,
               className,
             )}
           >
-            <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] px-5 py-4">
-              <h2 id={titleId} className="font-display text-base font-semibold tracking-tight">
+            <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
+              <h2 id={titleId} className="font-display text-lg font-medium tracking-tight">
                 {title}
               </h2>
               <button
                 type="button"
                 onClick={() => onOpenChange(false)}
                 aria-label={tCommon("close")}
-                className="grid size-8 place-items-center rounded-md text-[var(--muted-foreground)] transition-colors hover:bg-[var(--secondary)] hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                className="grid size-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-paper-2 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <X className="size-4" aria-hidden />
               </button>

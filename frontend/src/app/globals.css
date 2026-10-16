@@ -3,79 +3,127 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Nibras — "Paper & Ink".
+   Warm ivory paper, deep ink, one teal-green accent and small gold details.
+   Token NAMES are unchanged from the previous theme (many components read
+   them as `bg-[var(--primary)]`), only the values moved. Prefer the semantic
+   classes (`bg-primary`, `text-muted-foreground`, `border-border`) in new code. */
+
 :root {
-  --radius: 0.625rem;
+  --radius: 0.5rem;
 
   /* Font indirection — swap the site's typography here without touching the
-     @theme mapping. */
-  --display-font: var(--font-sora);
+     @theme mapping. Arabic overrides live in the base layer below. */
+  --display-font: var(--font-newsreader);
   --body-font: var(--font-inter);
-  --mono-font: var(--font-plex-mono);
+  --mono-font: ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, monospace;
   /* Tells the UA to render native form widgets (select option panels,
      scrollbars, date pickers) in light mode. Overridden by .dark below. */
   color-scheme: light;
 
-  /* Light theme */
-  --background: oklch(0.99 0.003 280);
-  --foreground: oklch(0.18 0.02 240);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 240);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 240);
+  /* Paper */
+  --background: #f7f3ea;
+  --paper-2: #efe9dc;
+  --card: #fffdf8;
+  --card-foreground: #1c1b18;
+  --popover: #fffdf8;
+  --popover-foreground: #1c1b18;
 
-  /* Brand: Nibras deep teal (lamp glass) */
-  --primary: oklch(0.51 0.09 180);
-  --primary-foreground: oklch(0.98 0.005 280);
+  /* Ink */
+  --foreground: #1c1b18;
+  --muted-foreground: #6b665c;
 
-  --secondary: oklch(0.96 0.01 250);
-  --secondary-foreground: oklch(0.2 0.02 240);
-  --muted: oklch(0.96 0.01 250);
-  --muted-foreground: oklch(0.5 0.02 240);
+  /* Teal-green accent (the lamp glass) */
+  --primary: #1f5c4f;
+  --primary-foreground: #fffdf8;
 
-  /* Accent: warm amber (lamp flame) */
-  --accent: oklch(0.78 0.16 70);
-  --accent-foreground: oklch(0.2 0.05 60);
+  --secondary: #efe9dc;
+  --secondary-foreground: #1c1b18;
+  --muted: #efe9dc;
 
-  --destructive: oklch(0.55 0.22 27);
-  --destructive-foreground: oklch(0.98 0.005 280);
+  /* Gold. --accent is the text-safe shade (eyebrows, stars, links on paper);
+     --gold is decorative only (rules, seals, star fills) — never body text. */
+  --accent: #8a6a24;
+  --accent-foreground: #fffdf8;
+  --gold: #b08a3e;
+  --gold-foreground: #1c1b18;
 
-  --border: oklch(0.92 0.01 250);
-  --input: oklch(0.92 0.01 250);
-  --ring: oklch(0.51 0.09 180);
+  --destructive: #a4332a;
+  --destructive-foreground: #fffdf8;
+  --success: #2f6b3a;
+  --warning: #8a5a12;
+
+  /* Hairlines: --border is decorative; --input/--rule-strong outline controls
+     and must stay >= 3:1 against paper (WCAG 1.4.11). */
+  --border: #e4ddcf;
+  --input: #8f8778;
+  --rule-strong: #8f8778;
+  --ring: #1f5c4f;
+
+  /* The one soft glow allowed on the site (home hero only). */
+  --lamp: color-mix(in oklch, var(--gold) 18%, transparent);
+
+  --chart-1: #1f5c4f;
+  --chart-2: #b08a3e;
+  --chart-3: #4a463e;
+  --chart-4: #7d9a8c;
+  --chart-5: #b5694a;
+}
+
+/* Arabic swaps the font VARIABLES (unlayered, so it beats :root) — the
+   font-sans / font-display utilities then follow along. */
+html[lang="ar"] {
+  --body-font: var(--font-plex-arabic), var(--font-inter);
+  --display-font: var(--font-naskh), var(--font-plex-arabic);
 }
 
 .dark {
   color-scheme: dark;
-  --background: oklch(0.14 0.015 250);
-  --foreground: oklch(0.98 0.005 280);
-  --card: oklch(0.18 0.018 250);
-  --card-foreground: oklch(0.98 0.005 280);
-  --popover: oklch(0.18 0.018 250);
-  --popover-foreground: oklch(0.98 0.005 280);
+  --background: #14130f;
+  --paper-2: #1c1a16;
+  --card: #1d1b17;
+  --card-foreground: #ece6d8;
+  --popover: #1d1b17;
+  --popover-foreground: #ece6d8;
 
-  /* Brand: deep teal — slightly brighter on dark */
-  --primary: oklch(0.65 0.11 180);
-  --primary-foreground: oklch(0.14 0.015 250);
+  --foreground: #ece6d8;
+  --muted-foreground: #a39d90;
 
-  --secondary: oklch(0.25 0.02 250);
-  --secondary-foreground: oklch(0.98 0.005 280);
-  --muted: oklch(0.25 0.02 250);
-  --muted-foreground: oklch(0.7 0.015 250);
+  --primary: #5fb39c;
+  --primary-foreground: #0f1a17;
 
-  --accent: oklch(0.78 0.16 70);
-  --accent-foreground: oklch(0.18 0.05 60);
+  --secondary: #1c1a16;
+  --secondary-foreground: #ece6d8;
+  --muted: #1c1a16;
 
-  --destructive: oklch(0.62 0.22 27);
-  --destructive-foreground: oklch(0.98 0.005 280);
+  --accent: #d4b06a;
+  --accent-foreground: #14130f;
+  --gold: #c9a35a;
+  --gold-foreground: #14130f;
 
-  --border: oklch(0.28 0.02 250);
-  --input: oklch(0.28 0.02 250);
-  --ring: oklch(0.65 0.11 180);
+  --destructive: #e07a6e;
+  --destructive-foreground: #14130f;
+  --success: #7cc08a;
+  --warning: #e0b061;
+
+  --border: #2e2b25;
+  --input: #6b665c;
+  --rule-strong: #6b665c;
+  --ring: #5fb39c;
+
+  --lamp: color-mix(in oklch, var(--gold) 22%, transparent);
+
+  --chart-1: #5fb39c;
+  --chart-2: #d4b06a;
+  --chart-3: #a39d90;
+  --chart-4: #9cb8aa;
+  --chart-5: #d68a6b;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-paper-2: var(--paper-2);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -88,11 +136,21 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
   --color-border: var(--border);
   --color-input: var(--input);
+  --color-rule-strong: var(--rule-strong);
   --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 
   --font-sans: var(--body-font);
   --font-display: var(--display-font);
@@ -104,37 +162,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --animate-shimmer: shimmer 1.8s infinite;
-  --animate-aurora: aurora 16s ease-in-out infinite;
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-marquee: marquee 30s linear infinite;
-  --animate-fade-in: fade-in 0.6s ease-out;
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes aurora {
-  0%,
-  100% {
-    transform: translate(0%, 0%) rotate(0deg);
-  }
-  50% {
-    transform: translate(-3%, -2%) rotate(8deg);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+  --animate-marquee: marquee 40s linear infinite;
 }
 
 @keyframes marquee {
@@ -146,50 +174,52 @@
   }
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @layer base {
   * {
     border-color: var(--border);
   }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
   body {
-    position: relative;
     background-color: var(--background);
     color: var(--foreground);
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
   }
-  /* Global ambient grain — subtle film-style noise, dark mode only */
-  .dark body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.025;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--display-font), Georgia, "Times New Roman", serif;
+    font-optical-sizing: auto;
   }
-  html[lang="ar"] body {
-    font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif;
-  }
-  /* Latin display faces (Sora, Archivo, Fraunces, …) have no Arabic glyphs —
-     Arabic headlines always render in IBM Plex Sans Arabic. */
+
+  /* Arabic headings (Naskh) need room to breathe and never take letter-spacing
+     or uppercase. The font swap itself is the html[lang="ar"] block above. */
+  html[lang="ar"] h1,
+  html[lang="ar"] h2,
+  html[lang="ar"] h3,
+  html[lang="ar"] h4,
   html[lang="ar"] .font-display {
-    font-family: var(--font-arabic), var(--display-font), system-ui, sans-serif;
+    letter-spacing: 0 !important;
+    line-height: 1.4 !important;
   }
+  html[lang="ar"] .eyebrow {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.8125rem;
+  }
+
   ::selection {
-    background-color: color-mix(in oklch, var(--primary) 30%, transparent);
+    background-color: color-mix(in oklch, var(--primary) 22%, transparent);
     color: var(--foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
   /* Force native <select> option panels to follow the theme. color-scheme
      usually does this, but Chrome on Windows ignores it when the parent
@@ -201,71 +231,60 @@
     color: var(--foreground);
   }
   select option:checked {
-    background-color: color-mix(in oklch, var(--primary) 25%, transparent);
-  }
-  @media print {
-    .dark body::before {
-      display: none;
-    }
+    background-color: color-mix(in oklch, var(--primary) 20%, transparent);
   }
 }
 
 @layer utilities {
-  .text-gradient-brand {
+  /* Eyebrow label: small, tracked, gold. Arabic drops case + tracking above. */
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* A soft hairline that fades at both ends — section divider. */
+  .horizon {
+    height: 1px;
     background: linear-gradient(
-      120deg,
-      color-mix(in oklch, var(--primary) 88%, white),
-      var(--accent),
-      color-mix(in oklch, var(--primary) 78%, white)
+      to right,
+      transparent,
+      var(--border) 20%,
+      var(--border) 80%,
+      transparent
     );
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: aurora 8s ease-in-out infinite;
-  }
-
-  .glass {
-    background: color-mix(in oklch, var(--card) 65%, transparent);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border: 1px solid color-mix(in oklch, var(--border) 80%, transparent);
-  }
-
-  .glass-dark {
-    background: color-mix(in oklch, oklch(0.14 0.015 250) 55%, transparent);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    border: 1px solid color-mix(in oklch, white 8%, transparent);
-  }
-
-  .brand-glow {
-    box-shadow:
-      0 10px 40px -10px color-mix(in oklch, var(--primary) 40%, transparent),
-      0 0 0 1px color-mix(in oklch, var(--primary) 20%, transparent) inset;
-  }
-
-  .grain::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.06;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/></svg>");
   }
 
   .mask-fade-edges {
     mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
   }
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-    }
+/* Reveal: content is only hidden once JS has run (html.js is set by an inline
+   script in the root layout), so the page is complete without JavaScript. */
+.js [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(1.5rem);
+}
+[data-reveal] {
+  transition:
+    opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal]:not([data-revealed]) {
+    opacity: 1;
+    transform: none;
   }
 }

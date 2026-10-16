@@ -98,7 +98,7 @@ export default function AdminStudentsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[var(--border)] text-left text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  <tr className="border-b border-[var(--border)] text-start text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
                     <th className="py-2 pe-4 font-medium">{t("colStudent")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colPlan")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colStatus")}</th>
@@ -221,7 +221,7 @@ export default function AdminStudentsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[var(--border)] text-left text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  <tr className="border-b border-[var(--border)] text-start text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
                     <th className="py-2 pe-4 font-medium">{t("colStudent")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colCourse")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colInstructor")}</th>
@@ -307,7 +307,7 @@ export default function AdminStudentsPage() {
                                 style={{ width: `${r.progressPct}%` }}
                               />
                             </div>
-                            <div className="text-right">
+                            <div className="text-end">
                               <p className="font-display text-sm font-semibold tabular-nums">
                                 {r.progressPct}%
                               </p>

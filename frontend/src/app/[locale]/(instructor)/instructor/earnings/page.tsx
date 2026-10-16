@@ -101,7 +101,7 @@ export default function InstructorEarningsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[var(--border)] text-left text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  <tr className="border-b border-[var(--border)] text-start text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
                     <th className="py-2 pe-4 font-medium">{t("colCourse")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colOrders")}</th>
                     <th className="py-2 pe-2 font-medium text-end">{t("colGross")}</th>
@@ -159,7 +159,7 @@ export default function InstructorEarningsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[var(--border)] text-left text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  <tr className="border-b border-[var(--border)] text-start text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
                     <th className="py-2 pe-4 font-medium">{t("colStudent")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colCourse")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colPaid")}</th>

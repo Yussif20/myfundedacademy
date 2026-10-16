@@ -54,7 +54,7 @@ export function ReviewsSection({
         <>
           <Card>
             <CardContent className="grid gap-6 p-6 md:grid-cols-[200px_1fr]">
-              <div className="flex flex-col items-center justify-center gap-2 border-b border-[var(--border)] pb-6 text-center md:border-b-0 md:border-r md:pb-0 md:pr-6 rtl:md:border-l rtl:md:border-r-0 rtl:md:pl-6 rtl:md:pr-0">
+              <div className="flex flex-col items-center justify-center gap-2 border-b border-[var(--border)] pb-6 text-center md:border-b-0 md:border-e md:pb-0 md:pe-6 rtl:md:pe-0">
                 <p className="font-display text-5xl font-bold">{avg.toFixed(1)}</p>
                 <StarRating value={avg} size={18} />
                 <p className="text-xs text-[var(--muted-foreground)]">
@@ -135,7 +135,7 @@ function DistributionBars({ dist, total }: { dist: Record<string, number>; total
                 className="h-full rounded-full bg-gradient-to-r from-[var(--accent)] to-[color-mix(in_oklch,var(--accent)_70%,var(--primary))]"
               />
             </div>
-            <span className="w-10 text-right text-xs text-[var(--muted-foreground)]">{count}</span>
+            <span className="w-10 text-end text-xs text-[var(--muted-foreground)]">{count}</span>
           </div>
         );
       })}

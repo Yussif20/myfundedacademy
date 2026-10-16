@@ -33,14 +33,6 @@ export function CategoriesSection() {
                 href={{ pathname: `/categories/${cat.slug}` }}
                 className="group relative flex h-full items-center gap-4 overflow-hidden rounded-xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_70%,transparent)] p-5 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-[color-mix(in_oklch,var(--primary)_45%,transparent)]"
               >
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -right-12 -top-12 size-32 rounded-full opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-60"
-                  style={{
-                    background:
-                      "radial-gradient(circle, color-mix(in oklch, var(--primary) 50%, transparent), transparent)",
-                  }}
-                />
                 <span className="relative text-3xl">{cat.icon || "📚"}</span>
                 <div className="relative">
                   <p className="font-semibold">{(isAr && cat.nameArabic) || cat.name}</p>

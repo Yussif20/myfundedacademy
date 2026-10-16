@@ -8,6 +8,7 @@ import { Sheet } from "@/components/ui/sheet";
 import { UserMenu } from "@/components/public/user-menu";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useAppSelector } from "@/redux/store";
+import { IndexNumber } from "@/components/ui/index-number";
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -24,13 +25,13 @@ export function PublicHeader() {
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
+    <header className="sticky top-0 z-30 border-b border-border bg-background/95">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:px-6">
         <Link href="/" aria-label="Home">
-          <Wordmark height={52} />
+          <Wordmark height={40} />
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-7 md:flex">
           <NavLink href="/courses" label={t("courses")} />
           <NavLink href="/instructors" label={t("instructors")} />
           <NavLink href="/pricing" label={t("pricing")} />
@@ -57,7 +58,7 @@ export function PublicHeader() {
             type="button"
             onClick={() => setOpen(true)}
             aria-label={tCommon("menu")}
-            className="grid size-9 place-items-center rounded-md text-[var(--muted-foreground)] transition-colors hover:bg-[var(--secondary)] hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] md:hidden"
+            className="grid size-9 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-paper-2 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:hidden"
           >
             <Menu className="size-5" aria-hidden />
           </button>
@@ -66,15 +67,13 @@ export function PublicHeader() {
 
       <Sheet open={open} onOpenChange={setOpen} side="start" title={tCommon("menu")}>
         <div className="flex h-full flex-col gap-4">
-          <nav className="flex flex-col">
-            <DrawerLink href="/courses" label={t("courses")} />
-            <DrawerLink href="/instructors" label={t("instructors")} />
-            <DrawerLink href="/pricing" label={t("pricing")} />
+          <nav className="flex flex-col divide-y divide-border border-y border-border">
+            <DrawerLink n={1} href="/courses" label={t("courses")} />
+            <DrawerLink n={2} href="/instructors" label={t("instructors")} />
+            <DrawerLink n={3} href="/pricing" label={t("pricing")} />
           </nav>
-          <div className="rounded-lg border border-[var(--border)] p-3">
-            <p className="mb-2 text-[10px] uppercase tracking-[0.15em] text-[var(--muted-foreground)]">
-              {t("preferences")}
-            </p>
+          <div className="rounded-lg border border-border p-3">
+            <p className="eyebrow mb-2">{t("preferences")}</p>
             <div className="flex items-center gap-2">
               <LocaleSwitcher />
               <ThemeToggle />
@@ -103,10 +102,13 @@ function NavLink({
   href: "/courses" | "/instructors" | "/pricing";
   label: string;
 }) {
+  const pathname = usePathname();
+  const active = pathname === href || pathname.startsWith(`${href}/`);
   return (
     <Link
       href={href}
-      className="rounded-md px-3 py-2 text-sm font-medium text-[var(--muted-foreground)] transition-colors hover:bg-[var(--secondary)] hover:text-[var(--foreground)]"
+      aria-current={active ? "page" : undefined}
+      className="relative py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:text-foreground after:absolute after:inset-x-0 after:-bottom-px after:h-px after:origin-left after:scale-x-0 after:bg-gold after:transition-transform after:duration-300 hover:after:scale-x-100 aria-[current=page]:after:scale-x-100 rtl:after:origin-right"
     >
       {label}
     </Link>
@@ -114,17 +116,20 @@ function NavLink({
 }
 
 function DrawerLink({
+  n,
   href,
   label,
 }: {
+  n: number;
   href: "/courses" | "/instructors" | "/pricing";
   label: string;
 }) {
   return (
     <Link
       href={href}
-      className="rounded-md px-3 py-3 text-sm font-medium text-[var(--foreground)] transition-colors hover:bg-[var(--secondary)]"
+      className="flex items-baseline gap-4 px-1 py-4 font-display text-xl text-foreground transition-colors hover:text-primary"
     >
+      <IndexNumber n={n} className="text-sm" />
       {label}
     </Link>
   );

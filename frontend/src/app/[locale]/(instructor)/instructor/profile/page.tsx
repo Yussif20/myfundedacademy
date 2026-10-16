@@ -256,7 +256,7 @@ export default function InstructorProfilePage() {
             </div>
 
             <div className="md:col-span-2">
-              <Button type="submit" disabled={saving} className="brand-glow gap-2">
+              <Button type="submit" disabled={saving} className="gap-2">
                 {saving ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
                 {saving ? t("saving") : t("save")}
               </Button>

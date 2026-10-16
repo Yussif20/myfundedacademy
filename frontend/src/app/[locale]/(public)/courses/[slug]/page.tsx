@@ -302,7 +302,7 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
 
   if (course.viewerHasAccess) {
     return (
-      <Button asChild className="w-full brand-glow" size="lg">
+      <Button asChild className="w-full " size="lg">
         <Link href={`/learn/${course.slug}` as `/learn/${string}`}>{t("continueLearning")}</Link>
       </Button>
     );
@@ -322,7 +322,7 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
     if (!loggedIn) {
       return (
         <>
-          <Button asChild className="w-full brand-glow" size="lg">
+          <Button asChild className="w-full " size="lg">
             <Link href="/login">{t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}</Link>
           </Button>
           {error && (
@@ -335,7 +335,7 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
     }
     return (
       <>
-        <Button className="w-full brand-glow" size="lg" disabled={isLoading} onClick={handleBuy}>
+        <Button className="w-full " size="lg" disabled={isLoading} onClick={handleBuy}>
           {isLoading ? "Redirecting…" : t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}
         </Button>
         {error && (
@@ -349,13 +349,13 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
 
   if (!loggedIn) {
     return (
-      <Button asChild className="w-full brand-glow" size="lg">
+      <Button asChild className="w-full " size="lg">
         <Link href="/login">{t("subscribeForAccess")}</Link>
       </Button>
     );
   }
   return (
-    <Button asChild className="w-full brand-glow" size="lg">
+    <Button asChild className="w-full " size="lg">
       <Link href="/pricing">{t("subscribeForAccess")}</Link>
     </Button>
   );
@@ -384,7 +384,7 @@ function SectionRow({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors hover:bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]"
+        className="flex w-full items-center gap-3 px-5 py-4 text-start transition-colors hover:bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]"
       >
         <motion.span
           animate={{ rotate: open ? 0 : -90 }}

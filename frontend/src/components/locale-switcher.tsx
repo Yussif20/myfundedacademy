@@ -19,8 +19,8 @@ export function LocaleSwitcher() {
       type="button"
       onClick={() => router.replace(pathname, { locale: switchTo })}
       className={cn(
-        "inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--card)] px-3 py-1.5 text-sm",
-        "text-[var(--foreground)] hover:bg-[var(--secondary)] transition-colors",
+        "inline-flex h-9 items-center gap-2 rounded-full border border-border px-3.5 text-sm",
+        "text-muted-foreground transition-colors hover:border-rule-strong/60 hover:text-foreground",
       )}
       aria-label={t("switchLocale")}
     >

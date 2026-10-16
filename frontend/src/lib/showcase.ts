@@ -46,7 +46,7 @@ export const showcaseTestimonials: ShowcaseTestimonial[] = [
     roleArabic: "متعلّمة · الخط العربي",
     initials: "NA",
     rating: 5,
-    body: "Learning in Arabic with a proper right-to-left layout made a real difference. My lesson progress follows me between my phone and laptop.",
+    body: "Learning in Arabic with a proper right-to-left layout made a real difference. My lesson progress follows me between my phone and laptop.", // rtl-allow
     bodyArabic:
       "التعلّم بالعربية بواجهة من اليمين إلى اليسار صنع فرقاً حقيقياً. وتقدّمي في الدروس يرافقني بين الهاتف والحاسوب.",
   },

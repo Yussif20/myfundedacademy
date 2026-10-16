@@ -55,9 +55,9 @@ export function StickyCourseCta({ course, loggedIn, triggerRef }: Props) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: reduced ? 0 : 24, scale: reduced ? 1 : 0.96 }}
           transition={{ type: "spring", stiffness: 320, damping: 28 }}
-          className="pointer-events-none fixed inset-x-3 bottom-3 z-40 flex justify-center sm:inset-x-4 sm:bottom-4 md:inset-x-auto md:bottom-6 md:right-6"
+          className="pointer-events-none fixed inset-x-3 bottom-3 z-40 flex justify-center sm:inset-x-4 sm:bottom-4 md:inset-x-auto md:bottom-6 md:end-6"
         >
-          <div className="glass pointer-events-auto flex w-full max-w-md items-center gap-4 rounded-2xl p-3 pl-5 shadow-xl shadow-black/20 md:w-auto md:min-w-[420px]">
+          <div className="bg-card border border-border pointer-events-auto flex w-full max-w-md items-center gap-4 rounded-2xl p-3 ps-5 shadow-xl shadow-black/20 md:w-auto md:min-w-[420px]">
             <div className="min-w-0 flex-1">
               <p className="line-clamp-1 text-xs uppercase tracking-[0.15em] text-[var(--muted-foreground)]">
                 {title}
@@ -68,32 +68,27 @@ export function StickyCourseCta({ course, loggedIn, triggerRef }: Props) {
             </div>
 
             {course.viewerHasAccess ? (
-              <Button asChild size="sm" className="brand-glow shrink-0">
+              <Button asChild size="sm" className="shrink-0">
                 <Link href={`/learn/${course.slug}` as `/learn/${string}`}>
                   {t("continueLearning")}
                 </Link>
               </Button>
             ) : course.oneTimePrice > 0 ? (
               loggedIn ? (
-                <Button
-                  size="sm"
-                  className="brand-glow shrink-0"
-                  disabled={isLoading}
-                  onClick={handleBuy}
-                >
+                <Button size="sm" className="shrink-0" disabled={isLoading} onClick={handleBuy}>
                   {isLoading
                     ? "Redirecting…"
                     : t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}
                 </Button>
               ) : (
-                <Button asChild size="sm" className="brand-glow shrink-0">
+                <Button asChild size="sm" className="shrink-0">
                   <Link href="/login">
                     {t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}
                   </Link>
                 </Button>
               )
             ) : (
-              <Button asChild size="sm" className="brand-glow shrink-0">
+              <Button asChild size="sm" className="shrink-0">
                 <Link href={loggedIn ? "/pricing" : "/login"}>{t("subscribeForAccess")}</Link>
               </Button>
             )}

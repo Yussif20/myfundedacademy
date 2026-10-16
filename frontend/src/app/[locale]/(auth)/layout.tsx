@@ -6,17 +6,6 @@ import { Link } from "@/i18n/navigation";
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="relative min-h-screen overflow-hidden bg-[var(--background)] text-[var(--foreground)]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[600px] rounded-full blur-[120px] opacity-25"
-        style={{ background: "radial-gradient(circle, var(--primary) 0%, transparent 60%)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-40 right-0 size-[500px] rounded-full blur-[100px] opacity-15"
-        style={{ background: "radial-gradient(circle, var(--accent) 0%, transparent 60%)" }}
-      />
-
       <header className="relative z-10 flex items-center justify-between gap-2 px-4 py-5 sm:px-6 sm:py-6 md:px-12">
         <Link href="/" aria-label="Home">
           <Wordmark />

@@ -173,7 +173,7 @@ export function VdoCipherPlayer({
             type="button"
             onClick={toggleFullscreen}
             aria-label={isFullscreen ? "Exit full screen" : "Full screen"}
-            className="absolute top-3 z-20 rounded-md bg-black/50 p-1.5 text-white/90 backdrop-blur-sm transition hover:bg-black/70 ltr:right-3 rtl:left-3"
+            className="absolute top-3 z-20 rounded-md bg-black/50 p-1.5 text-white/90 backdrop-blur-sm transition hover:bg-black/70 end-3"
           >
             {isFullscreen ? <Minimize className="size-4" /> : <Maximize className="size-4" />}
           </button>
