@@ -1,64 +1,40 @@
-"use client";
-
-import { Magnetic, ScrollReveal } from "@/components/motion";
+import { Button } from "@/components/ui/button";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+/** Closing invitation: a quiet paper panel with a serif headline. */
 export function FinalCta() {
   const t = useTranslations("home");
 
   return (
-    <section className="relative py-24">
-      <div className="mx-auto max-w-5xl px-6">
-        <ScrollReveal>
-          <div className="relative overflow-hidden rounded-3xl border border-[color-mix(in_oklch,var(--primary)_25%,transparent)] bg-[color-mix(in_oklch,var(--card)_70%,transparent)] p-12 text-center backdrop-blur-xl md:p-16">
-            {/* Animated gradient blob — top */}
-            {/* Amber blob — bottom right */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-[0.05]"
-              style={{
-                backgroundImage:
-                  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
-              }}
-            />
-
-            <div className="relative">
-              <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_oklch,var(--primary)_30%,transparent)] bg-[color-mix(in_oklch,var(--primary)_8%,transparent)] px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-[var(--primary)]">
-                <span className="size-1.5 rounded-full bg-[var(--primary)] animate-pulse" />
-                {t("pricingTeaser.title").split(",")[0]}
-              </p>
-              <h2 className="font-display text-balance text-4xl font-bold tracking-tight md:text-6xl">
-                {t("ctaTitle")}
-              </h2>
-              <p className="mx-auto mt-4 max-w-xl text-balance text-[var(--muted-foreground)] md:text-lg">
-                {t("pricingTeaser.subtitle")}
-              </p>
-
-              <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Magnetic>
-                  <Link
-                    href="/pricing"
-                    className="group inline-flex h-12 items-center gap-2 rounded-md bg-[var(--primary)] px-7 font-medium text-[var(--primary-foreground)] transition-shadow hover:shadow-2xl hover:shadow-[color-mix(in_oklch,var(--primary)_50%,transparent)]"
-                  >
-                    {t("pricingTeaser.cta")}
-                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
-                  </Link>
-                </Magnetic>
-
-                <Magnetic>
-                  <Link
-                    href="/signup"
-                    className="inline-flex h-12 items-center gap-2 rounded-md border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_70%,transparent)] px-6 font-medium text-[var(--foreground)] backdrop-blur transition-colors hover:border-[var(--primary)]"
-                  >
-                    {t("ctaButton")}
-                  </Link>
-                </Magnetic>
-              </div>
-            </div>
+    <section className="pb-24 md:pb-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <Reveal className="relative overflow-hidden rounded-2xl border border-border bg-paper-2 px-6 py-16 text-center md:px-16 md:py-24">
+          <Eyebrow className="justify-center">{t("eyebrows.cta")}</Eyebrow>
+          <h2 className="mx-auto mt-6 max-w-3xl font-display text-4xl font-normal leading-[1.08] tracking-tight text-balance md:text-6xl">
+            {t("ctaTitle")}
+          </h2>
+          <p className="mx-auto mt-6 max-w-xl leading-7 text-muted-foreground text-pretty md:text-lg">
+            {t("pricingTeaser.subtitle")}
+          </p>
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Button asChild size="lg" className="group">
+              <Link href="/pricing">
+                {t("pricingTeaser.cta")}
+                <ArrowRight
+                  className="size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1"
+                  aria-hidden
+                />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link href="/signup">{t("ctaButton")}</Link>
+            </Button>
           </div>
-        </ScrollReveal>
+        </Reveal>
       </div>
     </section>
   );
