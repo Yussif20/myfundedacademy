@@ -81,21 +81,10 @@ export default function VerifyCertificatePage() {
         <Card
           className={
             valid
-              ? "relative overflow-hidden border-[color-mix(in_oklch,var(--primary)_40%,transparent)] bg-[color-mix(in_oklch,var(--card)_85%,transparent)] backdrop-blur brand-glow"
+              ? "relative overflow-hidden border-[color-mix(in_oklch,var(--primary)_40%,transparent)] bg-[color-mix(in_oklch,var(--card)_85%,transparent)] backdrop-blur"
               : "border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_85%,transparent)] backdrop-blur"
           }
         >
-          {valid && (
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -top-24 left-1/2 size-[400px] -translate-x-1/2 rounded-full opacity-40 blur-3xl"
-              style={{
-                background:
-                  "radial-gradient(circle, color-mix(in oklch, var(--primary) 50%, transparent), transparent 60%)",
-              }}
-            />
-          )}
-
           <CardHeader className="relative text-center">
             {valid ? <AnimatedCheck /> : <FailedMark />}
             <CardTitle className="mt-3 font-display text-2xl">
@@ -144,7 +133,7 @@ export default function VerifyCertificatePage() {
                     <Share2 className="size-4" />
                     Share
                   </Button>
-                  <Button asChild className="brand-glow">
+                  <Button asChild>
                     <Link href="/courses">{t("browseCourses")}</Link>
                   </Button>
                 </motion.div>

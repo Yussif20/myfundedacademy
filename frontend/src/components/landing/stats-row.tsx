@@ -26,17 +26,9 @@ export function StatsRow() {
     <section className="relative py-16">
       <div className="mx-auto max-w-7xl px-6">
         <div
-          className="glass relative overflow-hidden rounded-2xl px-6 py-10 md:px-12"
+          className="bg-card border border-border relative overflow-hidden rounded-2xl px-6 py-10 md:px-12"
           style={{ borderColor: "color-mix(in oklch, var(--primary) 20%, transparent)" }}
         >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -top-24 left-1/2 h-48 w-2/3 -translate-x-1/2 rounded-full opacity-40 blur-3xl"
-            style={{
-              background:
-                "radial-gradient(closest-side, color-mix(in oklch, var(--primary) 40%, transparent), transparent)",
-            }}
-          />
           <ul className="relative grid grid-cols-2 gap-8 md:grid-cols-4">
             {stats.map((s) => (
               <StatItem key={s.key} value={s.value} suffix={s.suffix} label={t(s.key)} />
@@ -82,7 +74,7 @@ function StatItem({
   return (
     <li ref={ref} className="text-center">
       <p dir="ltr" className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-        <span className="text-gradient-brand">{formatted}</span>
+        <span className="text-primary">{formatted}</span>
         <span className="text-[var(--accent)]">{suffix}</span>
       </p>
       <p className="mt-2 text-sm uppercase tracking-[0.15em] text-[var(--muted-foreground)]">

@@ -65,14 +65,6 @@ export function KpiCard({
       ref={ref}
       className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_85%,transparent)] p-5 backdrop-blur transition-colors hover:border-[color-mix(in_oklch,var(--primary)_30%,transparent)]"
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full opacity-30 blur-2xl"
-        style={{
-          background:
-            "radial-gradient(circle, color-mix(in oklch, var(--primary) 50%, transparent), transparent)",
-        }}
-      />
       <div className="relative flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
           {label}

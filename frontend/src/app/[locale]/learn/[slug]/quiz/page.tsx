@@ -129,7 +129,7 @@ function QuizContent() {
                       {t("passingScore", { score: quiz.passingScore })}
                     </CardDescription>
                   </div>
-                  <div className="hidden text-right sm:block">
+                  <div className="hidden text-end sm:block">
                     <p className="font-display text-2xl font-bold text-[var(--primary)]">
                       {answeredCount}/{totalCount}
                     </p>
@@ -174,7 +174,7 @@ function QuizContent() {
                                   whileTap={{ scale: 0.98 }}
                                   onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: o.id }))}
                                   className={cn(
-                                    "group flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all",
+                                    "group flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-start text-sm transition-all",
                                     selected
                                       ? "border-[var(--primary)] bg-[color-mix(in_oklch,var(--primary)_12%,transparent)] shadow-sm shadow-[color-mix(in_oklch,var(--primary)_25%,transparent)]"
                                       : "border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_60%,transparent)] hover:border-[color-mix(in_oklch,var(--primary)_30%,transparent)] hover:bg-[color-mix(in_oklch,var(--primary)_5%,transparent)]",
@@ -222,12 +222,7 @@ function QuizContent() {
                       {t("backToCourse")}
                     </Link>
                   </Button>
-                  <Button
-                    size="lg"
-                    onClick={onSubmit}
-                    disabled={submitting}
-                    className="brand-glow gap-2"
-                  >
+                  <Button size="lg" onClick={onSubmit} disabled={submitting} className="gap-2">
                     {submitting ? (
                       <Loader2 className="size-4 animate-spin" />
                     ) : (
@@ -281,7 +276,7 @@ function ResultCard({
       className={cn(
         "overflow-hidden border bg-[color-mix(in_oklch,var(--card)_85%,transparent)] backdrop-blur",
         result.passed
-          ? "border-[color-mix(in_oklch,var(--primary)_40%,transparent)] brand-glow"
+          ? "border-[color-mix(in_oklch,var(--primary)_40%,transparent)]"
           : "border-[var(--border)]",
       )}
     >
@@ -344,7 +339,7 @@ function ResultCard({
           className="flex flex-col gap-2 sm:flex-row sm:justify-center"
         >
           {result.passed ? (
-            <Button asChild className="brand-glow gap-2">
+            <Button asChild className="gap-2">
               <Link href={`/learn/${slug}/certificate` as `/learn/${string}/certificate`}>
                 {t("getCertificate")}
               </Link>

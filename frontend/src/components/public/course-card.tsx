@@ -22,14 +22,6 @@ export function CourseCard({ course }: { course: CourseSummary }) {
   return (
     <div className="group relative h-full">
       {/* Animated gradient border halo on hover */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -inset-px rounded-[calc(var(--radius)+2px)] opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-50"
-        style={{
-          background:
-            "conic-gradient(from 0deg, color-mix(in oklch, var(--primary) 60%, transparent), color-mix(in oklch, var(--accent) 50%, transparent), color-mix(in oklch, var(--primary) 60%, transparent))",
-        }}
-      />
 
       <Link
         href={{ pathname: `/courses/${course.slug}` }}
@@ -67,12 +59,12 @@ export function CourseCard({ course }: { course: CourseSummary }) {
           />
 
           {course.accessTier !== "FREE" && (
-            <Badge variant="default" className="absolute left-3 top-3 backdrop-blur">
+            <Badge variant="default" className="absolute start-3 top-3 backdrop-blur">
               {tField(`tier.${course.accessTier}`)}
             </Badge>
           )}
           {course.isFeatured && (
-            <Badge variant="warning" className="absolute right-3 top-3">
+            <Badge variant="warning" className="absolute end-3 top-3">
               ★
             </Badge>
           )}
@@ -106,7 +98,7 @@ export function CourseCard({ course }: { course: CourseSummary }) {
                 {durationLabel}
               </span>
             </div>
-            <div className="text-right">
+            <div className="text-end">
               {course.oneTimePrice > 0 ? (
                 <span className="font-display font-semibold text-[var(--foreground)]">
                   ${course.oneTimePrice.toFixed(2)}

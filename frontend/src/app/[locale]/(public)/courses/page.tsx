@@ -80,10 +80,10 @@ export default function CatalogPage() {
         </ScrollReveal>
 
         {/* Filter bar */}
-        <div className="glass mb-10 rounded-2xl p-4 md:p-5">
+        <div className="bg-card border border-border mb-10 rounded-2xl p-4 md:p-5">
           <div className="grid gap-3 md:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
             <div className="relative group">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[var(--muted-foreground)] transition-colors group-focus-within:text-[var(--primary)] rtl:left-auto rtl:right-3" />
+              <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-[var(--muted-foreground)] transition-colors group-focus-within:text-[var(--primary)]" />
               <Input
                 value={search}
                 onChange={(e) => {
@@ -91,7 +91,7 @@ export default function CatalogPage() {
                   setPage(1);
                 }}
                 placeholder={t("filters.search")}
-                className="border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_60%,transparent)] pl-9 transition-all focus-visible:border-[var(--primary)] focus-visible:ring-[3px] focus-visible:ring-[color-mix(in_oklch,var(--primary)_25%,transparent)] rtl:pl-3 rtl:pr-9"
+                className="border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_60%,transparent)] ps-9 transition-all focus-visible:border-[var(--primary)] focus-visible:ring-[3px] focus-visible:ring-[color-mix(in_oklch,var(--primary)_25%,transparent)] rtl:ps-3 rtl:pe-9"
               />
             </div>
 
@@ -189,7 +189,7 @@ export default function CatalogPage() {
                 variant="ghost"
                 size="sm"
                 onClick={clearFilters}
-                className="ml-auto h-7 gap-1.5 text-xs"
+                className="ms-auto h-7 gap-1.5 text-xs"
               >
                 <X className="size-3.5" />
                 {t("filters.clear")}

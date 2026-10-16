@@ -344,7 +344,7 @@ function SectionGroup({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm font-medium transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_4%,transparent)]"
+        className="flex w-full items-center gap-3 px-3 py-2.5 text-start text-sm font-medium transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_4%,transparent)]"
       >
         <motion.span
           animate={{ rotate: open ? 0 : -90 }}
@@ -381,7 +381,7 @@ function SectionGroup({
                       type="button"
                       onClick={() => onPick(l.id)}
                       className={cn(
-                        "flex w-full items-center gap-3 border-b border-[color-mix(in_oklch,var(--border)_40%,transparent)] px-3 py-2.5 text-left text-sm transition-colors last:border-b-0",
+                        "flex w-full items-center gap-3 border-b border-[color-mix(in_oklch,var(--border)_40%,transparent)] px-3 py-2.5 text-start text-sm transition-colors last:border-b-0",
                         isCurrent
                           ? "bg-[color-mix(in_oklch,var(--primary)_12%,transparent)] text-[var(--foreground)]"
                           : "text-[var(--muted-foreground)] hover:bg-[color-mix(in_oklch,var(--primary)_5%,transparent)] hover:text-[var(--foreground)]",

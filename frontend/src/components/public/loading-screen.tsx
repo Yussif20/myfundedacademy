@@ -9,14 +9,6 @@ export function LoadingScreen({ caption }: { caption?: string }) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-[var(--background)]">
       {/* Soft brand glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-1/3 h-[400px] opacity-40 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, color-mix(in oklch, var(--primary) 35%, transparent), transparent 60%)",
-        }}
-      />
       <div className="relative flex flex-col items-center gap-5">
         <motion.div
           animate={

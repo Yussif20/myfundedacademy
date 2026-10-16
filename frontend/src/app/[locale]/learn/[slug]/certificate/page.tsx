@@ -16,15 +16,9 @@ import {
 import confetti from "canvas-confetti";
 import { motion, useReducedMotion } from "framer-motion";
 import { Award, Loader2, Printer, ShieldCheck } from "lucide-react";
-import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const CertificateAmbient3d = dynamic(() => import("@/components/public/certificate-ambient-3d"), {
-  ssr: false,
-  loading: () => null,
-});
 
 export default function CertificatePage() {
   return (
@@ -81,7 +75,7 @@ function CertificateContent() {
               </Alert>
             )}
             <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
-              <Button onClick={onIssue} disabled={issuing} className="brand-glow gap-2">
+              <Button onClick={onIssue} disabled={issuing} className="gap-2">
                 {issuing ? (
                   <Loader2 className="size-4 animate-spin" />
                 ) : (
@@ -123,14 +117,6 @@ function CertificateView({
 }) {
   const t = useTranslations("certPage");
   const reduced = useReducedMotion();
-  const [enable3d, setEnable3d] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const isSmall = window.matchMedia("(max-width: 768px)").matches;
-    if (!reduced && !isSmall) setEnable3d(true);
-  }, [reduced]);
-
   // Confetti burst on mount.
   useEffect(() => {
     if (reduced) return;
@@ -171,13 +157,6 @@ function CertificateView({
 
   return (
     <div className="relative mx-auto max-w-4xl space-y-6 print:p-0">
-      {/* Ambient 3D backdrop — desktop only, hidden in print */}
-      {enable3d && (
-        <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 print:hidden">
-          <CertificateAmbient3d />
-        </div>
-      )}
-
       <div className="flex items-center justify-between print:hidden">
         <Link
           href={`/learn/${cert.course?.slug}` as `/learn/${string}`}

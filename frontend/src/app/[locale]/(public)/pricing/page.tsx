@@ -171,7 +171,7 @@ export default function PricingPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_80%,transparent)]">
-                    <th className="px-5 py-4 text-left font-medium text-[var(--muted-foreground)]">
+                    <th className="px-5 py-4 text-start font-medium text-[var(--muted-foreground)]">
                       Feature
                     </th>
                     {plans.map((p) => (
@@ -293,9 +293,7 @@ function PlanCard({
 
         <div className="mt-6 flex items-baseline gap-1">
           <span
-            className={`font-display text-4xl font-bold ${
-              plan.highlighted ? "text-gradient-brand" : ""
-            }`}
+            className={`font-display text-4xl font-bold ${plan.highlighted ? "text-primary" : ""}`}
           >
             {plan.price}
           </span>
@@ -328,17 +326,13 @@ function PlanCard({
                 {t("freeTierActive")}
               </Button>
             ) : (
-              <Button
-                asChild
-                className={`w-full ${plan.highlighted ? "brand-glow" : ""}`}
-                variant={plan.highlighted ? "default" : "outline"}
-              >
+              <Button asChild className="w-full" variant={plan.highlighted ? "default" : "outline"}>
                 <Link href="/signup">{t(`${plan.key}.cta`)}</Link>
               </Button>
             )
           ) : (
             <Button
-              className={`w-full ${plan.highlighted ? "brand-glow" : ""}`}
+              className="w-full"
               variant={plan.highlighted ? "default" : "outline"}
               disabled={isPending || isCurrent}
               onClick={() => onSubscribe(plan.id as SubscriptionPlan)}

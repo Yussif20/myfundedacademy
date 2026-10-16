@@ -139,7 +139,7 @@ export default function AdminHomePage() {
                             {c.instructor.user.fullName}
                           </p>
                         </div>
-                        <div className="hidden text-right text-xs sm:block">
+                        <div className="hidden text-end text-xs sm:block">
                           <p className="font-display text-sm font-semibold text-[var(--foreground)]">
                             {fakeEnrollments}
                           </p>
@@ -154,7 +154,7 @@ export default function AdminHomePage() {
                               style={{ width: `${fakeCompletion}%` }}
                             />
                           </div>
-                          <p className="mt-1 text-right text-[10px] text-[var(--muted-foreground)]">
+                          <p className="mt-1 text-end text-[10px] text-[var(--muted-foreground)]">
                             {fakeCompletion}% done
                           </p>
                         </div>
@@ -229,7 +229,7 @@ function DashCard({
           </div>
           <span className="inline-flex items-center text-sm font-medium text-[var(--primary)]">
             {cta}
-            <ArrowRight className="ml-1 size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+            <ArrowRight className="ms-1 size-4 transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
           </span>
         </CardContent>
       </Card>

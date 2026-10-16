@@ -151,7 +151,7 @@ export default function BillingPage() {
                       {new Date(o.createdAt).toLocaleDateString()} · {o.type}
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-end">
                     <p className="font-semibold">${o.amount.toFixed(2)}</p>
                     <Badge
                       variant={
