@@ -1,6 +1,6 @@
 "use client";
 
-import { ScrollReveal } from "@/components/motion";
+import { Reveal } from "@/components/ui/reveal";
 import { EmptyState } from "@/components/public/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,7 @@ export default function InstructorCoursesPage() {
           }
         />
       ) : (
-        <ScrollReveal>
+        <Reveal>
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">{t("listTitle")}</CardTitle>
@@ -100,7 +100,7 @@ export default function InstructorCoursesPage() {
               </ul>
             </CardContent>
           </Card>
-        </ScrollReveal>
+        </Reveal>
       )}
     </div>
   );

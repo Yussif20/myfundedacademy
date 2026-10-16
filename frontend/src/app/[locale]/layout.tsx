@@ -89,8 +89,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: isAr ? "ar_SA" : "en_US",
       alternateLocale: isAr ? "en_US" : "ar_SA",
       type: "website",
+      images: [{ url: "/og.png", width: 1200, height: 630, alt: title }],
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: ["/og.png"] },
     alternates: {
       canonical: `${BASE_URL}/${locale}`,
       languages: {

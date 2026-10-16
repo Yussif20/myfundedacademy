@@ -79,13 +79,7 @@ export function AvatarUploader({ value, initial, onChange, disabled }: Props) {
   return (
     <div className="flex items-center gap-5">
       <div className="relative">
-        <div
-          className="grid size-24 place-items-center overflow-hidden rounded-full text-3xl font-semibold text-[var(--primary)]"
-          style={{
-            background: "color-mix(in oklch, var(--primary) 12%, transparent)",
-            border: "2px solid color-mix(in oklch, var(--primary) 30%, transparent)",
-          }}
-        >
+        <div className="grid size-24 place-items-center overflow-hidden rounded-full border border-border bg-paper-2 font-display text-4xl text-primary">
           {value ? (
             <Image
               src={value}
@@ -143,14 +137,14 @@ export function AvatarUploader({ value, initial, onChange, disabled }: Props) {
               variant="ghost"
               size="sm"
               disabled={disabled}
-              className="gap-2 text-[var(--destructive)] hover:text-[var(--destructive)]"
+              className="gap-2 text-destructive hover:text-destructive"
             >
               <Trash2 className="size-4" />
               {t("remove")}
             </Button>
           )}
         </div>
-        <p className="text-xs text-[var(--muted-foreground)]">{t("hint")}</p>
+        <p className="text-xs text-muted-foreground">{t("hint")}</p>
       </div>
     </div>
   );

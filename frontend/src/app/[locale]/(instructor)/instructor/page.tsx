@@ -1,7 +1,7 @@
 "use client";
 
 import { KpiCard } from "@/components/admin/kpi-card";
-import { ScrollReveal } from "@/components/motion";
+import { Reveal } from "@/components/ui/reveal";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/public/empty-state";
 import { Button } from "@/components/ui/button";
@@ -77,7 +77,7 @@ export default function InstructorDashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <ScrollReveal>
+      <Reveal>
         <div className="grid gap-3 sm:grid-cols-3">
           <ActionCard
             href="/instructor/courses/new"
@@ -99,10 +99,10 @@ export default function InstructorDashboardPage() {
             />
           )}
         </div>
-      </ScrollReveal>
+      </Reveal>
 
       {/* My recent courses */}
-      <ScrollReveal>
+      <Reveal>
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">{t("recentCoursesTitle")}</CardTitle>
@@ -148,7 +148,7 @@ export default function InstructorDashboardPage() {
             )}
           </CardContent>
         </Card>
-      </ScrollReveal>
+      </Reveal>
     </div>
   );
 }
