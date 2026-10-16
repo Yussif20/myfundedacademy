@@ -68,24 +68,24 @@ function ReviewContent() {
 
   if (isLoading) {
     return (
-      <div className="grid min-h-screen place-items-center bg-[var(--background)]">
-        <Loader2 className="size-8 animate-spin text-[var(--primary)]" />
+      <div className="grid min-h-screen place-items-center bg-background">
+        <Loader2 className="size-6 animate-spin text-primary" aria-hidden />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-      <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--card)]/80 backdrop-blur">
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="sticky top-0 z-30 border-b border-border bg-background">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3 md:px-6">
           <Link href="/" aria-label="Home" className="hidden md:block">
-            <Wordmark height={36} />
+            <Wordmark height={32} />
           </Link>
           <Link
             href={`/learn/${slug}` as `/learn/${string}`}
-            className="flex items-center gap-2 text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
           >
-            <ChevronLeft className="size-4 rtl:rotate-180" />
+            <ChevronLeft className="size-4 rtl:rotate-180" aria-hidden />
             {t("backToCourse")}
           </Link>
           <div className="flex items-center gap-2">
@@ -95,10 +95,12 @@ function ReviewContent() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-2xl px-4 py-8 md:px-6">
+      <section className="mx-auto max-w-2xl px-4 py-10 md:px-6 md:py-14">
         <Card>
           <CardHeader>
-            <CardTitle>{existing ? t("updateTitle") : t("leaveTitle")}</CardTitle>
+            <CardTitle className="font-display text-3xl font-medium tracking-tight">
+              {existing ? t("updateTitle") : t("leaveTitle")}
+            </CardTitle>
             <CardDescription>{t("subtitle")}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -113,7 +115,7 @@ function ReviewContent() {
                 <Label>{t("ratingLabel")}</Label>
                 <div className="flex items-center gap-3">
                   <StarRating value={rating} size={28} onChange={setRating} />
-                  <span className="text-sm text-[var(--muted-foreground)]">
+                  <span className="text-sm text-muted-foreground">
                     {rating > 0 ? t("starsOf", { rating }) : t("pickRating")}
                   </span>
                 </div>

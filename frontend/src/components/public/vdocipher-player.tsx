@@ -104,7 +104,7 @@ export function VdoCipherPlayer({
         type="button"
         onClick={handleActivate}
         aria-label={title ? `Play ${title}` : "Play preview"}
-        className="group relative block aspect-video w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--secondary)]"
+        className="group relative block aspect-video w-full overflow-hidden rounded-xl border border-border bg-secondary"
         style={
           poster
             ? {
@@ -116,7 +116,10 @@ export function VdoCipherPlayer({
         }
       >
         <div className="absolute inset-0 grid place-items-center bg-black/40 transition-colors group-hover:bg-black/30">
-          <PlayCircle className="size-16 text-white drop-shadow-lg transition-transform group-hover:scale-110" />
+          <PlayCircle
+            className="size-14 text-white transition-transform group-hover:scale-105"
+            strokeWidth={1.25}
+          />
         </div>
       </button>
     );
@@ -126,8 +129,8 @@ export function VdoCipherPlayer({
   // torn down mid-play.
   if (!ready) {
     return (
-      <div className="grid aspect-video w-full place-items-center rounded-xl border border-[var(--border)] bg-[var(--secondary)]">
-        <Loader2 className="size-8 animate-spin text-[var(--primary)]" />
+      <div className="grid aspect-video w-full place-items-center rounded-xl border border-border bg-secondary">
+        <Loader2 className="size-6 animate-spin text-primary" aria-hidden />
       </div>
     );
   }
@@ -137,7 +140,7 @@ export function VdoCipherPlayer({
   return (
     <div
       ref={containerRef}
-      className="relative aspect-video w-full overflow-hidden rounded-xl border border-[var(--border)] bg-black [&:fullscreen]:rounded-none [&:fullscreen]:border-0"
+      className="relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-black [&:fullscreen]:rounded-none [&:fullscreen]:border-0"
     >
       {videoUrl ? (
         <>

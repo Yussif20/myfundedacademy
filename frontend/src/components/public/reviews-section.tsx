@@ -5,10 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { StarRating } from "@/components/public/star-rating";
 import { Link } from "@/i18n/navigation";
 import { useListCourseReviewsQuery } from "@/redux/api/reviewsApi";
-import { motion, useInView } from "framer-motion";
 import { Loader2, MessageSquare } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useRef } from "react";
 
 export function ReviewsSection({
   slug,
@@ -31,9 +29,9 @@ export function ReviewsSection({
   return (
     <section className="space-y-6">
       <div className="flex items-end justify-between gap-4">
-        <h2 className="font-display text-2xl font-bold tracking-tight">{t("title")}</h2>
+        <h2 className="font-display text-3xl font-medium tracking-tight">{t("title")}</h2>
         {viewerHasAccess && (
-          <Button asChild size="sm">
+          <Button asChild size="sm" variant="outline">
             <Link href={`/learn/${slug}/review` as `/learn/${string}/review`}>{t("leave")}</Link>
           </Button>
         )}
@@ -41,12 +39,12 @@ export function ReviewsSection({
 
       {isLoading ? (
         <div className="flex justify-center py-10">
-          <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+          <Loader2 className="size-6 animate-spin text-primary" aria-hidden />
         </div>
       ) : total === 0 ? (
         <Card>
-          <CardContent className="flex flex-col items-center gap-3 py-10 text-center text-sm text-[var(--muted-foreground)]">
-            <MessageSquare className="size-6" />
+          <CardContent className="flex flex-col items-center gap-3 py-12 text-center text-sm text-muted-foreground sm:py-12">
+            <MessageSquare className="size-5 text-rule-strong" aria-hidden />
             <p>{t("noneYet")}</p>
           </CardContent>
         </Card>
@@ -54,10 +52,10 @@ export function ReviewsSection({
         <>
           <Card>
             <CardContent className="grid gap-6 p-6 md:grid-cols-[200px_1fr]">
-              <div className="flex flex-col items-center justify-center gap-2 border-b border-[var(--border)] pb-6 text-center md:border-b-0 md:border-e md:pb-0 md:pe-6 rtl:md:pe-0">
-                <p className="font-display text-5xl font-bold">{avg.toFixed(1)}</p>
+              <div className="flex flex-col items-center justify-center gap-2 border-b border-border pb-6 text-center md:border-b-0 md:border-e md:pb-0 md:pe-6">
+                <p className="font-display text-5xl font-light tabular-nums">{avg.toFixed(1)}</p>
                 <StarRating value={avg} size={18} />
-                <p className="text-xs text-[var(--muted-foreground)]">
+                <p className="text-xs text-muted-foreground">
                   {t("reviewsCount", { count: total })}
                 </p>
               </div>
@@ -75,23 +73,26 @@ export function ReviewsSection({
                     <CardContent className="space-y-2 p-5">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <span className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-[var(--primary)]/30 to-[var(--accent)]/20 font-display text-sm font-semibold text-[var(--primary)]">
+                          <span className="grid size-8 place-items-center rounded-full border border-border bg-paper-2 font-display text-sm text-primary">
                             {r.user?.fullName?.charAt(0) || "?"}
                           </span>
                           <div className="leading-tight">
-                            <p className="text-sm font-medium">{r.user?.fullName || "Student"}</p>
-                            <p className="text-xs text-[var(--muted-foreground)]">
-                              {new Date(r.createdAt).toLocaleDateString()}
+                            <p className="text-sm font-medium">
+                              {r.user?.fullName || t("anonymous")}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(r.createdAt).toLocaleDateString(
+                                isAr ? "ar-EG-u-nu-latn" : "en-US",
+                                { dateStyle: "medium" },
+                              )}
                             </p>
                           </div>
                         </div>
                         <StarRating value={r.rating} size={14} />
                       </div>
-                      {title && <p className="font-medium">{title}</p>}
+                      {title && <p className="font-display text-lg">{title}</p>}
                       {body && (
-                        <p className="whitespace-pre-line text-sm text-[var(--muted-foreground)]">
-                          {body}
-                        </p>
+                        <p className="whitespace-pre-line text-sm text-muted-foreground">{body}</p>
                       )}
                     </CardContent>
                   </Card>
@@ -101,7 +102,7 @@ export function ReviewsSection({
           </ul>
 
           {meta && meta.total > reviews.length && (
-            <p className="text-center text-xs text-[var(--muted-foreground)]">
+            <p className="text-center text-xs text-muted-foreground">
               {t("showingNOf", { shown: reviews.length, total: meta.total })}
             </p>
           )}
@@ -112,30 +113,20 @@ export function ReviewsSection({
 }
 
 function DistributionBars({ dist, total }: { dist: Record<string, number>; total: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.5 });
-
   return (
-    <div ref={ref} className="space-y-2">
-      {[5, 4, 3, 2, 1].map((star, i) => {
+    <div className="space-y-2">
+      {[5, 4, 3, 2, 1].map((star) => {
         const count = dist[String(star)] ?? 0;
         const pct = total > 0 ? Math.round((count / total) * 100) : 0;
         return (
           <div key={star} className="flex items-center gap-3 text-sm">
-            <span className="w-6 text-[var(--muted-foreground)]">{star}★</span>
-            <div className="h-2 flex-1 overflow-hidden rounded-full bg-[color-mix(in_oklch,var(--secondary)_80%,transparent)]">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: inView ? `${pct}%` : 0 }}
-                transition={{
-                  duration: 0.9,
-                  delay: i * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="h-full rounded-full bg-gradient-to-r from-[var(--accent)] to-[color-mix(in_oklch,var(--accent)_70%,var(--primary))]"
-              />
+            <span className="w-6 tabular-nums text-muted-foreground">{star}★</span>
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-paper-2">
+              <div className="h-full rounded-full bg-gold" style={{ width: `${pct}%` }} />
             </div>
-            <span className="w-10 text-end text-xs text-[var(--muted-foreground)]">{count}</span>
+            <span className="w-10 text-end text-xs tabular-nums text-muted-foreground">
+              {count}
+            </span>
           </div>
         );
       })}

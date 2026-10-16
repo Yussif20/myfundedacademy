@@ -23,7 +23,6 @@ import {
   type Section,
 } from "@/redux/api/coursesApi";
 import { useAppSelector } from "@/redux/store";
-import { AnimatePresence, motion } from "framer-motion";
 import {
   CheckCircle2,
   ChevronDown,
@@ -103,19 +102,19 @@ function ClassroomShell() {
 
   if (courseLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--background)]">
-        <Loader2 className="size-8 animate-spin text-[var(--primary)]" />
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="size-6 animate-spin text-primary" aria-hidden />
       </div>
     );
   }
 
   if (isError || !course) {
     return (
-      <div className="grid min-h-screen place-items-center bg-[var(--background)] text-[var(--foreground)]">
+      <div className="grid min-h-screen place-items-center bg-background text-foreground">
         <div className="text-center">
-          <p className="font-display text-3xl font-bold">404</p>
-          <p className="mt-2 text-[var(--muted-foreground)]">{t("courseNotFound")}</p>
-          <Button asChild className="mt-6">
+          <p className="font-display text-7xl font-light text-rule-strong">404</p>
+          <p className="mt-4 font-display text-xl">{t("courseNotFound")}</p>
+          <Button asChild variant="outline" className="mt-8">
             <Link href="/courses">{t("backToCourses")}</Link>
           </Button>
         </div>
@@ -135,31 +134,31 @@ function ClassroomShell() {
   const courseTitle = (isAr && course.titleArabic) || course.title;
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Top bar */}
-      <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-[var(--card)]/80 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-border bg-background">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
           <Link href="/" aria-label="Home" className="hidden md:block">
-            <Wordmark height={36} />
+            <Wordmark height={32} />
           </Link>
           <Link
             href={`/courses/${slug}` as `/courses/${string}`}
-            className="flex items-center gap-2 text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
           >
-            <ChevronLeft className="size-4 rtl:rotate-180" />
-            <span className="line-clamp-1">{courseTitle}</span>
+            <ChevronLeft className="size-4 rtl:rotate-180" aria-hidden />
+            <span className="line-clamp-1 font-display text-base text-foreground">
+              {courseTitle}
+            </span>
           </Link>
           <div className="flex items-center gap-2">
             <div className="hidden items-center gap-2 md:flex">
-              <div className="h-2 w-32 overflow-hidden rounded-full bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${pct}%` }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                  className="h-full rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]"
+              <div className="h-1 w-32 overflow-hidden rounded-full bg-border">
+                <div
+                  className="h-full rounded-full bg-primary transition-[width] duration-700 ease-out"
+                  style={{ width: `${pct}%` }}
                 />
               </div>
-              <span className="text-xs font-medium text-[var(--muted-foreground)]">{pct}%</span>
+              <span className="text-xs tabular-nums text-muted-foreground">{pct}%</span>
             </div>
             <LocaleSwitcher />
             <ThemeToggle />
@@ -172,24 +171,21 @@ function ClassroomShell() {
         <button
           type="button"
           onClick={() => setCurriculumOpen(true)}
-          className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+          className="inline-flex items-center gap-2 rounded-full border border-rule-strong/60 bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <List className="size-4" aria-hidden />
           {t("curriculumButton")}
         </button>
         <div className="flex items-center gap-2">
-          <div className="h-2 w-24 overflow-hidden rounded-full bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]"
-              style={{ width: `${pct}%` }}
-            />
+          <div className="h-1 w-24 overflow-hidden rounded-full bg-border">
+            <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
           </div>
-          <span className="text-xs font-medium text-[var(--muted-foreground)]">{pct}%</span>
+          <span className="text-xs tabular-nums text-muted-foreground">{pct}%</span>
         </div>
       </div>
 
       {/* Two-column body (sidebar hidden on mobile — opens via Sheet instead) */}
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[320px_1fr] lg:px-6">
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 lg:grid-cols-[320px_1fr] lg:px-6">
         <div className="hidden lg:block">
           <CurriculumSidebar
             course={course}
@@ -203,31 +199,23 @@ function ClassroomShell() {
         </div>
 
         <main className="min-w-0">
-          <AnimatePresence mode="wait">
-            {currentLesson ? (
-              <motion.div
-                key={currentLesson.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <LessonView
-                  lesson={currentLesson}
-                  course={course}
-                  progressByLesson={progressByLesson}
-                  prevLesson={prevLesson}
-                  nextLesson={nextLesson}
-                  onComplete={refetchProgress}
-                  onGoTo={goToLesson}
-                />
-              </motion.div>
-            ) : (
-              <div className="rounded-xl border border-dashed border-[var(--border)] py-16 text-center text-sm text-[var(--muted-foreground)]">
-                {t("noLessonsYet")}
-              </div>
-            )}
-          </AnimatePresence>
+          {currentLesson ? (
+            <div key={currentLesson.id} className="lesson-enter">
+              <LessonView
+                lesson={currentLesson}
+                course={course}
+                progressByLesson={progressByLesson}
+                prevLesson={prevLesson}
+                nextLesson={nextLesson}
+                onComplete={refetchProgress}
+                onGoTo={goToLesson}
+              />
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed border-rule-strong/50 py-16 text-center text-sm text-muted-foreground">
+              {t("noLessonsYet")}
+            </div>
+          )}
         </main>
       </div>
 
@@ -290,10 +278,8 @@ function CurriculumSidebar({
 
         {/* Final-quiz / certificate CTAs surface once everything is done. */}
         {allLessonsDone && (
-          <div className="space-y-2 rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/5 p-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--primary)]">
-              {t("allLessonsComplete")}
-            </p>
+          <div className="space-y-3 rounded-xl border border-gold/50 bg-card p-4">
+            <p className="font-display text-lg text-accent">{t("allLessonsComplete")}</p>
             <div className="flex flex-col gap-2">
               <Button asChild size="sm" className="gap-2">
                 <Link href={`/learn/${slug}/quiz` as `/learn/${string}/quiz`}>
@@ -340,74 +326,68 @@ function SectionGroup({
   const sectionPct = section.lessons.length > 0 ? completedInSection / section.lessons.length : 0;
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_75%,transparent)] backdrop-blur transition-colors hover:border-[color-mix(in_oklch,var(--primary)_25%,transparent)]">
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center gap-3 px-3 py-2.5 text-start text-sm font-medium transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_4%,transparent)]"
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 px-3 py-3 text-start text-sm font-medium transition-colors hover:bg-paper-2/60"
       >
-        <motion.span
-          animate={{ rotate: open ? 0 : -90 }}
-          transition={{ type: "spring", stiffness: 400, damping: 28 }}
-          className="grid size-5 shrink-0 place-items-center"
-        >
-          <ChevronDown className="size-4 text-[var(--muted-foreground)]" />
-        </motion.span>
+        <ChevronDown
+          className={cn(
+            "size-4 shrink-0 text-muted-foreground transition-transform duration-200",
+            !open && "-rotate-90 rtl:rotate-90",
+          )}
+          aria-hidden
+        />
         <ProgressRing value={sectionPct} size={22} stroke={2.5} />
         <span className="line-clamp-1 flex-1">
           {(isAr && section.titleArabic) || section.title}
         </span>
-        <span className="text-xs text-[var(--muted-foreground)]">
+        <span className="text-xs tabular-nums text-muted-foreground" dir="ltr">
           {completedInSection}/{section.lessons.length}
         </span>
       </button>
 
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
-          >
-            <ul className="border-t border-[color-mix(in_oklch,var(--border)_60%,transparent)]">
-              {section.lessons.map((l) => {
-                const completed = Boolean(progressByLesson.get(l.id)?.completedAt);
-                const isCurrent = l.id === currentLessonId;
-                return (
-                  <li key={l.id}>
-                    <button
-                      type="button"
-                      onClick={() => onPick(l.id)}
-                      className={cn(
-                        "flex w-full items-center gap-3 border-b border-[color-mix(in_oklch,var(--border)_40%,transparent)] px-3 py-2.5 text-start text-sm transition-colors last:border-b-0",
-                        isCurrent
-                          ? "bg-[color-mix(in_oklch,var(--primary)_12%,transparent)] text-[var(--foreground)]"
-                          : "text-[var(--muted-foreground)] hover:bg-[color-mix(in_oklch,var(--primary)_5%,transparent)] hover:text-[var(--foreground)]",
-                      )}
-                    >
-                      {completed ? (
-                        <CheckCircle2 className="size-4 shrink-0 text-[var(--primary)]" />
-                      ) : (
-                        <Circle className="size-4 shrink-0 text-[var(--muted-foreground)]" />
-                      )}
-                      <span className="line-clamp-1 flex-1">
-                        {(isAr && l.titleArabic) || l.title}
+      {open && (
+        <div>
+          <ul className="border-t border-border">
+            {section.lessons.map((l) => {
+              const completed = Boolean(progressByLesson.get(l.id)?.completedAt);
+              const isCurrent = l.id === currentLessonId;
+              return (
+                <li key={l.id}>
+                  <button
+                    type="button"
+                    onClick={() => onPick(l.id)}
+                    className={cn(
+                      "flex w-full items-center gap-3 border-b border-s-2 border-b-border px-3 py-2.5 text-start text-sm transition-colors last:border-b-0",
+                      isCurrent
+                        ? "border-s-primary bg-primary/8 text-foreground"
+                        : "border-s-transparent text-muted-foreground hover:bg-paper-2/60 hover:text-foreground",
+                    )}
+                    aria-current={isCurrent ? "true" : undefined}
+                  >
+                    {completed ? (
+                      <CheckCircle2 className="size-4 shrink-0 text-primary" aria-hidden />
+                    ) : (
+                      <Circle className="size-4 shrink-0 text-rule-strong" aria-hidden />
+                    )}
+                    <span className="line-clamp-1 flex-1">
+                      {(isAr && l.titleArabic) || l.title}
+                    </span>
+                    {l.durationMin > 0 && (
+                      <span className="text-xs tabular-nums text-muted-foreground" dir="ltr">
+                        {l.durationMin}m
                       </span>
-                      {l.durationMin > 0 && (
-                        <span className="text-xs text-[var(--muted-foreground)]">
-                          {l.durationMin}m
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -504,9 +484,9 @@ function LessonView({
       )}
 
       {!lesson.vdoVideoId ? (
-        <div className="grid aspect-video w-full place-items-center rounded-xl border border-dashed border-[var(--border)] bg-[var(--card)] text-sm text-[var(--muted-foreground)]">
+        <div className="grid aspect-video w-full place-items-center rounded-xl border border-dashed border-rule-strong/50 bg-paper-2 text-sm text-muted-foreground">
           <div className="text-center">
-            <Lock className="mx-auto size-8 text-[var(--muted-foreground)]" />
+            <Lock className="mx-auto size-6 text-rule-strong" aria-hidden />
             <p className="mt-2">{t("noVideoUploaded")}</p>
           </div>
         </div>
@@ -531,17 +511,19 @@ function LessonView({
       )}
 
       <div className="space-y-3">
-        <div className="flex items-center gap-3">
-          <h1 className="font-display text-2xl font-bold tracking-tight">{title}</h1>
-          {lesson.isFreePreview && <Badge variant="success">{t("freePreview")}</Badge>}
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="font-display text-3xl font-medium tracking-tight">{title}</h1>
+          {lesson.isFreePreview && <Badge variant="default">{t("freePreview")}</Badge>}
         </div>
 
         {description && (
-          <p className="whitespace-pre-line text-[var(--muted-foreground)]">{description}</p>
+          <p className="max-w-3xl whitespace-pre-line text-[17px] leading-8 text-foreground/85">
+            {description}
+          </p>
         )}
       </div>
 
-      <div className="flex flex-col gap-3 border-t border-[var(--border)] pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
         <Button
           onClick={onMarkComplete}
           disabled={marking}
@@ -552,7 +534,7 @@ function LessonView({
           {marking ? (
             <Loader2 className="size-4 animate-spin" />
           ) : completed ? (
-            <CheckCircle2 className="size-4 text-[var(--primary)]" />
+            <CheckCircle2 className="size-4 text-primary" />
           ) : (
             <PlayCircle className="size-4" />
           )}
