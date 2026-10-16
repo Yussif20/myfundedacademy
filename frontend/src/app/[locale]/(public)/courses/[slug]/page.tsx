@@ -409,6 +409,8 @@ function SectionRow({
 
 function PreviewPlayer({ lesson, thumbnail }: { lesson: Lesson; thumbnail: string }) {
   const t = useTranslations("courseDetail");
+  const isAr = useLocale() === "ar";
+  const lessonTitle = (isAr && lesson.titleArabic) || lesson.title;
   const [getOtp, { isLoading }] = useGetPreviewOtpMutation();
   const [otp, setOtp] = useState<string | undefined>();
   const [playbackInfo, setPlaybackInfo] = useState<string | undefined>();
@@ -438,13 +440,13 @@ function PreviewPlayer({ lesson, thumbnail }: { lesson: Lesson; thumbnail: strin
         videoUrl={videoUrl}
         isLoading={isLoading}
         poster={thumbnail}
-        title={lesson.title}
+        title={lessonTitle}
         onActivate={onActivate}
       />
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1">
           <Badge variant="default">{t("freePreview")}</Badge>
-          <span>{lesson.title}</span>
+          <span>{lessonTitle}</span>
         </span>
       </div>
       {error && (
