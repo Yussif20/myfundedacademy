@@ -6,19 +6,7 @@ import { routing } from "@/i18n/routing";
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
-import {
-  Archivo,
-  Archivo_Black,
-  Big_Shoulders,
-  Fraunces,
-  IBM_Plex_Mono,
-  IBM_Plex_Sans,
-  IBM_Plex_Sans_Arabic,
-  Inter,
-  Newsreader,
-  Sora,
-  Space_Grotesk,
-} from "next/font/google";
+import { IBM_Plex_Sans_Arabic, Inter, Newsreader, Noto_Naskh_Arabic } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Providers } from "./providers";
 
@@ -28,10 +16,12 @@ const inter = Inter({
   display: "swap",
 });
 
-const sora = Sora({
+/* Latin display: an editorial serif with optical sizes. */
+const newsreader = Newsreader({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-sora",
+  style: ["normal", "italic"],
+  axes: ["opsz"],
+  variable: "--font-newsreader",
   display: "swap",
 });
 
@@ -42,71 +32,12 @@ const plexArabic = IBM_Plex_Sans_Arabic({
   display: "swap",
 });
 
-/* Design-direction fonts (theme lab). preload:false — each face only downloads
-   when the active direction's tokens reference it. */
-const archivo = Archivo({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-archivo",
-  display: "swap",
-  preload: false,
-});
-
-const archivoBlack = Archivo_Black({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-archivo-black",
-  display: "swap",
-  preload: false,
-});
-
-const bigShoulders = Big_Shoulders({
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-big-shoulders",
-  display: "swap",
-  preload: false,
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
+/* Arabic display: Naskh for headings (paired with Newsreader). */
+const naskh = Noto_Naskh_Arabic({
+  subsets: ["arabic"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-fraunces",
+  variable: "--font-naskh",
   display: "swap",
-  preload: false,
-});
-
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-newsreader",
-  display: "swap",
-  preload: false,
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-  preload: false,
-});
-
-const plexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-plex-mono",
-  display: "swap",
-  preload: false,
-});
-
-const plexSans = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-plex-sans",
-  display: "swap",
-  preload: false,
 });
 
 type Props = {
@@ -118,8 +49,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#0B7768" },
-    { media: "(prefers-color-scheme: dark)", color: "#0A0F14" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f3ea" },
+    { media: "(prefers-color-scheme: dark)", color: "#14130f" },
   ],
 };
 
@@ -183,13 +114,17 @@ export default async function RootLayout({ children, params }: Props) {
     <html
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
-      data-scroll-behavior="smooth"
+      className={`${inter.variable} ${newsreader.variable} ${plexArabic.variable} ${naskh.variable}`}
       suppressHydrationWarning
     >
-      <body
-        suppressHydrationWarning
-        className={`${inter.variable} ${sora.variable} ${plexArabic.variable} ${archivo.variable} ${archivoBlack.variable} ${bigShoulders.variable} ${fraunces.variable} ${newsreader.variable} ${spaceGrotesk.variable} ${plexMono.variable} ${plexSans.variable} font-sans antialiased`}
-      >
+      <head>
+        {/* Marks the document as scripted before first paint, so scroll reveals
+            only hide content when JS can show it again. */}
+        <script
+          dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
+        />
+      </head>
+      <body suppressHydrationWarning className="font-sans antialiased">
         <ThemeProvider>
           <Providers>
             <NextIntlClientProvider locale={locale} messages={messages}>
