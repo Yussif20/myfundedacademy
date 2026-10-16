@@ -82,21 +82,56 @@ async function createDemoData(tx: Tx) {
   const base = { isDemo: true, isEmailVerified: true, password: null, status: "ACTIVE" as const };
 
   const studentId = randomUUID();
-  users.push({ ...base, id: studentId, email: DEMO_STUDENT.email, fullName: DEMO_STUDENT.fullName, country: DEMO_STUDENT.country, role: "STUDENT", createdAt: daysAgo(120) });
-  users.push({ ...base, id: randomUUID(), email: DEMO_ADMIN.email, fullName: DEMO_ADMIN.fullName, country: DEMO_ADMIN.country, role: "ADMIN", createdAt: daysAgo(400) });
+  users.push({
+    ...base,
+    id: studentId,
+    email: DEMO_STUDENT.email,
+    fullName: DEMO_STUDENT.fullName,
+    country: DEMO_STUDENT.country,
+    role: "STUDENT",
+    createdAt: daysAgo(120),
+  });
+  users.push({
+    ...base,
+    id: randomUUID(),
+    email: DEMO_ADMIN.email,
+    fullName: DEMO_ADMIN.fullName,
+    country: DEMO_ADMIN.country,
+    role: "ADMIN",
+    createdAt: daysAgo(400),
+  });
 
   const instructorUserIds = new Map<string, string>();
   for (const ins of DEMO_INSTRUCTORS) {
     const id = randomUUID();
     instructorUserIds.set(ins.key, id);
-    users.push({ ...base, id, email: ins.email, fullName: ins.fullName, country: ins.country, bio: ins.bio[0], role: "INSTRUCTOR", createdAt: daysAgo(300) });
+    users.push({
+      ...base,
+      id,
+      email: ins.email,
+      fullName: ins.fullName,
+      country: ins.country,
+      bio: ins.bio[0],
+      profile: `/demo/instructors/${ins.key}.jpg`,
+      role: "INSTRUCTOR",
+      createdAt: daysAgo(300),
+    });
   }
 
   const learnerIds: string[] = [];
   for (const [i, l] of DEMO_LEARNERS.entries()) {
     const id = randomUUID();
     learnerIds.push(id);
-    users.push({ ...base, id, email: l.email, fullName: l.fullName, country: l.country, preferredLocale: l.locale, role: "STUDENT", createdAt: daysAgo(100 - i * 5) });
+    users.push({
+      ...base,
+      id,
+      email: l.email,
+      fullName: l.fullName,
+      country: l.country,
+      preferredLocale: l.locale,
+      role: "STUDENT",
+      createdAt: daysAgo(100 - i * 5),
+    });
   }
   await tx.user.createMany({ data: users });
 
@@ -144,7 +179,13 @@ async function createDemoData(tx: Tx) {
 
     c.sections.forEach((s, si) => {
       const sectionId = randomUUID();
-      sections.push({ id: sectionId, courseId, title: s.title[0], titleArabic: s.title[1], order: si });
+      sections.push({
+        id: sectionId,
+        courseId,
+        title: s.title[0],
+        titleArabic: s.title[1],
+        order: si,
+      });
       s.lessons.forEach(([en, ar, minutes], li) => {
         const video = DEMO_VIDEOS[videoIdx++ % DEMO_VIDEOS.length];
         const id = randomUUID();
@@ -188,7 +229,14 @@ async function createDemoData(tx: Tx) {
       q.options.forEach((o, oi) => {
         const optionId = randomUUID();
         if (oi === q.correct) answers[questionId] = optionId;
-        options.push({ id: optionId, questionId, text: o[0], textArabic: o[1], isCorrect: oi === q.correct, order: oi });
+        options.push({
+          id: optionId,
+          questionId,
+          text: o[0],
+          textArabic: o[1],
+          isCorrect: oi === q.correct,
+          order: oi,
+        });
       });
     });
 
@@ -201,7 +249,7 @@ async function createDemoData(tx: Tx) {
       shortDescriptionArabic: c.short[1],
       description: c.description[0],
       descriptionArabic: c.description[1],
-      thumbnail: `/demo/courses/${c.slug}.svg`,
+      thumbnail: `/demo/courses/${c.slug}.jpg`,
       level: c.level,
       language: c.language,
       status: "PUBLISHED",
@@ -234,7 +282,12 @@ async function createDemoData(tx: Tx) {
   const certificates: Prisma.CertificateCreateManyInput[] = [];
 
   const enrol = (userId: string, course: CourseInfo, when: Date) => {
-    enrollments.push({ userId, courseId: course.id, source: course.price > 0 ? "PURCHASE" : "FREE", enrolledAt: when });
+    enrollments.push({
+      userId,
+      courseId: course.id,
+      source: course.price > 0 ? "PURCHASE" : "FREE",
+      enrolledAt: when,
+    });
     if (course.price > 0) {
       orders.push({
         userId,
@@ -261,9 +314,16 @@ async function createDemoData(tx: Tx) {
       enrol(userId, course, when);
 
       const done = pick(li + k * 5, course.lessonIds.length + 1);
-      course.lessonIds.slice(0, done).forEach((lessonId, n) =>
-        progress.push({ userId, lessonId, lastWatchedSeconds: 0, completedAt: new Date(when.getTime() + (n + 1) * DAY) }),
-      );
+      course.lessonIds
+        .slice(0, done)
+        .forEach((lessonId, n) =>
+          progress.push({
+            userId,
+            lessonId,
+            lastWatchedSeconds: 0,
+            completedAt: new Date(when.getTime() + (n + 1) * DAY),
+          }),
+        );
 
       if ((li + k) % 2 === 0) {
         const r = DEMO_REVIEWS[pick(li * 3 + k * 11, DEMO_REVIEWS.length)];
@@ -295,9 +355,11 @@ async function createDemoData(tx: Tx) {
   finished.lessonIds.forEach((lessonId, n) =>
     progress.push({ userId: studentId, lessonId, completedAt: daysAgo(38 - n * 3) }),
   );
-  inProgress.lessonIds.slice(0, 3).forEach((lessonId, n) =>
-    progress.push({ userId: studentId, lessonId, completedAt: daysAgo(10 - n * 2) }),
-  );
+  inProgress.lessonIds
+    .slice(0, 3)
+    .forEach((lessonId, n) =>
+      progress.push({ userId: studentId, lessonId, completedAt: daysAgo(10 - n * 2) }),
+    );
   progress.push({ userId: studentId, lessonId: started.lessonIds[0], completedAt: daysAgo(2) });
 
   attempts.push({
@@ -313,7 +375,10 @@ async function createDemoData(tx: Tx) {
     courseId: finished.id,
     passedQuiz: true,
     issuedAt: daysAgo(17),
-    code: `NB-${generateRandomToken(6).toUpperCase().replace(/[^A-Z0-9]/g, "0").slice(0, 8)}`,
+    code: `NB-${generateRandomToken(6)
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "0")
+      .slice(0, 8)}`,
   });
   reviews.push({
     userId: studentId,

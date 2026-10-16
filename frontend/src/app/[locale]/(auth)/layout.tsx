@@ -1,10 +1,11 @@
-import { LampMark, Wordmark } from "@/components/brand/wordmark";
+import { Wordmark } from "@/components/brand/wordmark";
 import { LocaleSwitcher } from "@/components/locale-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
-/** Two panels: the form on paper, and an ink panel with the lamp and a short line. */
+/** Two panels: the form on paper, and a lamplit photo with a short line on ink. */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const t = useTranslations("auth.panel");
 
@@ -27,25 +28,29 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       <aside className="dark relative hidden overflow-hidden bg-background text-foreground lg:flex lg:flex-col lg:justify-between lg:p-16">
+        <Image
+          src="/images/auth/lamp.jpg"
+          alt=""
+          fill
+          priority
+          sizes="40rem"
+          className="object-cover"
+        />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: "radial-gradient(ellipse 70% 50% at 50% 30%, var(--lamp), transparent 70%)",
-          }}
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background from-15% via-background/40 via-50% to-transparent"
         />
         <p className="eyebrow relative">{t("eyebrow")}</p>
         <div className="relative">
-          <LampMark size={56} />
-          <p className="mt-10 max-w-md font-display text-4xl font-medium leading-tight tracking-tight text-balance xl:text-5xl">
+          <p className="max-w-md font-display text-4xl font-medium leading-tight tracking-tight text-balance xl:text-5xl">
             {t("line")}
           </p>
           <p className="mt-6 max-w-sm leading-7 text-muted-foreground">{t("sub")}</p>
+          <div
+            aria-hidden
+            className="mt-10 h-px w-full bg-gradient-to-r from-gold/60 to-transparent rtl:bg-gradient-to-l"
+          />
         </div>
-        <div
-          aria-hidden
-          className="relative h-px w-full bg-gradient-to-r from-gold/60 to-transparent rtl:bg-gradient-to-l"
-        />
       </aside>
     </main>
   );

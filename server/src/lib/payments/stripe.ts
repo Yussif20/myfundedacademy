@@ -81,15 +81,18 @@ export const priceIdToPlan = (priceId: string): SubscriptionPlan | null => {
 };
 
 /**
- * Stripe only accepts absolute https image URLs (and doesn't render SVG), so
- * relative paths like the demo courses' `/demo/courses/x.svg` would make the
- * whole Checkout Session fail with "Not a valid URL". Send the thumbnail only
- * when Stripe can use it; otherwise the checkout page simply has no image.
+ * Stripe only accepts absolute https image URLs (and doesn't render SVG). Relative
+ * paths such as the demo covers (`/demo/courses/x.jpg`) are resolved against the
+ * frontend's base URL; anything Stripe can't use is left out, so the Checkout
+ * page simply shows no image instead of failing with "Not a valid URL".
  */
-export const stripeProductImages = (thumbnail?: string | null): string[] | undefined => {
+export const stripeProductImages = (
+  thumbnail?: string | null,
+  base: string = env.FRONTEND_URL,
+): string[] | undefined => {
   if (!thumbnail) return undefined;
   try {
-    const url = new URL(thumbnail);
+    const url = new URL(thumbnail, base);
     if (url.protocol !== "https:" || url.pathname.toLowerCase().endsWith(".svg")) return undefined;
     return [url.toString()];
   } catch {
