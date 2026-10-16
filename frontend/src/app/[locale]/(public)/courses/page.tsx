@@ -1,10 +1,11 @@
 "use client";
 
-import { ScrollReveal } from "@/components/motion";
 import { CourseCard } from "@/components/public/course-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { Reveal } from "@/components/ui/reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { ShimmerCard } from "@/components/ui/skeleton";
 import { useListCategoriesQuery } from "@/redux/api/categoriesApi";
 import {
@@ -13,15 +14,15 @@ import {
   type CourseLanguage,
   type CourseLevel,
 } from "@/redux/api/coursesApi";
-import { motion } from "framer-motion";
 import { Loader2, Search, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 
 export default function CatalogPage() {
   const t = useTranslations("catalog");
   const tField = useTranslations("admin.fields");
+  const isAr = useLocale() === "ar";
 
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -58,32 +59,17 @@ export default function CatalogPage() {
   };
 
   return (
-    <div className="relative">
-      {/* Top accent gradient */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[400px] opacity-40"
-        style={{
-          background:
-            "radial-gradient(ellipse at top, color-mix(in oklch, var(--primary) 25%, transparent), transparent 60%)",
-        }}
-      />
-
-      <div className="relative mx-auto max-w-7xl px-6 py-12">
-        <ScrollReveal>
-          <header className="mb-10">
-            <h1 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-              {t("title")}
-            </h1>
-            <p className="mt-3 max-w-2xl text-[var(--muted-foreground)]">{t("subtitle")}</p>
-          </header>
-        </ScrollReveal>
+    <div>
+      <div className="mx-auto max-w-7xl px-6 py-16 md:py-20">
+        <Reveal>
+          <SectionHeading as="h1" eyebrow={t("eyebrow")} title={t("title")} lead={t("subtitle")} />
+        </Reveal>
 
         {/* Filter bar */}
-        <div className="bg-card border border-border mb-10 rounded-2xl p-4 md:p-5">
+        <div className="mb-10 mt-12 border-y border-border py-5">
           <div className="grid gap-3 md:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
             <div className="relative group">
-              <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-[var(--muted-foreground)] transition-colors group-focus-within:text-[var(--primary)]" />
+              <Search className="pointer-events-none absolute start-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-primary" />
               <Input
                 value={search}
                 onChange={(e) => {
@@ -91,7 +77,7 @@ export default function CatalogPage() {
                   setPage(1);
                 }}
                 placeholder={t("filters.search")}
-                className="border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_60%,transparent)] ps-9 transition-all focus-visible:border-[var(--primary)] focus-visible:ring-[3px] focus-visible:ring-[color-mix(in_oklch,var(--primary)_25%,transparent)] rtl:ps-3 rtl:pe-9"
+                className="ps-10"
               />
             </div>
 
@@ -105,7 +91,7 @@ export default function CatalogPage() {
             >
               {(categoriesRes?.data || []).map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name}
+                  {(isAr && c.nameArabic) || c.name}
                 </option>
               ))}
             </FilterSelect>
@@ -149,14 +135,8 @@ export default function CatalogPage() {
 
           {/* Active-filter pills row */}
           {hasFilters && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              className="mt-3 flex flex-wrap items-center gap-2 overflow-hidden border-t border-[color-mix(in_oklch,var(--border)_60%,transparent)] pt-3"
-            >
-              <span className="text-xs uppercase tracking-[0.15em] text-[var(--muted-foreground)]">
-                Active:
-              </span>
+            <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-border pt-4">
+              <span className="eyebrow text-muted-foreground">{t("filters.active")}</span>
               {search && (
                 <FilterChip
                   label={`"${search}"`}
@@ -168,7 +148,10 @@ export default function CatalogPage() {
               )}
               {categoryId && (
                 <FilterChip
-                  label={categoriesRes?.data?.find((c) => c.id === categoryId)?.name || "Category"}
+                  label={(() => {
+                    const c = categoriesRes?.data?.find((x) => x.id === categoryId);
+                    return (c && ((isAr && c.nameArabic) || c.name)) || t("filters.category");
+                  })()}
                   onRemove={() => {
                     setCategoryId("");
                     setPage(1);
@@ -194,7 +177,7 @@ export default function CatalogPage() {
                 <X className="size-3.5" />
                 {t("filters.clear")}
               </Button>
-            </motion.div>
+            </div>
           )}
         </div>
 
@@ -206,8 +189,8 @@ export default function CatalogPage() {
             ))}
           </div>
         ) : courses.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[var(--border)] py-20 text-center">
-            <p className="text-sm text-[var(--muted-foreground)]">{t("noResults")}</p>
+          <div className="rounded-xl border border-dashed border-rule-strong/50 py-20 text-center">
+            <p className="font-display text-xl">{t("noResults")}</p>
             {hasFilters && (
               <Button variant="outline" onClick={clearFilters} className="mt-4 gap-2">
                 <X className="size-4" />
@@ -217,15 +200,15 @@ export default function CatalogPage() {
           </div>
         ) : (
           <>
-            <div className="mb-4 flex items-center justify-between text-sm text-[var(--muted-foreground)]">
+            <div className="mb-6 flex items-center justify-between text-sm text-muted-foreground">
               <span>{t("showingResults", { count: meta?.total ?? courses.length })}</span>
-              {isFetching && <Loader2 className="size-4 animate-spin text-[var(--primary)]" />}
+              {isFetching && <Loader2 className="size-4 animate-spin text-primary" />}
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {courses.map((c, i) => (
-                <ScrollReveal key={c.id} delay={(i % 3) * 0.06} amount={0.15}>
+                <Reveal key={c.id} delay={(i % 3) * 80}>
                   <CourseCard course={c} />
-                </ScrollReveal>
+                </Reveal>
               ))}
             </div>
             {meta && meta.totalPage > 1 && (
@@ -237,7 +220,7 @@ export default function CatalogPage() {
                 >
                   {t("prev")}
                 </Button>
-                <span className="text-sm text-[var(--muted-foreground)]">
+                <span className="text-sm tabular-nums text-muted-foreground">
                   {t("page", { page, total: meta.totalPage })}
                 </span>
                 <Button
@@ -268,12 +251,7 @@ function FilterSelect({
   children: React.ReactNode;
 }) {
   return (
-    <Select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      aria-label={placeholder}
-      className="border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_60%,transparent)] transition-all focus-visible:border-[var(--primary)] focus-visible:ring-[3px] focus-visible:ring-[color-mix(in_oklch,var(--primary)_25%,transparent)]"
-    >
+    <Select value={value} onChange={(e) => onChange(e.target.value)} aria-label={placeholder}>
       <option value="">{placeholder}</option>
       {children}
     </Select>
@@ -281,28 +259,18 @@ function FilterSelect({
 }
 
 function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
+  const tCommon = useTranslations("common");
   return (
-    <motion.span
-      layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ type: "spring", stiffness: 380, damping: 28 }}
-      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
-      style={{
-        background: "color-mix(in oklch, var(--primary) 12%, transparent)",
-        border: "1px solid color-mix(in oklch, var(--primary) 30%, transparent)",
-        color: "var(--primary)",
-      }}
-    >
+    <span className="inline-flex h-7 items-center gap-1 rounded-full border border-primary/25 bg-primary/8 ps-3 pe-1 text-xs font-medium text-primary">
       {label}
       <button
         type="button"
         onClick={onRemove}
-        className="rounded-full p-0.5 transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_20%,transparent)]"
+        aria-label={`${tCommon("close")}: ${label}`}
+        className="grid size-5 place-items-center rounded-full transition-colors hover:bg-primary/15"
       >
-        <X className="size-3" />
+        <X className="size-3" aria-hidden />
       </button>
-    </motion.span>
+    </span>
   );
 }

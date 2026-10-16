@@ -1,14 +1,15 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 import type { CourseSummary } from "@/redux/api/coursesApi";
 import { BookOpen, Clock } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
+/** Course card: flat hairline card; on hover the image eases in and a gold rule draws across the top. */
 export function CourseCard({ course }: { course: CourseSummary }) {
   const tField = useTranslations("admin.fields");
+  const t = useTranslations("cards");
   const locale = useLocale();
   const isAr = locale === "ar";
   const title = (isAr && course.titleArabic) || course.title;
@@ -20,109 +21,93 @@ export function CourseCard({ course }: { course: CourseSummary }) {
     hours > 0 ? `${hours}h${minutes > 0 ? ` ${minutes}m` : ""}` : `${minutes || 0}m`;
 
   return (
-    <div className="group relative h-full">
-      {/* Animated gradient border halo on hover */}
+    <Link
+      href={{ pathname: `/courses/${course.slug}` }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-colors duration-300 hover:border-primary/40"
+    >
+      <span
+        aria-hidden
+        className="absolute inset-x-0 top-0 z-10 h-0.5 origin-left scale-x-0 bg-gold transition-transform duration-500 group-hover:scale-x-100 rtl:origin-right"
+      />
 
-      <Link
-        href={{ pathname: `/courses/${course.slug}` }}
-        className="relative flex h-full flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_85%,transparent)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[color-mix(in_oklch,var(--primary)_40%,transparent)] hover:shadow-xl hover:shadow-[color-mix(in_oklch,var(--primary)_15%,transparent)]"
-      >
-        <div className="relative aspect-video w-full overflow-hidden bg-[var(--secondary)]">
-          {course.thumbnail ? (
-            <Image
-              src={course.thumbnail}
-              alt={title}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              unoptimized
-            />
-          ) : (
-            <div
-              aria-hidden
-              className="grid h-full w-full place-items-center bg-gradient-to-br from-[color-mix(in_oklch,var(--primary)_20%,transparent)] to-[color-mix(in_oklch,var(--accent)_10%,transparent)]"
-            >
-              <BookOpen className="size-10 text-[var(--muted-foreground)]" />
-            </div>
-          )}
-
-          {/* Shine sweep on hover */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-1000 group-hover:translate-x-full"
+      <div className="relative aspect-video w-full overflow-hidden bg-paper-2">
+        {course.thumbnail ? (
+          <Image
+            src={course.thumbnail}
+            alt=""
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            unoptimized
           />
-
-          {/* Bottom fade overlay for badges */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          />
-
-          {course.accessTier !== "FREE" && (
-            <Badge variant="default" className="absolute start-3 top-3 backdrop-blur">
-              {tField(`tier.${course.accessTier}`)}
-            </Badge>
-          )}
-          {course.isFeatured && (
-            <Badge variant="warning" className="absolute end-3 top-3">
-              ★
-            </Badge>
-          )}
-        </div>
-
-        <div className="flex flex-1 flex-col gap-3 p-5">
-          <div className="flex items-center gap-2 text-xs">
-            {course.category && (
-              <span className="text-[var(--primary)]">
-                {(isAr && course.category.nameArabic) || course.category.name}
+        ) : (
+          <div aria-hidden className="grid h-full w-full place-items-center">
+            <BookOpen className="size-10 text-rule-strong" />
+          </div>
+        )}
+        {(course.accessTier !== "FREE" || course.isFeatured) && (
+          <div className="absolute start-3 top-3 flex gap-1.5">
+            {course.accessTier !== "FREE" && (
+              <span className="rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-medium text-foreground">
+                {tField(`tier.${course.accessTier}`)}
               </span>
             )}
-            <span className="text-[var(--muted-foreground)]">·</span>
-            <span className="text-[var(--muted-foreground)]">
-              {tField(`level.${course.level}`)}
+            {course.isFeatured && (
+              <span className="rounded-full bg-card/95 px-2.5 py-1 text-[11px] font-medium text-accent">
+                {t("featured")}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col p-5">
+        <p className="flex items-center gap-2 text-xs text-muted-foreground">
+          {course.category && (
+            <span className="font-medium text-primary">
+              {(isAr && course.category.nameArabic) || course.category.name}
+            </span>
+          )}
+          {course.category && (
+            <span aria-hidden className="text-gold">
+              ·
+            </span>
+          )}
+          <span>{tField(`level.${course.level}`)}</span>
+        </p>
+        <h3 className="mt-3 line-clamp-2 font-display text-xl font-medium leading-snug tracking-tight">
+          {title}
+        </h3>
+        {desc && (
+          <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">{desc}</p>
+        )}
+
+        <p className="mb-4 mt-4 text-xs text-muted-foreground">
+          {t("by", { name: course.instructor.user.fullName })}
+        </p>
+
+        <div className="mt-auto flex items-center justify-between border-t border-border pt-4">
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5">
+              <BookOpen className="size-3.5" aria-hidden />
+              <span className="tabular-nums">{t("lessons", { n: course.totalLessons })}</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 tabular-nums" dir="ltr">
+              <Clock className="size-3.5" aria-hidden />
+              {durationLabel}
             </span>
           </div>
-          <h3 className="font-display line-clamp-2 text-lg font-semibold leading-snug tracking-tight transition-colors group-hover:text-[var(--primary)]">
-            {title}
-          </h3>
-          {desc && <p className="line-clamp-2 text-sm text-[var(--muted-foreground)]">{desc}</p>}
-
-          <div className="mt-auto flex items-center justify-between border-t border-[color-mix(in_oklch,var(--border)_60%,transparent)] pt-3 text-sm">
-            <div className="flex items-center gap-3 text-xs text-[var(--muted-foreground)]">
-              <span className="inline-flex items-center gap-1">
-                <BookOpen className="size-3.5" />
-                {course.totalLessons}
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <Clock className="size-3.5" />
-                {durationLabel}
-              </span>
-            </div>
-            <div className="text-end">
-              {course.oneTimePrice > 0 ? (
-                <span className="font-display font-semibold text-[var(--foreground)]">
-                  ${course.oneTimePrice.toFixed(2)}
-                </span>
-              ) : (
-                <span className="text-xs text-[var(--muted-foreground)]">Sub-only</span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 text-xs text-[var(--muted-foreground)]">
-            <span
-              className="inline-grid size-6 place-items-center rounded-full text-[10px] font-semibold uppercase text-[var(--primary)]"
-              style={{
-                background: "color-mix(in oklch, var(--primary) 15%, transparent)",
-                border: "1px solid color-mix(in oklch, var(--primary) 25%, transparent)",
-              }}
-            >
-              {course.instructor.user.fullName.charAt(0)}
+          {course.oneTimePrice > 0 ? (
+            <span className="font-display text-lg tabular-nums" dir="ltr">
+              ${course.oneTimePrice.toFixed(2)}
             </span>
-            <span>{course.instructor.user.fullName}</span>
-          </div>
+          ) : (
+            <span className="text-xs text-muted-foreground">
+              {course.accessTier === "FREE" ? t("free") : t("subOnly")}
+            </span>
+          )}
         </div>
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 }
