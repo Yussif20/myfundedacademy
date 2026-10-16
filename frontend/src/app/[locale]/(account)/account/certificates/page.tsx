@@ -15,19 +15,19 @@ export default function MyCertificatesPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
       </header>
 
       {isLoading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+          <Loader2 className="size-6 animate-spin text-primary" />
         </div>
       ) : certs.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center">
-            <Award className="mx-auto size-10 text-[var(--muted-foreground)]" />
-            <p className="mt-3 text-sm text-[var(--muted-foreground)]">{t("none")}</p>
+            <Award className="mx-auto size-8 text-gold" strokeWidth={1.5} aria-hidden />
+            <p className="mt-3 text-sm text-muted-foreground">{t("none")}</p>
             <Button asChild className="mt-4">
               <Link href="/account/courses">{t("myCourses")}</Link>
             </Button>
@@ -40,11 +40,13 @@ export default function MyCertificatesPage() {
               <Card>
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <div className="grid size-10 place-items-center rounded-full bg-[var(--primary)]/10 text-[var(--primary)]">
-                      <Award className="size-5" />
+                    <div className="grid size-10 place-items-center rounded-full border border-border bg-card text-primary">
+                      <Award className="size-5 text-gold" strokeWidth={1.5} aria-hidden />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <CardTitle className="line-clamp-1 text-base">{cert.course?.title}</CardTitle>
+                      <CardTitle className="line-clamp-1 text-lg sm:text-lg">
+                        {cert.course?.title}
+                      </CardTitle>
                       <CardDescription className="text-xs">
                         {t("issuedAt", {
                           date: new Date(cert.issuedAt).toLocaleDateString(),

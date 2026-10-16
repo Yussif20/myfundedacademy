@@ -600,6 +600,11 @@
       "instructor": "Try as instructor",
       "admin": "Admin (read-only)",
       "or": "or sign in with email"
+    },
+    "panel": {
+      "eyebrow": "Nibras · نبراس",
+      "line": "Learn from people who do the work.",
+      "sub": "Short video courses in English and Arabic. Watch at your own pace and earn a certificate you can share."
     }
   },
   "account": {

@@ -116,10 +116,10 @@ export default function SignupPage() {
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="justify-center text-sm text-[var(--muted-foreground)]">
+      <CardFooter className="justify-center text-sm text-muted-foreground">
         <span>
           {t("haveAccount")}{" "}
-          <Link href="/login" className="text-[var(--primary)] hover:underline">
+          <Link href="/login" className="text-primary hover:underline">
             {t("signInLink")}
           </Link>
         </span>

@@ -34,10 +34,12 @@ export default function CheckEmailPage() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <div className="mx-auto grid size-12 place-items-center rounded-full bg-[var(--primary)]/10 text-[var(--primary)]">
+        <div className="mx-auto grid size-12 place-items-center rounded-full border border-border bg-card text-primary">
           <Mail className="size-6" />
         </div>
-        <CardTitle className="mt-2">{t("checkEmail.title")}</CardTitle>
+        <CardTitle className="mt-5 font-display text-2xl font-medium">
+          {t("checkEmail.title")}
+        </CardTitle>
         <CardDescription>{t("checkEmail.body")}</CardDescription>
       </CardHeader>
       <CardContent>
@@ -54,12 +56,12 @@ export default function CheckEmailPage() {
             />
           </div>
           {done && (
-            <p className="rounded-md bg-[var(--primary)]/10 px-3 py-2 text-sm text-[var(--primary)]">
+            <p className="rounded-lg border border-primary/30 bg-primary/8 px-3 py-2 text-sm text-primary">
               {t("resend.done")}
             </p>
           )}
           {error && (
-            <p className="rounded-md bg-[var(--destructive)]/10 px-3 py-2 text-sm text-[var(--destructive)]">
+            <p className="rounded-lg border border-destructive/30 bg-destructive/8 px-3 py-2 text-sm text-destructive">
               {error}
             </p>
           )}

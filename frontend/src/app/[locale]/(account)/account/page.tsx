@@ -94,7 +94,7 @@ export default function AccountPage() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">{t("title")}</h1>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
         <Button variant="outline" onClick={onLogout} className="gap-2 self-start sm:self-auto">
           <LogOut className="size-4" /> {tNav("signOut")}
         </Button>

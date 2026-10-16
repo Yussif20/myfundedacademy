@@ -8,8 +8,8 @@ import { Link } from "@/i18n/navigation";
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
   return (
     <AuthGuard roles={["STUDENT"]}>
-      <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
-        <header className="border-b border-[var(--border)] bg-[var(--card)]/50 backdrop-blur">
+      <main className="min-h-screen bg-background text-foreground">
+        <header className="border-b border-border">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
             <Link href="/" aria-label="Home">
               <Wordmark />
@@ -20,7 +20,7 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
             </div>
           </div>
         </header>
-        <section className="mx-auto max-w-3xl px-6 py-10">
+        <section className="mx-auto max-w-3xl px-6 py-12 md:py-16">
           <AccountSubNav />
           {children}
         </section>

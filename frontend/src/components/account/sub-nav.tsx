@@ -18,18 +18,19 @@ export function AccountSubNav() {
   const pathname = usePathname();
   const t = useTranslations("accountNav");
   return (
-    <nav className="mask-fade-edges mb-8 flex gap-1 overflow-x-auto rounded-lg border border-[var(--border)] bg-[var(--card)] p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <nav className="mb-10 flex w-fit max-w-full gap-1 overflow-x-auto rounded-full border border-border bg-card p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {items.map((it) => {
         const active = pathname === it.href;
         return (
           <Link
             key={it.href}
             href={it.href}
+            aria-current={active ? "page" : undefined}
             className={cn(
-              "rounded-md px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors sm:text-sm",
+              "rounded-full px-4 py-1.5 text-xs font-medium whitespace-nowrap transition-colors sm:text-sm",
               active
-                ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
-                : "text-[var(--muted-foreground)] hover:bg-[var(--secondary)] hover:text-[var(--foreground)]",
+                ? "bg-foreground text-background"
+                : "text-muted-foreground hover:bg-paper-2 hover:text-foreground",
             )}
           >
             {t(it.key)}
