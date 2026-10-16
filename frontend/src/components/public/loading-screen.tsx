@@ -1,55 +1,15 @@
-"use client";
-
 import { Wordmark } from "@/components/brand/wordmark";
-import { motion, useReducedMotion } from "framer-motion";
 
+/** Full-screen wait state: the wordmark over paper with one quiet hairline sweep. */
 export function LoadingScreen({ caption }: { caption?: string }) {
-  const reduced = useReducedMotion();
-
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-[var(--background)]">
-      {/* Soft brand glow */}
-      <div className="relative flex flex-col items-center gap-5">
-        <motion.div
-          animate={
-            reduced
-              ? {}
-              : {
-                  scale: [1, 1.03, 1],
-                  opacity: [0.85, 1, 0.85],
-                }
-          }
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Wordmark height={48} />
-        </motion.div>
-        <div className="flex items-center gap-1.5">
-          {[0, 1, 2].map((i) => (
-            <motion.span
-              key={i}
-              animate={
-                reduced
-                  ? {}
-                  : {
-                      y: [0, -6, 0],
-                      opacity: [0.4, 1, 0.4],
-                    }
-              }
-              transition={{
-                duration: 1,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: i * 0.15,
-              }}
-              className="size-1.5 rounded-full bg-[var(--primary)]"
-            />
-          ))}
+    <div className="fixed inset-0 z-50 grid place-items-center bg-background" role="status">
+      <div className="flex flex-col items-center gap-6">
+        <Wordmark height={44} />
+        <div className="relative h-px w-32 overflow-hidden bg-border">
+          <span className="loading-sweep absolute inset-y-0 start-0 w-1/3 bg-gold" />
         </div>
-        {caption && (
-          <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
-            {caption}
-          </p>
-        )}
+        {caption && <p className="text-sm text-muted-foreground">{caption}</p>}
       </div>
     </div>
   );

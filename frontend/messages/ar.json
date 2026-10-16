@@ -94,7 +94,12 @@
     "curriculum": "المنهج",
     "aboutInstructor": "عن المدرب",
     "previewLessonNote": "اضغط تشغيل لمعاينة الدرس — بدون تسجيل.",
-    "previewError": "تعذّر تحميل المعاينة الآن."
+    "previewError": "تعذّر تحميل المعاينة الآن.",
+    "notFound": "لم نعثر على هذه الدورة.",
+    "free": "مجاني",
+    "redirecting": "جارٍ التحويل…",
+    "noCurriculum": "المنهج قيد الإعداد.",
+    "noLessons": "لا توجد دروس بعد."
   },
   "instructorsPage": {
     "title": "المدربون",
@@ -690,7 +695,8 @@
     "scoreLine": "حصلت على {score}% — نسبة النجاح هي {passing}%.",
     "correctOf": "{correct} إجابة صحيحة من {total}.",
     "getCertificate": "احصل على الشهادة",
-    "retake": "إعادة الاختبار"
+    "retake": "إعادة الاختبار",
+    "answered": "تمت الإجابة"
   },
   "certPage": {
     "earnTitle": "احصل على شهادتك",
@@ -731,7 +737,8 @@
     "leave": "اكتب تقييماً",
     "noneYet": "لا توجد تقييمات بعد. كن أول من يشاركنا رأيه.",
     "reviewsCount": "{count, plural, =1 {تقييم واحد} =2 {تقييمان} other {{count} تقييماً}}",
-    "showingNOf": "عرض {shown} من {total} تقييم"
+    "showingNOf": "عرض {shown} من {total} تقييم",
+    "anonymous": "طالب"
   },
   "verifyPage": {
     "verified": "تم التحقق من الشهادة",
@@ -742,7 +749,9 @@
     "issuedOnDate": "صادرة في {date}",
     "browseCourses": "تصفّح دوراتنا",
     "notFoundBlurb": "تعذّر العثور على شهادة بهذا الرمز. ربما أُدخل خطأً أو تم إلغاؤها.",
-    "backToHome": "العودة للرئيسية"
+    "backToHome": "العودة للرئيسية",
+    "share": "مشاركة",
+    "linkCopied": "تم نسخ الرابط"
   },
   "checkout": {
     "confirming": "جارٍ تأكيد الدفع…",

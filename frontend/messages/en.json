@@ -94,7 +94,12 @@
     "curriculum": "Curriculum",
     "aboutInstructor": "About the instructor",
     "previewLessonNote": "Click play to preview this lesson — no signup needed.",
-    "previewError": "Couldn't load preview right now."
+    "previewError": "Couldn't load preview right now.",
+    "notFound": "We couldn't find this course.",
+    "free": "Free",
+    "redirecting": "Redirecting…",
+    "noCurriculum": "The curriculum is still being written.",
+    "noLessons": "No lessons yet."
   },
   "instructorsPage": {
     "title": "Instructors",
@@ -690,7 +695,8 @@
     "scoreLine": "You scored {score}% — passing score is {passing}%.",
     "correctOf": "{correct} correct out of {total}.",
     "getCertificate": "Get certificate",
-    "retake": "Retake quiz"
+    "retake": "Retake quiz",
+    "answered": "Answered"
   },
   "certPage": {
     "earnTitle": "Earn your certificate",
@@ -731,7 +737,8 @@
     "leave": "Leave a review",
     "noneYet": "No reviews yet. Be the first to share what you thought.",
     "reviewsCount": "{count, plural, =1 {1 review} other {{count} reviews}}",
-    "showingNOf": "Showing {shown} of {total} reviews"
+    "showingNOf": "Showing {shown} of {total} reviews",
+    "anonymous": "Student"
   },
   "verifyPage": {
     "verified": "Certificate verified",
@@ -742,7 +749,9 @@
     "issuedOnDate": "Issued on {date}",
     "browseCourses": "Browse our courses",
     "notFoundBlurb": "We couldn't find a certificate with that code. It may have been mistyped or revoked.",
-    "backToHome": "Back to home"
+    "backToHome": "Back to home",
+    "share": "Share",
+    "linkCopied": "Link copied"
   },
   "checkout": {
     "confirming": "Confirming your payment…",

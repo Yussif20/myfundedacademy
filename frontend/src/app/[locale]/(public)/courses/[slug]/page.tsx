@@ -1,6 +1,5 @@
 "use client";
 
-import { ScrollReveal } from "@/components/motion";
 import { ReviewsSection } from "@/components/public/reviews-section";
 import { StarRating } from "@/components/public/star-rating";
 import { StickyCourseCta } from "@/components/public/sticky-course-cta";
@@ -9,6 +8,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Eyebrow } from "@/components/ui/eyebrow";
+import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
 import { extractApiError } from "@/lib/errors";
 import {
@@ -20,8 +21,7 @@ import {
 } from "@/redux/api/coursesApi";
 import { useCheckoutCourseMutation } from "@/redux/api/paymentsApi";
 import { useAppSelector } from "@/redux/store";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { BookOpen, ChevronDown, Clock, Globe, Loader2, PlayCircle, Star } from "lucide-react";
+import { ArrowRight, BookOpen, ChevronDown, Clock, Globe, Loader2, PlayCircle } from "lucide-react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
@@ -36,6 +36,7 @@ export default function CourseDetailPage() {
   const t = useTranslations("courseDetail");
   const tField = useTranslations("admin.fields");
   const tReviews = useTranslations("reviewsSection");
+  const tHome = useTranslations("home");
 
   const { data, isLoading, isError } = useGetCourseQuery(slug, { skip: !slug });
   const course = data?.data;
@@ -55,18 +56,20 @@ export default function CourseDetailPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-[var(--primary)]" />
+        <Loader2 className="size-6 animate-spin text-primary" aria-hidden />
       </div>
     );
   }
 
   if (isError || !course) {
     return (
-      <div className="mx-auto max-w-3xl px-6 py-20 text-center">
-        <h1 className="font-display text-3xl font-bold">404</h1>
-        <p className="mt-2 text-[var(--muted-foreground)]">Course not found.</p>
-        <Button asChild className="mt-6">
-          <Link href="/courses">Browse all courses</Link>
+      <div className="mx-auto max-w-xl px-6 py-24 text-center">
+        <p className="font-display text-2xl">{t("notFound")}</p>
+        <Button asChild variant="outline" className="mt-8">
+          <Link href="/courses">
+            {tHome("browseAll")}
+            <ArrowRight className="size-4 rtl:rotate-180" aria-hidden />
+          </Link>
         </Button>
       </div>
     );
@@ -87,68 +90,47 @@ export default function CourseDetailPage() {
       : `${totalMinutes || 0}m`;
 
   return (
-    <div className="relative">
-      {/* Hero accent gradient */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[500px] opacity-50"
-        style={{
-          background:
-            "radial-gradient(ellipse at top right, color-mix(in oklch, var(--primary) 30%, transparent), transparent 60%)",
-        }}
-      />
-
+    <div>
       {/* Hero */}
-      <section className="relative border-b border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_30%,transparent)]">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[1fr_400px]">
-          <ScrollReveal>
-            <div className="flex items-center gap-2 text-sm">
-              {course.category && (
+      <section className="border-b border-border">
+        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-14 md:py-20 lg:grid-cols-[1fr_400px]">
+          <Reveal>
+            <Eyebrow>
+              {course.category ? (
                 <Link
                   href={{ pathname: `/categories/${course.category.slug}` }}
-                  className="text-[var(--primary)] hover:underline"
+                  className="hover:text-primary"
                 >
                   {(isAr && course.category.nameArabic) || course.category.name}
                 </Link>
+              ) : (
+                tField(`level.${course.level}`)
               )}
-              <span className="text-[var(--muted-foreground)]">·</span>
-              <Badge variant="outline">{tField(`level.${course.level}`)}</Badge>
-              {course.isFeatured && (
-                <Badge variant="warning">
-                  <Star className="size-3 fill-current" />
-                </Badge>
-              )}
-            </div>
+            </Eyebrow>
 
-            <h1 className="font-display mt-4 text-balance text-4xl font-bold leading-tight tracking-tight md:text-5xl">
+            <h1 className="mt-6 font-display text-4xl font-medium leading-[1.1] tracking-tight text-balance md:text-5xl">
               {title}
             </h1>
             {shortDesc && (
-              <p className="mt-4 text-lg text-[var(--muted-foreground)]">{shortDesc}</p>
+              <p className="mt-5 text-lg leading-8 text-muted-foreground">{shortDesc}</p>
             )}
 
             {(course.reviewCount ?? 0) > 0 && (
               <div className="mt-3 flex items-center gap-2">
                 <StarRating value={course.averageRating ?? 0} size={16} />
-                <span className="text-sm text-[var(--muted-foreground)]">
+                <span className="text-sm text-muted-foreground">
                   {(course.averageRating ?? 0).toFixed(1)} ·{" "}
                   {tReviews("reviewsCount", { count: course.reviewCount ?? 0 })}
                 </span>
               </div>
             )}
 
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-[var(--muted-foreground)]">
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2">
-                <span
-                  className="grid size-7 place-items-center rounded-full text-xs font-semibold text-[var(--primary)]"
-                  style={{
-                    background: "color-mix(in oklch, var(--primary) 15%, transparent)",
-                    border: "1px solid color-mix(in oklch, var(--primary) 25%, transparent)",
-                  }}
-                >
+                <span className="grid size-7 place-items-center rounded-full border border-border bg-card font-display text-sm text-primary">
                   {instructorName.charAt(0)}
                 </span>
-                {t("by")} <span className="text-[var(--foreground)]">{instructorName}</span>
+                {t("by")} <span className="text-foreground">{instructorName}</span>
               </span>
               <span className="inline-flex items-center gap-2">
                 <BookOpen className="size-4" />
@@ -159,18 +141,19 @@ export default function CourseDetailPage() {
                 {t("duration", { duration: durationLabel })}
               </span>
               <span className="inline-flex items-center gap-2">
-                <Globe className="size-4" />
+                <Globe className="size-4" aria-hidden />
                 {tField(`language.${course.language}`)}
               </span>
+              <span>{tField(`level.${course.level}`)}</span>
             </div>
-          </ScrollReveal>
+          </Reveal>
 
           {/* Right rail */}
           <div ref={inlineCtaRef} className="space-y-4">
             {previewLesson ? (
               <PreviewPlayer lesson={previewLesson} thumbnail={course.thumbnail} />
             ) : course.thumbnail ? (
-              <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[var(--border)]">
+              <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border">
                 <Image
                   src={course.thumbnail}
                   alt={title}
@@ -182,19 +165,19 @@ export default function CourseDetailPage() {
               </div>
             ) : null}
 
-            <Card className="overflow-hidden border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_85%,transparent)] backdrop-blur">
-              <CardContent className="space-y-4 p-6">
-                <div className="flex items-baseline justify-between">
+            <Card className="overflow-hidden">
+              <CardContent className="space-y-4 p-6 sm:p-6">
+                <div className="flex items-baseline justify-between border-b border-border pb-5">
                   {course.oneTimePrice > 0 ? (
                     <>
-                      <span className="font-display text-3xl font-bold">
+                      <span className="font-display text-4xl font-light tabular-nums" dir="ltr">
                         ${course.oneTimePrice.toFixed(2)}
                       </span>
-                      <Badge variant="secondary">{tField(`tier.${course.accessTier}`)}</Badge>
+                      <Badge variant="gold">{tField(`tier.${course.accessTier}`)}</Badge>
                     </>
                   ) : (
-                    <span className="font-display text-2xl font-bold text-[var(--primary)]">
-                      Free
+                    <span className="font-display text-3xl font-light text-primary">
+                      {t("free")}
                     </span>
                   )}
                 </div>
@@ -212,29 +195,29 @@ export default function CourseDetailPage() {
       </section>
 
       {/* Body */}
-      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-6 sm:py-12 lg:grid-cols-[1fr_360px]">
-        <div className="space-y-12">
+      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-[1fr_360px]">
+        <div className="space-y-16">
           {longDesc && (
-            <ScrollReveal>
-              <div>
-                <h2 className="font-display text-2xl font-bold tracking-tight">
-                  {t("whatYouLearn")}
-                </h2>
-                <div className="prose prose-invert mt-4 max-w-none text-[var(--muted-foreground)]">
-                  {longDesc.split("\n").map((line, i) => (
-                    <p key={i} className="mb-3 leading-relaxed">
-                      {line}
-                    </p>
-                  ))}
-                </div>
+            <Reveal>
+              <h2 className="font-display text-3xl font-medium tracking-tight">
+                {t("whatYouLearn")}
+              </h2>
+              <div className="mt-5 max-w-2xl">
+                {longDesc.split("\n").map((line, i) => (
+                  <p key={i} className="mb-4 text-[17px] leading-8 text-foreground/85">
+                    {line}
+                  </p>
+                ))}
               </div>
-            </ScrollReveal>
+            </Reveal>
           )}
 
-          <ScrollReveal>
+          <Reveal>
             <div>
-              <h2 className="font-display text-2xl font-bold tracking-tight">{t("curriculum")}</h2>
-              <div className="mt-4 space-y-3">
+              <h2 className="font-display text-3xl font-medium tracking-tight">
+                {t("curriculum")}
+              </h2>
+              <div className="mt-6 space-y-3">
                 {course.sections.map((section, i) => (
                   <SectionRow
                     key={section.id}
@@ -244,48 +227,46 @@ export default function CourseDetailPage() {
                   />
                 ))}
                 {course.sections.length === 0 && (
-                  <p className="rounded-md border border-dashed border-[var(--border)] py-6 text-center text-sm text-[var(--muted-foreground)]">
-                    Curriculum not finalized yet.
+                  <p className="rounded-xl border border-dashed border-rule-strong/50 py-8 text-center text-sm text-muted-foreground">
+                    {t("noCurriculum")}
                   </p>
                 )}
               </div>
             </div>
-          </ScrollReveal>
+          </Reveal>
         </div>
 
         {/* Instructor sidebar */}
         <aside className="space-y-4">
-          <ScrollReveal>
-            <h3 className="font-display text-xl font-bold tracking-tight">
+          <Reveal>
+            <h3 className="font-display text-2xl font-medium tracking-tight">
               {t("aboutInstructor")}
             </h3>
-            <Card className="mt-4">
-              <CardContent className="p-6">
+            <Card className="mt-6">
+              <CardContent className="p-6 sm:p-6">
                 <div className="flex items-start gap-4">
-                  <div className="grid size-14 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[var(--primary)]/30 to-[var(--accent)]/20 font-display text-lg font-semibold text-[var(--primary)]">
+                  <div className="grid size-14 shrink-0 place-items-center rounded-full border border-border bg-paper-2 font-display text-xl text-primary">
                     {instructorName.charAt(0)}
                   </div>
                   <div className="min-w-0">
                     <Link
                       href={{ pathname: `/instructors/${course.instructor.id}` }}
-                      className="font-medium hover:text-[var(--primary)]"
+                      className="font-display text-lg hover:text-primary"
                     >
                       {instructorName}
                     </Link>
                     {instructorHeadline && (
-                      <p className="mt-1 text-sm text-[var(--muted-foreground)]">
-                        {instructorHeadline}
-                      </p>
+                      <p className="mt-1 text-sm text-muted-foreground">{instructorHeadline}</p>
                     )}
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </ScrollReveal>
+          </Reveal>
         </aside>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-16">
+      <section className="mx-auto max-w-7xl px-6 pb-24">
         <ReviewsSection slug={course.slug} viewerHasAccess={Boolean(course.viewerHasAccess)} />
       </section>
 
@@ -336,7 +317,7 @@ function PurchaseCta({ course, loggedIn }: { course: CourseDetail; loggedIn: boo
     return (
       <>
         <Button className="w-full " size="lg" disabled={isLoading} onClick={handleBuy}>
-          {isLoading ? "Redirecting…" : t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}
+          {isLoading ? t("redirecting") : t("enrollNow", { price: course.oneTimePrice.toFixed(2) })}
         </Button>
         {error && (
           <Alert variant="destructive">
@@ -372,7 +353,6 @@ function SectionRow({
 }) {
   const t = useTranslations("courseDetail");
   const [open, setOpen] = useState(defaultOpen);
-  const reduced = useReducedMotion();
 
   const totalDuration = section.lessons.reduce(
     (acc: number, l: Lesson) => acc + (l.durationMin || 0),
@@ -380,60 +360,49 @@ function SectionRow({
   );
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_70%,transparent)] backdrop-blur transition-colors hover:border-[color-mix(in_oklch,var(--primary)_30%,transparent)]">
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center gap-3 px-5 py-4 text-start transition-colors hover:bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]"
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 px-5 py-4 text-start transition-colors hover:bg-paper-2/60"
       >
-        <motion.span
-          animate={{ rotate: open ? 0 : -90 }}
-          transition={{ type: "spring", stiffness: 380, damping: 28 }}
-          className="grid size-6 shrink-0 place-items-center"
-        >
-          <ChevronDown className="size-4 text-[var(--muted-foreground)]" />
-        </motion.span>
-        <div className="flex-1">
-          <p className="font-medium">{(isAr && section.titleArabic) || section.title}</p>
-        </div>
-        <span className="text-xs text-[var(--muted-foreground)]">
+        <ChevronDown
+          className={`size-4 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? "" : "-rotate-90 rtl:rotate-90"}`}
+          aria-hidden
+        />
+        <p className="flex-1 font-display text-lg">
+          {(isAr && section.titleArabic) || section.title}
+        </p>
+        <span className="text-xs tabular-nums text-muted-foreground" dir="ltr">
           {section.lessons.length} · {totalDuration}m
         </span>
       </button>
 
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-            animate={reduced ? { opacity: 1 } : { height: "auto", opacity: 1 }}
-            exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden"
-          >
-            <ul className="divide-y divide-[color-mix(in_oklch,var(--border)_50%,transparent)] border-t border-[color-mix(in_oklch,var(--border)_50%,transparent)]">
-              {section.lessons.map((l: Lesson, idx: number) => (
-                <li
-                  key={l.id}
-                  className="flex items-center gap-3 px-5 py-3 text-sm transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_4%,transparent)]"
-                >
-                  <PlayCircle className="size-4 shrink-0 text-[var(--muted-foreground)]" />
-                  <span className="flex-1 truncate">
-                    <span className="text-[var(--muted-foreground)]">{idx + 1}. </span>
-                    {(isAr && l.titleArabic) || l.title}
+      {open && (
+        <div>
+          <ul className="divide-y divide-border border-t border-border">
+            {section.lessons.map((l: Lesson, idx: number) => (
+              <li key={l.id} className="flex items-center gap-3 px-5 py-3 text-sm">
+                <PlayCircle className="size-4 shrink-0 text-rule-strong" aria-hidden />
+                <span className="flex-1 truncate">
+                  <span className="text-muted-foreground">{idx + 1}. </span>
+                  {(isAr && l.titleArabic) || l.title}
+                </span>
+                {l.isFreePreview && <Badge variant="default">{t("freePreview")}</Badge>}
+                {l.durationMin > 0 && (
+                  <span className="text-xs tabular-nums text-muted-foreground" dir="ltr">
+                    {l.durationMin}m
                   </span>
-                  {l.isFreePreview && <Badge variant="success">{t("freePreview")}</Badge>}
-                  {l.durationMin > 0 && (
-                    <span className="text-xs text-[var(--muted-foreground)]">{l.durationMin}m</span>
-                  )}
-                </li>
-              ))}
-              {section.lessons.length === 0 && (
-                <li className="px-5 py-3 text-sm text-[var(--muted-foreground)]">No lessons.</li>
-              )}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                )}
+              </li>
+            ))}
+            {section.lessons.length === 0 && (
+              <li className="px-5 py-3 text-sm text-muted-foreground">{t("noLessons")}</li>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -472,9 +441,9 @@ function PreviewPlayer({ lesson, thumbnail }: { lesson: Lesson; thumbnail: strin
         title={lesson.title}
         onActivate={onActivate}
       />
-      <div className="flex items-center justify-between text-xs text-[var(--muted-foreground)]">
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1">
-          <Badge variant="success">{t("freePreview")}</Badge>
+          <Badge variant="default">{t("freePreview")}</Badge>
           <span>{lesson.title}</span>
         </span>
       </div>

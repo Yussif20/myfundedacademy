@@ -30,17 +30,13 @@ export function StarRating({ value, size = 16, className, onChange }: Props) {
             onClick={() => onChange?.(s)}
             className={cn(
               "transition-transform",
-              interactive ? "cursor-pointer hover:scale-110" : "cursor-default",
+              interactive ? "cursor-pointer hover:scale-105" : "cursor-default",
             )}
             aria-label={`${s} ${s === 1 ? "star" : "stars"}`}
           >
             <Star
               style={{ width: size, height: size }}
-              className={cn(
-                display
-                  ? "fill-[var(--accent)] text-[var(--accent)]"
-                  : "fill-none text-[var(--muted-foreground)]",
-              )}
+              className={cn(display ? "fill-gold text-gold" : "fill-none text-rule-strong")}
             />
           </button>
         );

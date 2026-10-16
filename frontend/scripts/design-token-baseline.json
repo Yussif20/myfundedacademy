@@ -1,9 +1,9 @@
 {
-  "total": 171,
+  "total": 86,
   "counts": {
-    "hex": 37,
-    "colorFn": 4,
-    "colorMix": 104,
-    "palette": 26
+    "hex": 15,
+    "colorFn": 1,
+    "colorMix": 58,
+    "palette": 12
   }
 }
