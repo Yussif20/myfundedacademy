@@ -1,14 +1,16 @@
 "use client";
 
-import { ScrollReveal } from "@/components/motion";
+import { CategoryIcon } from "@/components/public/category-icon";
+import { Reveal } from "@/components/ui/reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { Link } from "@/i18n/navigation";
 import { useListCategoriesQuery } from "@/redux/api/categoriesApi";
+import { ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 export function CategoriesSection() {
   const t = useTranslations("home");
-  const locale = useLocale();
-  const isAr = locale === "ar";
+  const isAr = useLocale() === "ar";
 
   const { data: categoriesRes } = useListCategoriesQuery({ featured: true });
   const categories = categoriesRes?.data || [];
@@ -16,36 +18,43 @@ export function CategoriesSection() {
   if (categories.length === 0) return null;
 
   return (
-    <section className="relative py-20">
+    <section className="bg-paper-2/60 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
-        <ScrollReveal>
-          <div className="mb-10 max-w-2xl">
-            <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
-              {t("categories")}
-            </h2>
-            <p className="mt-2 text-[var(--muted-foreground)]">{t("categoriesSub")}</p>
-          </div>
-        </ScrollReveal>
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <Reveal>
+          <SectionHeading
+            eyebrow={t("eyebrows.categories")}
+            title={t("categories")}
+            lead={t("categoriesSub")}
+          />
+        </Reveal>
+        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((cat, i) => (
-            <ScrollReveal key={cat.id} delay={i * 0.05} amount={0.2}>
+            <Reveal as="li" key={cat.id} delay={(i % 3) * 80}>
               <Link
                 href={{ pathname: `/categories/${cat.slug}` }}
-                className="group relative flex h-full items-center gap-4 overflow-hidden rounded-xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_70%,transparent)] p-5 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-[color-mix(in_oklch,var(--primary)_45%,transparent)]"
+                className="group flex h-full items-center gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/40"
               >
-                <span className="relative text-3xl">{cat.icon || "📚"}</span>
-                <div className="relative">
-                  <p className="font-semibold">{(isAr && cat.nameArabic) || cat.name}</p>
+                <span className="grid size-11 shrink-0 place-items-center rounded-lg border border-border bg-background text-primary">
+                  <CategoryIcon icon={cat.icon} />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-display text-lg leading-tight">
+                    {(isAr && cat.nameArabic) || cat.name}
+                  </span>
                   {(cat.description || cat.descriptionArabic) && (
-                    <p className="line-clamp-1 text-xs text-[var(--muted-foreground)]">
+                    <span className="mt-1 line-clamp-1 text-sm text-muted-foreground">
                       {(isAr && cat.descriptionArabic) || cat.description}
-                    </p>
+                    </span>
                   )}
-                </div>
+                </span>
+                <ArrowRight
+                  className="size-4 shrink-0 text-rule-strong transition-transform group-hover:translate-x-0.5 group-hover:text-primary rtl:rotate-180 rtl:group-hover:-translate-x-0.5"
+                  aria-hidden
+                />
               </Link>
-            </ScrollReveal>
+            </Reveal>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

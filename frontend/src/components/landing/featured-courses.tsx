@@ -1,9 +1,10 @@
 "use client";
 
-import { ScrollReveal } from "@/components/motion";
 import { CourseCard } from "@/components/public/course-card";
-import { ShimmerCard } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/ui/reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { ShimmerCard } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/navigation";
 import { useListCoursesQuery } from "@/redux/api/coursesApi";
 import { ArrowRight } from "lucide-react";
@@ -15,50 +16,47 @@ export function FeaturedCourses() {
   const { data: featuredRes, isLoading } = useListCoursesQuery({ featured: true, limit: 6 });
   const { data: allRes } = useListCoursesQuery({ limit: 6 });
 
-  const courses =
-    (featuredRes?.data?.data?.length ? featuredRes.data.data : allRes?.data?.data) || [];
+  // Three cards make one clean row on desktop.
+  const courses = (
+    (featuredRes?.data?.data?.length ? featuredRes.data.data : allRes?.data?.data) || []
+  ).slice(0, 3);
 
   return (
-    <section className="relative py-20">
+    <section className="py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
-        <ScrollReveal>
-          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
-                {t("featuredCourses")}
-              </h2>
-              <p className="mt-2 max-w-xl text-[var(--muted-foreground)]">
-                {t("featuredCoursesSub")}
-              </p>
-            </div>
-            <Button asChild variant="outline" className="self-start gap-2 sm:self-auto">
-              <Link href="/courses">
-                {t("browseAll")}
-                <ArrowRight className="size-4 rtl:rotate-180" />
-              </Link>
-            </Button>
-          </div>
-        </ScrollReveal>
+        <Reveal>
+          <SectionHeading
+            eyebrow={t("eyebrows.featured")}
+            title={t("featuredCourses")}
+            lead={t("featuredCoursesSub")}
+            action={
+              <Button asChild variant="outline">
+                <Link href="/courses">
+                  {t("browseAll")}
+                  <ArrowRight className="size-4 rtl:rotate-180" aria-hidden />
+                </Link>
+              </Button>
+            }
+          />
+        </Reveal>
 
-        {isLoading ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <ShimmerCard key={i} />
-            ))}
-          </div>
-        ) : courses.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-[var(--border)] py-16 text-center text-sm text-[var(--muted-foreground)]">
-            No published courses yet — admin can add some at /admin/courses.
-          </p>
-        ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {courses.map((c, i) => (
-              <ScrollReveal key={c.id} delay={i * 0.06} amount={0.2}>
-                <CourseCard course={c} />
-              </ScrollReveal>
-            ))}
-          </div>
-        )}
+        <div className="mt-12">
+          {isLoading ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <ShimmerCard key={i} />
+              ))}
+            </div>
+          ) : courses.length === 0 ? null : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {courses.map((c, i) => (
+                <Reveal key={c.id} delay={(i % 3) * 80}>
+                  <CourseCard course={c} />
+                </Reveal>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

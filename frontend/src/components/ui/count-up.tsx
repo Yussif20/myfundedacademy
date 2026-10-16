@@ -1,11 +1,10 @@
 "use client";
 
-import { useLocale } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 /**
  * Counts from 0 to `value` once it scrolls into view (easeOutCubic, 1.4s).
- * Renders the final value on the server and under reduced motion.
+ * Renders the final value on the server and under reduced motion. Latin digits in both languages.
  */
 export function CountUp({
   value,
@@ -18,10 +17,10 @@ export function CountUp({
   duration?: number;
   className?: string;
 }) {
-  const locale = useLocale();
   const ref = useRef<HTMLSpanElement>(null);
   const [shown, setShown] = useState(value);
-  const fmt = new Intl.NumberFormat(locale === "ar" ? "ar-EG" : "en-US");
+  // Latin digits in both languages, to match prices and durations elsewhere.
+  const fmt = new Intl.NumberFormat("en-US");
 
   useEffect(() => {
     const el = ref.current;

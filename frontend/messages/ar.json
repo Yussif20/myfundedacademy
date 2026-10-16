@@ -46,7 +46,17 @@
     "featuredInstructorsSub": "ممارسون يعلّمون ما يعملون به كل يوم.",
     "ctaTitle": "كفى تأجيلاً. ابدأ التعلّم.",
     "ctaSubtitle": "احصل على وصول فوري لدورات فيديو واختبارات وشهادات يمكنك مشاركتها.",
-    "ctaButton": "أنشئ حساباً مجانياً"
+    "ctaButton": "أنشئ حساباً مجانياً",
+    "eyebrows": {
+      "topics": "في المكتبة",
+      "steps": "كيف تعمل",
+      "featured": "مختارة",
+      "categories": "المواضيع",
+      "instructors": "المدرّبون",
+      "stories": "قصص المتعلّمين",
+      "cta": "ابدأ اليوم"
+    },
+    "step": "الخطوة"
   },
   "catalog": {
     "title": "كل الدورات",
@@ -58,14 +68,16 @@
       "tier": "الباقة",
       "all": "الكل",
       "search": "ابحث في الدورات…",
-      "clear": "مسح المرشحات"
+      "clear": "مسح المرشحات",
+      "active": "الفلاتر الحالية"
     },
     "noResults": "لا توجد دورات تطابق المرشحات.",
     "loading": "جارٍ تحميل الدورات…",
     "showingResults": "{count} دورة",
     "page": "صفحة {page} من {total}",
     "prev": "السابق",
-    "next": "التالي"
+    "next": "التالي",
+    "eyebrow": "الفهرس"
   },
   "courseDetail": {
     "by": "تقديم",
@@ -90,7 +102,9 @@
     "noInstructors": "لا يوجد مدربون مدرجون بعد.",
     "coursesByInstructor": "دورات {name}",
     "noCoursesByInstructor": "لم ينشر هذا المدرب أي دورات بعد.",
-    "expertise": "الخبرة"
+    "expertise": "الخبرة",
+    "notFound": "لم نعثر على هذا المدرّب.",
+    "back": "العودة إلى المدرّبين"
   },
   "categoryPage": {
     "noCoursesInCategory": "لا توجد دورات في هذه الفئة بعد."
@@ -812,7 +826,9 @@
     },
     "yes": "متضمن",
     "no": "—",
-    "limited": "محدود"
+    "limited": "محدود",
+    "eyebrow": "الأسعار",
+    "feature": "الميزة"
   },
   "homeFeatures": {
     "drmTitle": "محمي بـ DRM",
@@ -854,5 +870,12 @@
     "browse": "تصفّح الدورات",
     "retry": "حاول مرة أخرى",
     "ref": "المرجع"
+  },
+  "cards": {
+    "subOnly": "ضمن الاشتراك",
+    "free": "مجاني",
+    "lessons": "{n} دروس",
+    "featured": "مختارة",
+    "by": "بواسطة {name}"
   }
 }

@@ -1,88 +1,63 @@
-"use client";
-
-import { ScrollReveal } from "@/components/motion";
-import { Quote, Star } from "lucide-react";
+import { Reveal } from "@/components/ui/reveal";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { showcaseTestimonials, type ShowcaseTestimonial } from "@/lib/showcase";
 import { useLocale, useTranslations } from "next-intl";
 
+/** Serif pull quotes on hairline columns, each opened by a large gold quote mark. */
 export function Testimonials() {
   const t = useTranslations("home.testimonials");
-  const locale = useLocale();
-  const isAr = locale === "ar";
+  const tHome = useTranslations("home");
+  const isAr = useLocale() === "ar";
 
   return (
-    <section className="relative py-24">
+    <section className="border-t border-border py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
-        <ScrollReveal>
-          <div className="mx-auto mb-14 max-w-2xl text-center">
-            <h2 className="font-display text-balance text-3xl font-bold tracking-tight md:text-5xl">
-              {t("title")}
-            </h2>
-            <p className="mt-4 text-[var(--muted-foreground)]">{t("subtitle")}</p>
-          </div>
-        </ScrollReveal>
+        <Reveal>
+          <SectionHeading
+            align="center"
+            eyebrow={tHome("eyebrows.stories")}
+            title={t("title")}
+            lead={t("subtitle")}
+          />
+        </Reveal>
 
-        {/* Mobile: horizontal scroll-snap carousel */}
-        <div className="mask-fade-edges -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 md:hidden">
-          {showcaseTestimonials.map((tm) => (
-            <div key={tm.name} className="w-[80%] shrink-0 snap-center">
-              <TestimonialCard testimonial={tm} isAr={isAr} />
-            </div>
-          ))}
-        </div>
-
-        {/* Desktop: 3-col grid */}
-        <div className="hidden gap-6 md:grid md:grid-cols-3">
+        <ul className="mt-16 grid gap-12 md:grid-cols-3 md:gap-0 md:divide-x md:divide-border md:rtl:divide-x-reverse">
           {showcaseTestimonials.map((tm, i) => (
-            <ScrollReveal key={tm.name} delay={i * 0.1} amount={0.3}>
-              <TestimonialCard testimonial={tm} isAr={isAr} />
-            </ScrollReveal>
+            <Reveal
+              as="li"
+              key={tm.name}
+              delay={i * 100}
+              className="md:px-10 md:first:ps-0 md:last:pe-0"
+            >
+              <Quote testimonial={tm} isAr={isAr} />
+            </Reveal>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
 }
 
-function TestimonialCard({
-  testimonial,
-  isAr,
-}: {
-  testimonial: ShowcaseTestimonial;
-  isAr: boolean;
-}) {
+function Quote({ testimonial, isAr }: { testimonial: ShowcaseTestimonial; isAr: boolean }) {
   const body = isAr ? testimonial.bodyArabic : testimonial.body;
   const name = isAr ? testimonial.nameArabic : testimonial.name;
   const role = isAr ? testimonial.roleArabic : testimonial.role;
 
   return (
-    <div className="group relative h-full">
-      <article className="bg-card border border-border relative flex h-full flex-col gap-5 rounded-2xl p-7 transition-transform duration-500 group-hover:-translate-y-1">
-        <Quote className="size-7 text-[var(--primary)] opacity-40" aria-hidden />
-        <p className="flex-1 text-[15px] leading-relaxed text-[var(--foreground)]">{body}</p>
-        <div className="flex items-center justify-between border-t border-[color-mix(in_oklch,var(--border)_60%,transparent)] pt-4">
-          <div className="flex items-center gap-3">
-            <span
-              className="grid size-10 place-items-center rounded-full font-display text-sm font-semibold text-[var(--primary)]"
-              style={{
-                background: "color-mix(in oklch, var(--primary) 15%, transparent)",
-                border: "1px solid color-mix(in oklch, var(--primary) 30%, transparent)",
-              }}
-            >
-              {testimonial.initials}
-            </span>
-            <div className="leading-tight">
-              <p className="text-sm font-semibold">{name}</p>
-              <p className="text-xs text-[var(--muted-foreground)]">{role}</p>
-            </div>
-          </div>
-          <div className="flex gap-0.5">
-            {Array.from({ length: testimonial.rating }).map((_, i) => (
-              <Star key={i} className="size-3.5 fill-[var(--accent)] text-[var(--accent)]" />
-            ))}
-          </div>
-        </div>
-      </article>
-    </div>
+    <figure className="flex h-full flex-col">
+      <span aria-hidden className="font-display text-6xl leading-none text-gold">
+        {isAr ? "”" : "“"}
+      </span>
+      <blockquote className="mt-2 flex-1 font-display text-xl leading-8 text-foreground">
+        {body}
+      </blockquote>
+      <figcaption className="mt-8 flex items-center gap-3">
+        <span className="h-px w-8 bg-gold" aria-hidden />
+        <span>
+          <span className="block text-sm font-medium">{name}</span>
+          <span className="block text-xs text-muted-foreground">{role}</span>
+        </span>
+      </figcaption>
+    </figure>
   );
 }

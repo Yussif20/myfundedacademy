@@ -46,7 +46,17 @@
     "featuredInstructorsSub": "Practitioners teaching what they do every day.",
     "ctaTitle": "Stop putting it off. Start learning.",
     "ctaSubtitle": "Get instant access to video courses, quizzes and certificates you can share.",
-    "ctaButton": "Create free account"
+    "ctaButton": "Create free account",
+    "eyebrows": {
+      "topics": "In the library",
+      "steps": "How it works",
+      "featured": "Featured",
+      "categories": "Topics",
+      "instructors": "The instructors",
+      "stories": "Learner stories",
+      "cta": "Start today"
+    },
+    "step": "Step"
   },
   "catalog": {
     "title": "All courses",
@@ -58,14 +68,16 @@
       "tier": "Access",
       "all": "All",
       "search": "Search courses…",
-      "clear": "Clear filters"
+      "clear": "Clear filters",
+      "active": "Active filters"
     },
     "noResults": "No courses match your filters yet.",
     "loading": "Loading courses…",
     "showingResults": "{count} courses",
     "page": "Page {page} of {total}",
     "prev": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "eyebrow": "Catalogue"
   },
   "courseDetail": {
     "by": "By",
@@ -90,7 +102,9 @@
     "noInstructors": "No instructors listed yet.",
     "coursesByInstructor": "Courses by {name}",
     "noCoursesByInstructor": "This instructor hasn't published any courses yet.",
-    "expertise": "Expertise"
+    "expertise": "Expertise",
+    "notFound": "We couldn't find this instructor.",
+    "back": "Back to instructors"
   },
   "categoryPage": {
     "noCoursesInCategory": "No courses in this category yet."
@@ -812,7 +826,9 @@
     },
     "yes": "Included",
     "no": "—",
-    "limited": "Limited"
+    "limited": "Limited",
+    "eyebrow": "Pricing",
+    "feature": "Feature"
   },
   "homeFeatures": {
     "drmTitle": "DRM-protected",
@@ -854,5 +870,12 @@
     "browse": "Browse courses",
     "retry": "Try again",
     "ref": "Reference"
+  },
+  "cards": {
+    "subOnly": "With a subscription",
+    "free": "Free",
+    "lessons": "{n} lessons",
+    "featured": "Featured",
+    "by": "By {name}"
   }
 }
