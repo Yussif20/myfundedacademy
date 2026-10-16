@@ -1,8 +1,8 @@
 "use client";
 
-import { animate, useInView, useReducedMotion } from "framer-motion";
+import { CountUp } from "@/components/ui/count-up";
 import { ArrowDownRight, ArrowUpRight, type LucideIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type Props = {
   label: string;
@@ -12,90 +12,40 @@ type Props = {
   Icon: LucideIcon;
   delta?: number; // percent change
   format?: "currency" | "number" | "percent";
+  /** Pre-formatted text shown instead of the counting number (e.g. a decimal rating). */
+  display?: string;
+  /** Kept for call-site compatibility; figures count up together now. */
   delay?: number;
 };
 
-export function KpiCard({
-  label,
-  value,
-  prefix,
-  suffix,
-  Icon,
-  delta,
-  format = "number",
-  delay = 0,
-}: Props) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.4 });
-  const reduced = useReducedMotion();
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    if (reduced) {
-      setDisplay(value);
-      return;
-    }
-    const controls = animate(0, value, {
-      duration: 1.4,
-      delay,
-      ease: [0.22, 1, 0.36, 1],
-      onUpdate: (v) => setDisplay(v),
-    });
-    return () => controls.stop();
-  }, [inView, reduced, value, delay]);
-
-  const formatted = (() => {
-    if (format === "currency") {
-      return display.toLocaleString(undefined, {
-        maximumFractionDigits: 0,
-        minimumFractionDigits: 0,
-      });
-    }
-    if (format === "percent") {
-      return display.toFixed(0);
-    }
-    return Math.round(display).toLocaleString();
-  })();
-
+/** A dashboard figure: eyebrow label, light serif number, optional change line. */
+export function KpiCard({ label, value, prefix, suffix, Icon, delta, display }: Props) {
+  const t = useTranslations("common");
   const deltaPositive = (delta ?? 0) >= 0;
 
   return (
-    <div
-      ref={ref}
-      className="relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_85%,transparent)] p-5 backdrop-blur transition-colors hover:border-[color-mix(in_oklch,var(--primary)_30%,transparent)]"
-    >
-      <div className="relative flex items-start justify-between">
-        <p className="text-xs font-medium uppercase tracking-[0.13em] text-[var(--muted-foreground)]">
-          {label}
-        </p>
-        <span
-          className="grid size-9 place-items-center rounded-xl text-[var(--primary)]"
-          style={{
-            background: "color-mix(in oklch, var(--primary) 12%, transparent)",
-            border: "1px solid color-mix(in oklch, var(--primary) 22%, transparent)",
-          }}
-        >
-          <Icon className="size-4" />
-        </span>
+    <div className="rounded-xl border border-border bg-card p-5">
+      <div className="flex items-start justify-between gap-3">
+        <p className="eyebrow !text-[10px]">{label}</p>
+        <Icon className="size-4 shrink-0 text-rule-strong" aria-hidden />
       </div>
-      <p className="font-display relative mt-3 text-3xl font-bold tracking-tight">
+      <p className="mt-4 font-display text-4xl font-light tabular-nums tracking-tight" dir="ltr">
         {prefix}
-        {formatted}
+        {display ?? <CountUp value={Math.round(value)} />}
         {suffix}
       </p>
       {typeof delta === "number" && (
         <p
-          className={`relative mt-1 inline-flex items-center gap-1 text-xs font-medium ${
-            deltaPositive ? "text-[var(--primary)]" : "text-[var(--destructive)]"
+          className={`mt-2 inline-flex items-center gap-1 text-xs font-medium ${
+            deltaPositive ? "text-success" : "text-destructive"
           }`}
         >
           {deltaPositive ? (
-            <ArrowUpRight className="size-3" />
+            <ArrowUpRight className="size-3" aria-hidden />
           ) : (
-            <ArrowDownRight className="size-3" />
+            <ArrowDownRight className="size-3" aria-hidden />
           )}
-          {Math.abs(delta).toFixed(1)}% vs last period
+          <span className="tabular-nums">{Math.abs(delta).toFixed(1)}%</span> {t("vsLastPeriod")}
         </p>
       )}
     </div>

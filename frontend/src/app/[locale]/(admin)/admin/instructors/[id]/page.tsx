@@ -93,7 +93,7 @@ export default function EditInstructorPage() {
   if (isLoading) {
     return (
       <div className="flex justify-center py-12">
-        <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+        <Loader2 className="size-6 animate-spin text-primary" />
       </div>
     );
   }
@@ -102,8 +102,8 @@ export default function EditInstructorPage() {
     <div className="space-y-8">
       <header className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">{t("editTitle")}</h1>
-          <p className="mt-1 text-sm text-[var(--muted-foreground)]">{data?.data?.user.email}</p>
+          <h1 className="font-display text-4xl font-medium tracking-tight">{t("editTitle")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{data?.data?.user.email}</p>
         </div>
         <Button variant="outline" onClick={() => router.push("/admin/instructors")}>
           {tCommon("back")}
@@ -256,7 +256,7 @@ function FormField({
     <div className={`space-y-2 ${wide ? "md:col-span-2" : ""}`}>
       <Label htmlFor={htmlFor}>{label}</Label>
       {children}
-      {hint && <p className="text-xs text-[var(--muted-foreground)]">{hint}</p>}
+      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }

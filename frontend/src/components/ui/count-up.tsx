@@ -24,7 +24,9 @@ export function CountUp({
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Data often arrives after mount: always land on the latest value first.
+    setShown(value);
+    if (!el || value === 0 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let raf = 0;
     const io = new IntersectionObserver(
       ([entry]) => {

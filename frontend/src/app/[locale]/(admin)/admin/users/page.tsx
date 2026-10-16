@@ -71,8 +71,8 @@ export default function AdminUsersPage() {
     <div className="space-y-8">
       <header className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+          <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+          <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
         </div>
         <Button asChild>
           <Link href="/admin/users/new" className="gap-2">
@@ -119,14 +119,12 @@ export default function AdminUsersPage() {
         <CardContent>
           {isLoading ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+              <Loader2 className="size-6 animate-spin text-primary" />
             </div>
           ) : !users.length ? (
-            <p className="py-6 text-center text-sm text-[var(--muted-foreground)]">
-              {t("noUsers")}
-            </p>
+            <p className="py-6 text-center text-sm text-muted-foreground">{t("noUsers")}</p>
           ) : (
-            <ul className="divide-y divide-[var(--border)]">
+            <ul className="divide-y divide-border">
               {users.map((u) => {
                 const isSelf = me?.id === u.id;
                 const roleBadge =
@@ -166,10 +164,8 @@ export default function AdminUsersPage() {
                           </Badge>
                         )}
                       </div>
-                      <p className="truncate text-xs text-[var(--muted-foreground)]">{u.email}</p>
-                      {u.country && (
-                        <p className="text-xs text-[var(--muted-foreground)]">{u.country}</p>
-                      )}
+                      <p className="truncate text-xs text-muted-foreground">{u.email}</p>
+                      {u.country && <p className="text-xs text-muted-foreground">{u.country}</p>}
                     </div>
                     <div className="flex shrink-0 items-center gap-1">
                       {!isSelf && (
@@ -184,9 +180,9 @@ export default function AdminUsersPage() {
                             onClick={() => toggleStatus(u)}
                           >
                             {u.status === "ACTIVE" ? (
-                              <UserX className="size-4 text-[var(--accent)]" />
+                              <UserX className="size-4 text-accent" />
                             ) : (
-                              <UserCheck className="size-4 text-[var(--primary)]" />
+                              <UserCheck className="size-4 text-primary" />
                             )}
                           </Button>
                           <Button
@@ -198,7 +194,7 @@ export default function AdminUsersPage() {
                             disabled={isDeleting}
                             onClick={() => onDelete(u)}
                           >
-                            <Trash2 className="size-4 text-[var(--destructive)]" />
+                            <Trash2 className="size-4 text-destructive" />
                           </Button>
                         </>
                       )}
@@ -210,8 +206,8 @@ export default function AdminUsersPage() {
           )}
 
           {meta && meta.totalPage > 1 && (
-            <div className="mt-4 flex items-center justify-between gap-3 border-t border-[var(--border)] pt-4">
-              <p className="text-xs text-[var(--muted-foreground)]">
+            <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
+              <p className="text-xs text-muted-foreground">
                 {t("paginationLabel", {
                   page: meta.page,
                   totalPage: meta.totalPage,

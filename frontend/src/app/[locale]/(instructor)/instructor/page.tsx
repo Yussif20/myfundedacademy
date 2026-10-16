@@ -37,10 +37,10 @@ export default function InstructorDashboardPage() {
     <div className="space-y-8">
       <header className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+          <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+          <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
         </div>
-        <span className="hidden items-center gap-1.5 rounded-full border border-[color-mix(in_oklch,var(--primary)_25%,transparent)] bg-[color-mix(in_oklch,var(--primary)_8%,transparent)] px-3 py-1 text-xs font-medium text-[var(--primary)] sm:inline-flex">
+        <span className="hidden items-center gap-1.5 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-medium text-primary sm:inline-flex">
           <Sparkles className="size-3" />
           {profile?.user.fullName || ""}
         </span>
@@ -68,8 +68,9 @@ export default function InstructorDashboardPage() {
         />
         <KpiCard
           label={t("kpiRating")}
-          value={statsLoading ? 0 : Math.round((stats?.avgRating ?? 0) * 10)}
-          suffix={` / 50`}
+          value={stats?.avgRating ?? 0}
+          display={statsLoading ? "–" : (stats?.avgRating ?? 0).toFixed(1)}
+          suffix=" / 5"
           Icon={Star}
           delay={0.3}
         />
@@ -123,20 +124,15 @@ export default function InstructorDashboardPage() {
                 }
               />
             ) : (
-              <ul className="divide-y divide-[color-mix(in_oklch,var(--border)_60%,transparent)]">
+              <ul className="divide-y divide-border">
                 {courses.slice(0, 5).map((c) => (
                   <li key={c.id} className="flex items-center gap-4 py-3">
-                    <span
-                      className="grid size-9 shrink-0 place-items-center rounded-lg text-[var(--primary)]"
-                      style={{
-                        background: "color-mix(in oklch, var(--primary) 12%, transparent)",
-                      }}
-                    >
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full text-primary border border-border bg-paper-2 font-display">
                       <BookOpen className="size-4" />
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium">{c.title}</p>
-                      <p className="text-xs text-[var(--muted-foreground)]">
+                      <p className="text-xs text-muted-foreground">
                         {c.totalLessons} lessons · {c.status}
                       </p>
                     </div>
@@ -173,26 +169,20 @@ function ActionCard({
   return (
     <Link
       href={href as Parameters<typeof Link>[0]["href"]}
-      className={`group flex items-center gap-4 rounded-xl border p-4 backdrop-blur transition-all hover:-translate-y-0.5 ${
+      className={`group flex items-center gap-4 rounded-xl border p-4 transition-all ${
         primary
-          ? "border-[color-mix(in_oklch,var(--primary)_40%,transparent)] bg-[color-mix(in_oklch,var(--primary)_10%,transparent)] hover:border-[var(--primary)]"
-          : "border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_75%,transparent)] hover:border-[color-mix(in_oklch,var(--primary)_30%,transparent)]"
+          ? "border-primary/40 bg-primary/10 hover:border-primary"
+          : "border-border bg-card hover:border-primary/30"
       }`}
     >
-      <span
-        className="grid size-10 shrink-0 place-items-center rounded-xl text-[var(--primary)]"
-        style={{
-          background: "color-mix(in oklch, var(--primary) 12%, transparent)",
-          border: "1px solid color-mix(in oklch, var(--primary) 25%, transparent)",
-        }}
-      >
+      <span className="grid size-10 shrink-0 place-items-center rounded-full text-primary border border-border bg-paper-2 font-display">
         {icon}
       </span>
       <p className="flex-1 font-medium">{title}</p>
       {external ? (
-        <ExternalLink className="size-4 text-[var(--primary)] opacity-60 transition-opacity group-hover:opacity-100" />
+        <ExternalLink className="size-4 text-primary opacity-60 transition-opacity group-hover:opacity-100" />
       ) : (
-        <ArrowRight className="size-4 text-[var(--primary)] transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+        <ArrowRight className="size-4 text-primary transition-transform group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
       )}
     </Link>
   );

@@ -57,10 +57,10 @@ export default function NewUserPage() {
     <div className="space-y-8">
       <header className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">{t("newTitle")}</h1>
-          <p className="mt-1 text-[var(--muted-foreground)]">{t("newSubtitle")}</p>
+          <h1 className="font-display text-4xl font-medium tracking-tight">{t("newTitle")}</h1>
+          <p className="mt-1 text-muted-foreground">{t("newSubtitle")}</p>
         </div>
-        <span className="hidden items-center gap-1.5 rounded-full border border-[color-mix(in_oklch,var(--accent)_30%,transparent)] bg-[color-mix(in_oklch,var(--accent)_10%,transparent)] px-3 py-1 text-xs font-medium text-[var(--accent)] sm:inline-flex">
+        <span className="hidden items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent sm:inline-flex">
           <ShieldCheck className="size-3" />
           {t("adminPrivilegeNote")}
         </span>
@@ -190,7 +190,7 @@ function Field({
     <div className={`space-y-2 ${wide ? "md:col-span-2" : ""}`}>
       <Label htmlFor={htmlFor}>{label}</Label>
       {children}
-      {hint && <p className="text-xs text-[var(--muted-foreground)]">{hint}</p>}
+      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }

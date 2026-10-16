@@ -29,8 +29,8 @@ export default function AdminInstructorsPage() {
     <div className="space-y-8">
       <header className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+          <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+          <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
         </div>
         <Button asChild>
           <Link href="/admin/instructors/new" className="gap-2">
@@ -47,14 +47,12 @@ export default function AdminInstructorsPage() {
         <CardContent>
           {isLoading ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+              <Loader2 className="size-6 animate-spin text-primary" />
             </div>
           ) : !data?.data?.length ? (
-            <p className="py-6 text-center text-sm text-[var(--muted-foreground)]">
-              {t("noInstructors")}
-            </p>
+            <p className="py-6 text-center text-sm text-muted-foreground">{t("noInstructors")}</p>
           ) : (
-            <ul className="divide-y divide-[var(--border)]">
+            <ul className="divide-y divide-border">
               {data.data.map((p) => (
                 <li key={p.id} className="flex items-center justify-between gap-4 py-3">
                   <div>
@@ -62,9 +60,9 @@ export default function AdminInstructorsPage() {
                       <span>{p.user.fullName}</span>
                       {p.isFeatured && <Badge variant="success">★</Badge>}
                     </div>
-                    <p className="text-xs text-[var(--muted-foreground)]">{p.user.email}</p>
+                    <p className="text-xs text-muted-foreground">{p.user.email}</p>
                     {p.headline && (
-                      <p className="mt-1 text-sm text-[var(--muted-foreground)]">{p.headline}</p>
+                      <p className="mt-1 text-sm text-muted-foreground">{p.headline}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-2">
@@ -80,7 +78,7 @@ export default function AdminInstructorsPage() {
                       aria-label={tCommon("delete")}
                       onClick={() => onDelete(p.id)}
                     >
-                      <Trash2 className="size-4 text-[var(--destructive)]" />
+                      <Trash2 className="size-4 text-destructive" />
                     </Button>
                   </div>
                 </li>

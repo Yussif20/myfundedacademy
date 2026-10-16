@@ -191,7 +191,7 @@ export function QuizEditor({ courseId }: { courseId: string }) {
     return (
       <Card>
         <CardContent className="flex justify-center py-12">
-          <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+          <Loader2 className="size-6 animate-spin text-primary" />
         </CardContent>
       </Card>
     );
@@ -249,18 +249,15 @@ export function QuizEditor({ courseId }: { courseId: string }) {
         </div>
 
         {questions.length === 0 ? (
-          <p className="rounded-md border border-dashed border-[var(--border)] py-8 text-center text-sm text-[var(--muted-foreground)]">
+          <p className="rounded-md border border-dashed border-border py-8 text-center text-sm text-muted-foreground">
             No questions yet. Add the first one to start.
           </p>
         ) : (
           <ul className="space-y-4">
             {questions.map((q, qi) => (
-              <li
-                key={qi}
-                className="space-y-3 rounded-lg border border-[var(--border)] bg-[var(--background)] p-4"
-              >
+              <li key={qi} className="space-y-3 rounded-lg border border-border bg-background p-4">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     Question {qi + 1}
                   </p>
                   <Button
@@ -269,7 +266,7 @@ export function QuizEditor({ courseId }: { courseId: string }) {
                     onClick={() => removeQuestion(qi)}
                     aria-label="Remove question"
                   >
-                    <Trash2 className="size-4 text-[var(--destructive)]" />
+                    <Trash2 className="size-4 text-destructive" />
                   </Button>
                 </div>
 
@@ -298,15 +295,15 @@ export function QuizEditor({ courseId }: { courseId: string }) {
                     {q.options.map((o, oi) => (
                       <li
                         key={oi}
-                        className="flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--card)] p-2"
+                        className="flex items-center gap-2 rounded-md border border-border bg-card p-2"
                       >
                         <button
                           type="button"
                           onClick={() => setCorrectOption(qi, oi)}
                           className={
                             o.isCorrect
-                              ? "grid size-7 place-items-center rounded-full bg-[var(--primary)] text-[var(--primary-foreground)]"
-                              : "grid size-7 place-items-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+                              ? "grid size-7 place-items-center rounded-full bg-primary text-primary-foreground"
+                              : "grid size-7 place-items-center rounded-full border border-border text-muted-foreground hover:text-foreground"
                           }
                           aria-label="Mark as correct"
                         >
@@ -331,7 +328,7 @@ export function QuizEditor({ courseId }: { courseId: string }) {
                             onClick={() => removeOption(qi, oi)}
                             aria-label="Remove option"
                           >
-                            <Trash2 className="size-4 text-[var(--destructive)]" />
+                            <Trash2 className="size-4 text-destructive" />
                           </Button>
                         )}
                       </li>
@@ -374,7 +371,7 @@ export function QuizEditor({ courseId }: { courseId: string }) {
           </ul>
         )}
 
-        <div className="flex flex-col gap-3 border-t border-[var(--border)] pt-4 sm:flex-row sm:justify-between">
+        <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:justify-between">
           <Button variant="outline" onClick={addQuestion} className="gap-2">
             <Plus className="size-4" />
             Add question
