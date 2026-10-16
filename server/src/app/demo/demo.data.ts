@@ -127,15 +127,14 @@ export const DEMO_LEARNERS: { email: string; fullName: string; country: string; 
   ];
 
 /**
- * Royalty-free sample films (Blender Foundation, CC BY) served from Google's
- * public sample bucket. Played through the plain-MP4 provider.
+ * 40-second 480p excerpts of Blender Foundation open films (CC BY), bundled in
+ * frontend/public/demo/videos and played through the plain-MP4 provider.
  */
-const SAMPLE_BUCKET = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample";
 export const DEMO_VIDEOS: { url: string; credit: string }[] = [
-  { url: `${SAMPLE_BUCKET}/BigBuckBunny.mp4`, credit: "Big Buck Bunny © Blender Foundation, CC BY 3.0" },
-  { url: `${SAMPLE_BUCKET}/ElephantsDream.mp4`, credit: "Elephants Dream © Blender Foundation, CC BY 2.5" },
-  { url: `${SAMPLE_BUCKET}/Sintel.mp4`, credit: "Sintel © Blender Foundation, CC BY 3.0" },
-  { url: `${SAMPLE_BUCKET}/TearsOfSteel.mp4`, credit: "Tears of Steel © Blender Foundation, CC BY 3.0" },
+  { url: "/demo/videos/tears-of-steel-1.mp4", credit: "Tears of Steel © Blender Foundation (mango.blender.org), CC BY 3.0" },
+  { url: "/demo/videos/elephants-dream-1.mp4", credit: "Elephants Dream © Blender Foundation (orange.blender.org), CC BY 2.5" },
+  { url: "/demo/videos/tears-of-steel-2.mp4", credit: "Tears of Steel © Blender Foundation (mango.blender.org), CC BY 3.0" },
+  { url: "/demo/videos/elephants-dream-2.mp4", credit: "Elephants Dream © Blender Foundation (orange.blender.org), CC BY 2.5" },
 ];
 
 export const DEMO_COURSES: DemoCourse[] = [
