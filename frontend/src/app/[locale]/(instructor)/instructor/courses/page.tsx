@@ -20,8 +20,8 @@ export default function InstructorCoursesPage() {
     <div className="space-y-8">
       <header className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+          <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+          <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
         </div>
         <Button asChild className="gap-2">
           <Link href="/instructor/courses/new">
@@ -33,7 +33,7 @@ export default function InstructorCoursesPage() {
 
       {isLoading ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+          <Loader2 className="size-6 animate-spin text-primary" />
         </div>
       ) : courses.length === 0 ? (
         <EmptyState
@@ -57,13 +57,13 @@ export default function InstructorCoursesPage() {
               <CardDescription>{t("listSub")}</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="divide-y divide-[color-mix(in_oklch,var(--border)_60%,transparent)]">
+              <ul className="divide-y divide-border">
                 {courses.map((c) => (
                   <li
                     key={c.id}
-                    className="flex items-center gap-4 py-4 transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_4%,transparent)]"
+                    className="flex items-center gap-4 py-4 transition-colors hover:bg-primary/4"
                   >
-                    <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--secondary)]">
+                    <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-border bg-secondary">
                       {c.thumbnail ? (
                         <Image
                           src={c.thumbnail}
@@ -75,13 +75,13 @@ export default function InstructorCoursesPage() {
                         />
                       ) : (
                         <div className="grid h-full w-full place-items-center">
-                          <BookOpen className="size-5 text-[var(--muted-foreground)]" />
+                          <BookOpen className="size-5 text-muted-foreground" />
                         </div>
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium">{c.title}</p>
-                      <p className="text-xs text-[var(--muted-foreground)]">
+                      <p className="text-xs text-muted-foreground">
                         {c.totalLessons} lessons · {c.accessTier}
                       </p>
                     </div>

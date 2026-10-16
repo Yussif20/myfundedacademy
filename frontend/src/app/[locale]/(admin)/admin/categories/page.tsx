@@ -71,8 +71,8 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
       </header>
 
       <Card>
@@ -163,14 +163,12 @@ export default function AdminCategoriesPage() {
         <CardContent>
           {isLoading ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+              <Loader2 className="size-6 animate-spin text-primary" />
             </div>
           ) : !data?.data?.length ? (
-            <p className="py-6 text-center text-sm text-[var(--muted-foreground)]">
-              {t("noCategories")}
-            </p>
+            <p className="py-6 text-center text-sm text-muted-foreground">{t("noCategories")}</p>
           ) : (
-            <ul className="divide-y divide-[var(--border)]">
+            <ul className="divide-y divide-border">
               {data.data.map((cat) => (
                 <li key={cat.id} className="flex items-center justify-between gap-4 py-3">
                   <div className="flex items-center gap-3">
@@ -179,12 +177,12 @@ export default function AdminCategoriesPage() {
                       <p className="font-medium">
                         {cat.name}
                         {cat.nameArabic && (
-                          <span className="ms-2 text-sm text-[var(--muted-foreground)]">
+                          <span className="ms-2 text-sm text-muted-foreground">
                             ({cat.nameArabic})
                           </span>
                         )}
                       </p>
-                      <p className="text-xs text-[var(--muted-foreground)]">/{cat.slug}</p>
+                      <p className="text-xs text-muted-foreground">/{cat.slug}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -196,7 +194,7 @@ export default function AdminCategoriesPage() {
                       aria-label={tCommon("delete")}
                       onClick={() => onDelete(cat.id)}
                     >
-                      <Trash2 className="size-4 text-[var(--destructive)]" />
+                      <Trash2 className="size-4 text-destructive" />
                     </Button>
                   </div>
                 </li>

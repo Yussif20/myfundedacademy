@@ -157,7 +157,8 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "menu": "Menu",
-    "close": "Close"
+    "close": "Close",
+    "vsLastPeriod": "vs last period"
   },
   "avatarUploader": {
     "upload": "Upload photo",

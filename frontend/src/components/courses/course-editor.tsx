@@ -122,7 +122,7 @@ export function CourseEditor({ courseId, mode }: { courseId: string; mode: Cours
   if (isLoading || !course || !form) {
     return (
       <div className="flex justify-center py-12">
-        <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+        <Loader2 className="size-6 animate-spin text-primary" />
       </div>
     );
   }
@@ -209,12 +209,12 @@ export function CourseEditor({ courseId, mode }: { courseId: string; mode: Cours
     <div className="space-y-8">
       <header className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">{t("editTitle")}</h1>
+          <h1 className="font-display text-4xl font-medium tracking-tight">{t("editTitle")}</h1>
           <div className="mt-2 flex items-center gap-2">
             <Badge variant={statusVariant(course.status) as never}>
               {tStatus(course.status as never)}
             </Badge>
-            <p className="text-sm text-[var(--muted-foreground)]">{course.slug}</p>
+            <p className="text-sm text-muted-foreground">{course.slug}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -397,7 +397,7 @@ export function CourseEditor({ courseId, mode }: { courseId: string; mode: Cours
               <Label>{t("thumbnail")}</Label>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 {form.thumbnail ? (
-                  <div className="relative h-20 w-32 overflow-hidden rounded-md border border-[var(--border)] bg-[var(--secondary)]">
+                  <div className="relative h-20 w-32 overflow-hidden rounded-md border border-border bg-secondary">
                     <Image
                       src={form.thumbnail}
                       alt="thumbnail"
@@ -408,7 +408,7 @@ export function CourseEditor({ courseId, mode }: { courseId: string; mode: Cours
                     />
                   </div>
                 ) : (
-                  <div className="grid h-20 w-32 place-items-center rounded-md border border-dashed border-[var(--border)] bg-[var(--secondary)]/50 text-xs text-[var(--muted-foreground)]">
+                  <div className="grid h-20 w-32 place-items-center rounded-md border border-dashed border-border bg-secondary/50 text-xs text-muted-foreground">
                     No image
                   </div>
                 )}
@@ -423,7 +423,7 @@ export function CourseEditor({ courseId, mode }: { courseId: string; mode: Cours
                       if (f) onUploadThumbnail(f);
                     }}
                   />
-                  <span className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-transparent px-4 py-2 text-sm font-medium hover:bg-[var(--secondary)]">
+                  <span className="inline-flex items-center gap-2 rounded-md border border-border bg-transparent px-4 py-2 text-sm font-medium hover:bg-secondary">
                     <Upload className="size-4" />
                     {thumbProgress !== null
                       ? t("videoUploading", { pct: String(thumbProgress) })
@@ -466,7 +466,7 @@ function FormField({
     <div className={`space-y-2 ${wide ? "md:col-span-2" : ""}`}>
       <Label htmlFor={htmlFor}>{label}</Label>
       {children}
-      {hint && <p className="text-xs text-[var(--muted-foreground)]">{hint}</p>}
+      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }
@@ -495,11 +495,11 @@ function CurriculumEditor({
     <Card>
       <CardHeader>
         <CardTitle className="text-lg">{t("curriculum")}</CardTitle>
-        <p className="text-sm text-[var(--muted-foreground)]">{t("publishHint")}</p>
+        <p className="text-sm text-muted-foreground">{t("publishHint")}</p>
       </CardHeader>
       <CardContent className="space-y-4">
         {sections.length === 0 ? (
-          <p className="rounded-md border border-dashed border-[var(--border)] py-8 text-center text-sm text-[var(--muted-foreground)]">
+          <p className="rounded-md border border-dashed border-border py-8 text-center text-sm text-muted-foreground">
             {t("noSectionsYet")}
           </p>
         ) : (
@@ -508,7 +508,7 @@ function CurriculumEditor({
           ))
         )}
 
-        <div className="flex items-center gap-2 border-t border-[var(--border)] pt-4">
+        <div className="flex items-center gap-2 border-t border-border pt-4">
           <Input
             value={newSectionTitle}
             onChange={(e) => setNewSectionTitle(e.target.value)}
@@ -574,12 +574,12 @@ function SectionEditor({
   };
 
   return (
-    <div className="rounded-lg border border-[var(--border)]">
+    <div className="rounded-lg border border-border">
       <div className="flex items-center gap-2 px-4 py-3">
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          className="text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+          className="text-muted-foreground hover:text-foreground"
           aria-label={open ? "Collapse" : "Expand"}
         >
           {open ? (
@@ -601,14 +601,14 @@ function SectionEditor({
           onClick={onDelete}
           aria-label={tCommon("delete")}
         >
-          <Trash2 className="size-4 text-[var(--destructive)]" />
+          <Trash2 className="size-4 text-destructive" />
         </Button>
       </div>
 
       {open && (
-        <div className="space-y-3 border-t border-[var(--border)] bg-[var(--background)]/50 px-4 py-3">
+        <div className="space-y-3 border-t border-border bg-background/50 px-4 py-3">
           {section.lessons.length === 0 ? (
-            <p className="text-sm text-[var(--muted-foreground)]">No lessons yet.</p>
+            <p className="text-sm text-muted-foreground">No lessons yet.</p>
           ) : (
             section.lessons.map((l) => (
               <LessonEditor key={l.id} courseId={courseId} lesson={l} onChange={onChange} />
@@ -702,7 +702,7 @@ function LessonEditor({
   };
 
   return (
-    <div className="space-y-3 rounded-md border border-[var(--border)] bg-[var(--card)] p-3">
+    <div className="space-y-3 rounded-md border border-border bg-card p-3">
       <div className="grid gap-2 md:grid-cols-[1fr_120px_auto_auto] md:items-end">
         <div className="space-y-1">
           <Label htmlFor={`title-${lesson.id}`} className="text-xs">
@@ -749,11 +749,11 @@ function LessonEditor({
           aria-label={tCommon("delete")}
           className="mb-1"
         >
-          <Trash2 className="size-4 text-[var(--destructive)]" />
+          <Trash2 className="size-4 text-destructive" />
         </Button>
       </div>
 
-      <div className="flex items-center gap-3 border-t border-[var(--border)] pt-3 text-sm">
+      <div className="flex items-center gap-3 border-t border-border pt-3 text-sm">
         {lesson.vdoVideoId ? (
           <Badge variant="success">{t("videoUploaded")}</Badge>
         ) : (
@@ -771,13 +771,13 @@ function LessonEditor({
               if (f) onUploadVideo(f);
             }}
           />
-          <span className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-transparent px-3 py-1.5 text-xs font-medium hover:bg-[var(--secondary)]">
+          <span className="inline-flex items-center gap-2 rounded-md border border-border bg-transparent px-3 py-1.5 text-xs font-medium hover:bg-secondary">
             <Upload className="size-3.5" />
             {progress !== null ? t("videoUploading", { pct: String(progress) }) : t("uploadVideo")}
           </span>
         </label>
 
-        {error && <span className="text-xs text-[var(--destructive)]">{error}</span>}
+        {error && <span className="text-xs text-destructive">{error}</span>}
       </div>
     </div>
   );

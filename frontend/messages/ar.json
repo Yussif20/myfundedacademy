@@ -157,7 +157,8 @@
     "showPassword": "إظهار كلمة المرور",
     "hidePassword": "إخفاء كلمة المرور",
     "menu": "القائمة",
-    "close": "إغلاق"
+    "close": "إغلاق",
+    "vsLastPeriod": "مقارنة بالفترة السابقة"
   },
   "avatarUploader": {
     "upload": "رفع صورة",

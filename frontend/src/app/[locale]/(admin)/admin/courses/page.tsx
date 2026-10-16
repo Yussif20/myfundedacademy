@@ -33,8 +33,8 @@ export default function AdminCoursesPage() {
     <div className="space-y-8">
       <header className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+          <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+          <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
         </div>
         <Button asChild>
           <Link href="/admin/courses/new" className="gap-2">
@@ -51,14 +51,12 @@ export default function AdminCoursesPage() {
         <CardContent>
           {isLoading ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+              <Loader2 className="size-6 animate-spin text-primary" />
             </div>
           ) : !data?.data?.data?.length ? (
-            <p className="py-6 text-center text-sm text-[var(--muted-foreground)]">
-              {t("noCourses")}
-            </p>
+            <p className="py-6 text-center text-sm text-muted-foreground">{t("noCourses")}</p>
           ) : (
-            <ul className="divide-y divide-[var(--border)]">
+            <ul className="divide-y divide-border">
               {data.data.data.map((c) => (
                 <li key={c.id} className="flex items-center justify-between gap-4 py-3">
                   <div className="min-w-0 flex-1">
@@ -69,7 +67,7 @@ export default function AdminCoursesPage() {
                       </Badge>
                       {c.isFeatured && <Badge variant="success">★</Badge>}
                     </div>
-                    <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+                    <p className="mt-1 text-xs text-muted-foreground">
                       {c.instructor.user.fullName}
                       {c.category && ` · ${c.category.name}`}
                       {` · $${c.oneTimePrice.toFixed(2)}`}
@@ -89,7 +87,7 @@ export default function AdminCoursesPage() {
                       aria-label={tCommon("delete")}
                       onClick={() => onDelete(c.id)}
                     >
-                      <Trash2 className="size-4 text-[var(--destructive)]" />
+                      <Trash2 className="size-4 text-destructive" />
                     </Button>
                   </div>
                 </li>

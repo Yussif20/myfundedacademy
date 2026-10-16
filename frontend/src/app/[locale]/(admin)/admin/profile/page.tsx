@@ -75,8 +75,8 @@ export default function AdminProfilePage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">{t("profileDescription")}</p>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-muted-foreground">{t("profileDescription")}</p>
       </header>
 
       <Card>

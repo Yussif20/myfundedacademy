@@ -55,7 +55,7 @@ export default function InstructorProfilePage() {
   if (isLoading || !form) {
     return (
       <div className="flex justify-center py-12">
-        <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+        <Loader2 className="size-6 animate-spin text-primary" />
       </div>
     );
   }
@@ -95,8 +95,8 @@ export default function InstructorProfilePage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
       </header>
 
       {error && (
@@ -183,18 +183,13 @@ export default function InstructorProfilePage() {
                 {form.expertise.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
-                    style={{
-                      background: "color-mix(in oklch, var(--primary) 12%, transparent)",
-                      border: "1px solid color-mix(in oklch, var(--primary) 30%, transparent)",
-                      color: "var(--primary)",
-                    }}
+                    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border border-primary/30 bg-primary/8 text-primary"
                   >
                     {tag}
                     <button
                       type="button"
                       onClick={() => removeExpertise(tag)}
-                      className="rounded-full p-0.5 transition-colors hover:bg-[color-mix(in_oklch,var(--primary)_20%,transparent)]"
+                      className="rounded-full p-0.5 transition-colors hover:bg-primary/20"
                       aria-label="Remove"
                     >
                       <X className="size-3" />

@@ -20,7 +20,7 @@ export default function InstructorEarningsPage() {
   if (isLoading || !earnings) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+        <Loader2 className="size-6 animate-spin text-primary" />
       </div>
     );
   }
@@ -37,8 +37,8 @@ export default function InstructorEarningsPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
       </header>
 
       <Alert>
@@ -70,17 +70,17 @@ export default function InstructorEarningsPage() {
           Icon={ShoppingBag}
           delay={0.1}
         />
-        <Card className="overflow-hidden border-[var(--border)] bg-[color-mix(in_oklch,var(--card)_85%,transparent)] backdrop-blur">
-          <CardContent className="flex h-full flex-col gap-2 p-5">
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
-              <Sparkles className="size-4 text-[var(--accent)]" />
+        <Card className="overflow-hidden">
+          <CardContent className="flex h-full flex-col gap-2 p-5 sm:p-5">
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.1em] text-muted-foreground">
+              <Sparkles className="size-4 text-accent" />
               {t("kpiTopCourse")}
             </div>
-            <p className="font-display line-clamp-2 text-lg font-semibold leading-snug">
+            <p className="font-display line-clamp-2 text-lg font-medium leading-snug">
               {topCourseLabel}
             </p>
             {topCourse && (
-              <p className="mt-auto font-display text-xl font-bold tabular-nums text-[var(--primary)]">
+              <p className="mt-auto font-display text-xl font-medium tabular-nums text-primary">
                 {fmtMoney(topCourse.gross)}
               </p>
             )}
@@ -94,20 +94,20 @@ export default function InstructorEarningsPage() {
         </CardHeader>
         <CardContent>
           {earnings.byCourse.length === 0 ? (
-            <p className="py-10 text-center text-sm text-[var(--muted-foreground)]">
+            <p className="py-10 text-center text-sm text-muted-foreground">
               {earnings.orderCount === 0 ? t("noEarnings") : t("noCourses")}
             </p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[var(--border)] text-start text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  <tr className="border-b border-border text-start text-xs uppercase tracking-[0.1em] text-muted-foreground">
                     <th className="py-2 pe-4 font-medium">{t("colCourse")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colOrders")}</th>
                     <th className="py-2 pe-2 font-medium text-end">{t("colGross")}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[color-mix(in_oklch,var(--border)_60%,transparent)]">
+                <tbody className="divide-y divide-border">
                   {earnings.byCourse.map((row) => {
                     const title = (isAr && row.course.titleArabic) || row.course.title;
                     const share =
@@ -119,21 +119,21 @@ export default function InstructorEarningsPage() {
                         <td className="py-3 pe-4">
                           <Link
                             href={{ pathname: `/instructor/courses/${row.course.id}` } as never}
-                            className="font-medium hover:text-[var(--primary)]"
+                            className="font-medium hover:text-primary"
                           >
                             {title}
                           </Link>
-                          <div className="mt-1 h-1 w-32 overflow-hidden rounded-full bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]">
+                          <div className="mt-1 h-1 w-32 overflow-hidden rounded-full bg-border">
                             <div
-                              className="h-full rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]"
+                              className="h-full rounded-full bg-primary"
                               style={{ width: `${share}%` }}
                             />
                           </div>
                         </td>
-                        <td className="py-3 pe-4 tabular-nums text-[var(--muted-foreground)]">
+                        <td className="py-3 pe-4 tabular-nums text-muted-foreground">
                           {row.orderCount}
                         </td>
-                        <td className="py-3 pe-2 text-end font-display font-semibold tabular-nums">
+                        <td className="py-3 pe-2 text-end font-display font-medium tabular-nums">
                           {fmtMoney(row.gross)}
                         </td>
                       </tr>
@@ -152,55 +152,51 @@ export default function InstructorEarningsPage() {
         </CardHeader>
         <CardContent>
           {earnings.recent.length === 0 ? (
-            <p className="py-10 text-center text-sm text-[var(--muted-foreground)]">
-              {t("noRecent")}
-            </p>
+            <p className="py-10 text-center text-sm text-muted-foreground">{t("noRecent")}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[var(--border)] text-start text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  <tr className="border-b border-border text-start text-xs uppercase tracking-[0.1em] text-muted-foreground">
                     <th className="py-2 pe-4 font-medium">{t("colStudent")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colCourse")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colPaid")}</th>
                     <th className="py-2 pe-2 font-medium text-end">{t("colAmount")}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[color-mix(in_oklch,var(--border)_60%,transparent)]">
+                <tbody className="divide-y divide-border">
                   {earnings.recent.map((o) => (
                     <tr key={o.id} className="align-middle">
                       <td className="py-3 pe-4">
                         {o.student ? (
                           <>
                             <p className="font-medium">{o.student.fullName}</p>
-                            <p className="text-xs text-[var(--muted-foreground)]">
-                              {o.student.email}
-                            </p>
+                            <p className="text-xs text-muted-foreground">{o.student.email}</p>
                           </>
                         ) : (
-                          <span className="text-[var(--muted-foreground)]">—</span>
+                          <span className="text-muted-foreground">—</span>
                         )}
                       </td>
                       <td className="py-3 pe-4">
                         {o.courseId ? (
                           <Link
                             href={{ pathname: `/instructor/courses/${o.courseId}` } as never}
-                            className="hover:text-[var(--primary)]"
+                            className="hover:text-primary"
                           >
                             {o.courseTitle}
                           </Link>
                         ) : (
-                          <span className="text-[var(--muted-foreground)]">—</span>
+                          <span className="text-muted-foreground">—</span>
                         )}
                       </td>
-                      <td className="py-3 pe-4 whitespace-nowrap text-[var(--muted-foreground)]">
+                      <td className="py-3 pe-4 whitespace-nowrap text-muted-foreground">
                         {format.dateTime(new Date(o.paidAt), {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
                         })}
                       </td>
-                      <td className="py-3 pe-2 text-end font-display font-semibold tabular-nums">
+                      <td className="py-3 pe-2 text-end font-display font-medium tabular-nums">
                         {fmtMoney(o.amount)}
                       </td>
                     </tr>

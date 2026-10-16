@@ -28,7 +28,7 @@ export function AdminSidebar() {
   const t = useTranslations("admin.nav");
 
   return (
-    <nav className="space-y-1">
+    <nav className="space-y-0.5">
       {items.map((it) => {
         const active =
           it.href === "/admin"
@@ -39,11 +39,12 @@ export function AdminSidebar() {
             key={it.href}
             href={it.href}
             className={cn(
-              "group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+              "group flex items-center gap-3 rounded-e-lg border-s-2 px-3 py-2 text-sm font-medium transition-colors",
               active
-                ? "bg-[var(--primary)]/10 text-[var(--primary)]"
-                : "text-[var(--muted-foreground)] hover:bg-[var(--secondary)] hover:text-[var(--foreground)]",
+                ? "border-s-primary bg-primary/8 text-primary"
+                : "border-s-transparent text-muted-foreground hover:bg-paper-2 hover:text-foreground",
             )}
+            aria-current={active ? "page" : undefined}
           >
             <it.icon className="size-4" aria-hidden />
             {t(it.key)}

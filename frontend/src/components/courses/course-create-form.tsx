@@ -73,7 +73,7 @@ export function CourseCreateForm({ mode }: { mode: CourseCreateMode }) {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("newTitle")}</h1>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("newTitle")}</h1>
       </header>
 
       <Card>
@@ -214,7 +214,7 @@ export function CourseCreateForm({ mode }: { mode: CourseCreateMode }) {
                 onChange={(e) => set("oneTimePrice", Number(e.target.value))}
                 disabled={isLoading}
               />
-              <p className="text-xs text-[var(--muted-foreground)]">{t("priceHelp")}</p>
+              <p className="text-xs text-muted-foreground">{t("priceHelp")}</p>
             </div>
 
             <div className="md:col-span-2">

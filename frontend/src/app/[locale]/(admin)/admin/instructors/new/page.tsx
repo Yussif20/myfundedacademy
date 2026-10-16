@@ -73,7 +73,7 @@ export default function NewInstructorPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("newTitle")}</h1>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("newTitle")}</h1>
       </header>
 
       <Card>
@@ -250,7 +250,7 @@ function Field({
     <div className={`space-y-2 ${wide ? "md:col-span-2" : ""}`}>
       <Label htmlFor={htmlFor}>{label}</Label>
       {children}
-      {hint && <p className="text-xs text-[var(--muted-foreground)]">{hint}</p>}
+      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }

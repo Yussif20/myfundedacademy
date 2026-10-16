@@ -51,8 +51,8 @@ export default function InstructorStudentsPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -73,9 +73,7 @@ export default function InstructorStudentsPage() {
         <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <CardTitle className="text-lg">{t("subscribersTitle")}</CardTitle>
-            <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-              {t("subscribersSubtitle")}
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{t("subscribersSubtitle")}</p>
           </div>
           <div className="w-full sm:max-w-xs">
             <Input
@@ -88,17 +86,17 @@ export default function InstructorStudentsPage() {
         <CardContent>
           {subsLoading ? (
             <div className="flex justify-center py-8">
-              <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+              <Loader2 className="size-6 animate-spin text-primary" />
             </div>
           ) : subs.length === 0 ? (
-            <p className="py-10 text-center text-sm text-[var(--muted-foreground)]">
+            <p className="py-10 text-center text-sm text-muted-foreground">
               {debouncedSubSearch ? t("noSubscribersMatch") : t("noSubscribers")}
             </p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[var(--border)] text-start text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  <tr className="border-b border-border text-start text-xs uppercase tracking-[0.1em] text-muted-foreground">
                     <th className="py-2 pe-4 font-medium">{t("colStudent")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colPlan")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colStatus")}</th>
@@ -106,7 +104,7 @@ export default function InstructorStudentsPage() {
                     <th className="py-2 pe-2 font-medium">{t("colRenewsOn")}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[color-mix(in_oklch,var(--border)_60%,transparent)]">
+                <tbody className="divide-y divide-border">
                   {subs.map((s) => {
                     const initials = s.user.fullName
                       .split(/\s+/)
@@ -129,18 +127,13 @@ export default function InstructorStudentsPage() {
                           <div className="flex items-center gap-3">
                             <span
                               aria-hidden
-                              className="grid size-8 shrink-0 place-items-center rounded-full text-xs font-semibold text-[var(--primary)]"
-                              style={{
-                                background: "color-mix(in oklch, var(--primary) 14%, transparent)",
-                                border:
-                                  "1px solid color-mix(in oklch, var(--primary) 25%, transparent)",
-                              }}
+                              className="grid size-8 shrink-0 place-items-center rounded-full text-xs font-medium text-primary border border-border bg-paper-2 font-display"
                             >
                               {initials || "?"}
                             </span>
                             <div className="min-w-0">
                               <p className="truncate font-medium">{s.user.fullName}</p>
-                              <p className="truncate text-xs text-[var(--muted-foreground)]">
+                              <p className="truncate text-xs text-muted-foreground">
                                 {s.user.email}
                               </p>
                             </div>
@@ -159,14 +152,14 @@ export default function InstructorStudentsPage() {
                             )}
                           </div>
                         </td>
-                        <td className="py-3 pe-4 whitespace-nowrap text-[var(--muted-foreground)]">
+                        <td className="py-3 pe-4 whitespace-nowrap text-muted-foreground">
                           {format.dateTime(new Date(s.createdAt), {
                             year: "numeric",
                             month: "short",
                             day: "numeric",
                           })}
                         </td>
-                        <td className="py-3 pe-2 whitespace-nowrap text-[var(--muted-foreground)]">
+                        <td className="py-3 pe-2 whitespace-nowrap text-muted-foreground">
                           {s.currentPeriodEnd
                             ? format.dateTime(new Date(s.currentPeriodEnd), {
                                 year: "numeric",
@@ -199,21 +192,17 @@ export default function InstructorStudentsPage() {
         <CardContent>
           {isLoading ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+              <Loader2 className="size-6 animate-spin text-primary" />
             </div>
           ) : rows.length === 0 ? (
-            <p className="py-12 text-center text-sm text-[var(--muted-foreground)]">
-              {t("noStudents")}
-            </p>
+            <p className="py-12 text-center text-sm text-muted-foreground">{t("noStudents")}</p>
           ) : filtered.length === 0 ? (
-            <p className="py-12 text-center text-sm text-[var(--muted-foreground)]">
-              {t("noMatches")}
-            </p>
+            <p className="py-12 text-center text-sm text-muted-foreground">{t("noMatches")}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[var(--border)] text-start text-xs uppercase tracking-[0.1em] text-[var(--muted-foreground)]">
+                  <tr className="border-b border-border text-start text-xs uppercase tracking-[0.1em] text-muted-foreground">
                     <th className="py-2 pe-4 font-medium">{t("colStudent")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colCourse")}</th>
                     <th className="py-2 pe-4 font-medium">{t("colEnrolled")}</th>
@@ -221,7 +210,7 @@ export default function InstructorStudentsPage() {
                     <th className="py-2 pe-2 font-medium">{t("colProgress")}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[color-mix(in_oklch,var(--border)_60%,transparent)]">
+                <tbody className="divide-y divide-border">
                   {filtered.map((r) => {
                     const courseTitle = (isAr && r.course.titleArabic) || r.course.title;
                     const initials = r.student.fullName
@@ -236,18 +225,13 @@ export default function InstructorStudentsPage() {
                           <div className="flex items-center gap-3">
                             <span
                               aria-hidden
-                              className="grid size-8 shrink-0 place-items-center rounded-full text-xs font-semibold text-[var(--primary)]"
-                              style={{
-                                background: "color-mix(in oklch, var(--primary) 14%, transparent)",
-                                border:
-                                  "1px solid color-mix(in oklch, var(--primary) 25%, transparent)",
-                              }}
+                              className="grid size-8 shrink-0 place-items-center rounded-full text-xs font-medium text-primary border border-border bg-paper-2 font-display"
                             >
                               {initials || "?"}
                             </span>
                             <div className="min-w-0">
                               <p className="truncate font-medium">{r.student.fullName}</p>
-                              <p className="truncate text-xs text-[var(--muted-foreground)]">
+                              <p className="truncate text-xs text-muted-foreground">
                                 {r.student.email}
                               </p>
                             </div>
@@ -256,12 +240,12 @@ export default function InstructorStudentsPage() {
                         <td className="py-3 pe-4">
                           <Link
                             href={{ pathname: `/instructor/courses/${r.course.id}` } as never}
-                            className="font-medium hover:text-[var(--primary)]"
+                            className="font-medium hover:text-primary"
                           >
                             {courseTitle}
                           </Link>
                         </td>
-                        <td className="py-3 pe-4 whitespace-nowrap text-[var(--muted-foreground)]">
+                        <td className="py-3 pe-4 whitespace-nowrap text-muted-foreground">
                           {format.dateTime(new Date(r.enrolledAt), {
                             year: "numeric",
                             month: "short",
@@ -276,17 +260,17 @@ export default function InstructorStudentsPage() {
                         </td>
                         <td className="py-3 pe-2 min-w-[180px]">
                           <div className="flex items-center gap-3">
-                            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[color-mix(in_oklch,var(--secondary)_70%,transparent)]">
+                            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-border">
                               <div
-                                className="h-full rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] transition-all"
+                                className="h-full rounded-full bg-primary transition-all"
                                 style={{ width: `${r.progressPct}%` }}
                               />
                             </div>
                             <div className="text-end">
-                              <p className="font-display text-sm font-semibold tabular-nums">
+                              <p className="font-display text-sm font-medium tabular-nums">
                                 {r.progressPct}%
                               </p>
-                              <p className="text-[10px] text-[var(--muted-foreground)]">
+                              <p className="text-[10px] text-muted-foreground">
                                 {t("lessonsCompleted", {
                                   done: r.completedLessons,
                                   total: r.course.totalLessons,
