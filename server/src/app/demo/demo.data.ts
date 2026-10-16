@@ -9,6 +9,8 @@ type Pair = [string, string];
 export type DemoCategory = { slug: string; name: Pair; description: Pair; icon: string };
 export type DemoInstructor = {
   key: string;
+  /** Portrait in frontend/public/demo/instructors (only the male instructor has one). */
+  photo?: string;
   email: string;
   fullName: string;
   country: string;
@@ -51,7 +53,10 @@ export const DEMO_CATEGORIES: DemoCategory[] = [
   {
     slug: "arabic-calligraphy",
     name: ["Arabic Calligraphy", "الخط العربي"],
-    description: ["Classic scripts, one stroke at a time.", "الخطوط الكلاسيكية، ضربة قلم تلو الأخرى."],
+    description: [
+      "Classic scripts, one stroke at a time.",
+      "الخطوط الكلاسيكية، ضربة قلم تلو الأخرى.",
+    ],
     icon: "pen-tool",
   },
   {
@@ -71,6 +76,7 @@ export const DEMO_CATEGORIES: DemoCategory[] = [
 export const DEMO_INSTRUCTORS: DemoInstructor[] = [
   {
     key: "karim",
+    photo: "/demo/instructors/karim.jpg",
     email: DEMO_ACCOUNTS.instructor,
     fullName: "Karim Nasser",
     country: "Egypt",
@@ -107,34 +113,54 @@ export const DEMO_INSTRUCTORS: DemoInstructor[] = [
   },
 ];
 
-export const DEMO_STUDENT = { email: DEMO_ACCOUNTS.student, fullName: "Nour Hassan", country: "Egypt" };
+export const DEMO_STUDENT = {
+  email: DEMO_ACCOUNTS.student,
+  fullName: "Nour Hassan",
+  country: "Egypt",
+};
 export const DEMO_ADMIN = { email: DEMO_ACCOUNTS.admin, fullName: "Demo Admin", country: "Egypt" };
 
-export const DEMO_LEARNERS: { email: string; fullName: string; country: string; locale: "en" | "ar" }[] =
-  [
-    { email: "learner01@example.com", fullName: "Youssef Amin", country: "Egypt", locale: "ar" },
-    { email: "learner02@example.com", fullName: "Hana Saleh", country: "Saudi Arabia", locale: "ar" },
-    { email: "learner03@example.com", fullName: "Daniel Brooks", country: "Canada", locale: "en" },
-    { email: "learner04@example.com", fullName: "Mariam Farouk", country: "Egypt", locale: "ar" },
-    { email: "learner05@example.com", fullName: "Omar Khalil", country: "UAE", locale: "en" },
-    { email: "learner06@example.com", fullName: "Lina Haddad", country: "Lebanon", locale: "ar" },
-    { email: "learner07@example.com", fullName: "Priya Raman", country: "India", locale: "en" },
-    { email: "learner08@example.com", fullName: "Tariq Aziz", country: "Morocco", locale: "ar" },
-    { email: "learner09@example.com", fullName: "Emma Novak", country: "Germany", locale: "en" },
-    { email: "learner10@example.com", fullName: "Salma Ibrahim", country: "Qatar", locale: "ar" },
-    { email: "learner11@example.com", fullName: "Lucas Moreau", country: "France", locale: "en" },
-    { email: "learner12@example.com", fullName: "Reem Al-Sayed", country: "Kuwait", locale: "ar" },
-  ];
+export const DEMO_LEARNERS: {
+  email: string;
+  fullName: string;
+  country: string;
+  locale: "en" | "ar";
+}[] = [
+  { email: "learner01@example.com", fullName: "Youssef Amin", country: "Egypt", locale: "ar" },
+  { email: "learner02@example.com", fullName: "Hana Saleh", country: "Saudi Arabia", locale: "ar" },
+  { email: "learner03@example.com", fullName: "Daniel Brooks", country: "Canada", locale: "en" },
+  { email: "learner04@example.com", fullName: "Mariam Farouk", country: "Egypt", locale: "ar" },
+  { email: "learner05@example.com", fullName: "Omar Khalil", country: "UAE", locale: "en" },
+  { email: "learner06@example.com", fullName: "Lina Haddad", country: "Lebanon", locale: "ar" },
+  { email: "learner07@example.com", fullName: "Priya Raman", country: "India", locale: "en" },
+  { email: "learner08@example.com", fullName: "Tariq Aziz", country: "Morocco", locale: "ar" },
+  { email: "learner09@example.com", fullName: "Emma Novak", country: "Germany", locale: "en" },
+  { email: "learner10@example.com", fullName: "Salma Ibrahim", country: "Qatar", locale: "ar" },
+  { email: "learner11@example.com", fullName: "Lucas Moreau", country: "France", locale: "en" },
+  { email: "learner12@example.com", fullName: "Reem Al-Sayed", country: "Kuwait", locale: "ar" },
+];
 
 /**
  * 40-second 480p excerpts of Blender Foundation open films (CC BY), bundled in
  * frontend/public/demo/videos and played through the plain-MP4 provider.
  */
 export const DEMO_VIDEOS: { url: string; credit: string }[] = [
-  { url: "/demo/videos/tears-of-steel-1.mp4", credit: "Tears of Steel © Blender Foundation (mango.blender.org), CC BY 3.0" },
-  { url: "/demo/videos/elephants-dream-1.mp4", credit: "Elephants Dream © Blender Foundation (orange.blender.org), CC BY 2.5" },
-  { url: "/demo/videos/tears-of-steel-2.mp4", credit: "Tears of Steel © Blender Foundation (mango.blender.org), CC BY 3.0" },
-  { url: "/demo/videos/elephants-dream-2.mp4", credit: "Elephants Dream © Blender Foundation (orange.blender.org), CC BY 2.5" },
+  {
+    url: "/demo/videos/tears-of-steel-1.mp4",
+    credit: "Tears of Steel © Blender Foundation (mango.blender.org), CC BY 3.0",
+  },
+  {
+    url: "/demo/videos/elephants-dream-1.mp4",
+    credit: "Elephants Dream © Blender Foundation (orange.blender.org), CC BY 2.5",
+  },
+  {
+    url: "/demo/videos/tears-of-steel-2.mp4",
+    credit: "Tears of Steel © Blender Foundation (mango.blender.org), CC BY 3.0",
+  },
+  {
+    url: "/demo/videos/elephants-dream-2.mp4",
+    credit: "Elephants Dream © Blender Foundation (orange.blender.org), CC BY 2.5",
+  },
 ];
 
 export const DEMO_COURSES: DemoCourse[] = [
@@ -142,7 +168,10 @@ export const DEMO_COURSES: DemoCourse[] = [
     slug: "demo-react-typescript",
     category: "web-development",
     instructor: "karim",
-    title: ["Modern Web Apps with React & TypeScript", "تطبيقات ويب حديثة باستخدام React و TypeScript"],
+    title: [
+      "Modern Web Apps with React & TypeScript",
+      "تطبيقات ويب حديثة باستخدام React و TypeScript",
+    ],
     short: [
       "Build a real, typed React app from an empty folder to deployment.",
       "ابنِ تطبيق React حقيقيًا بأنواع TypeScript من مجلد فارغ حتى النشر.",
@@ -183,24 +212,36 @@ export const DEMO_COURSES: DemoCourse[] = [
     ],
     quiz: [
       {
-        prompt: ["Which hook is best for complex state transitions?", "أي خطّاف أنسب لانتقالات الحالة المعقدة؟"],
+        prompt: [
+          "Which hook is best for complex state transitions?",
+          "أي خطّاف أنسب لانتقالات الحالة المعقدة؟",
+        ],
         options: [
           ["useReducer", "useReducer"],
           ["useRef", "useRef"],
           ["useId", "useId"],
         ],
         correct: 0,
-        explanation: ["useReducer keeps transitions in one pure function.", "يجمع useReducer الانتقالات في دالة نقية واحدة."],
+        explanation: [
+          "useReducer keeps transitions in one pure function.",
+          "يجمع useReducer الانتقالات في دالة نقية واحدة.",
+        ],
       },
       {
-        prompt: ["What does TypeScript add to a React component?", "ماذا تضيف TypeScript إلى مكوّن React؟"],
+        prompt: [
+          "What does TypeScript add to a React component?",
+          "ماذا تضيف TypeScript إلى مكوّن React؟",
+        ],
         options: [
           ["Faster rendering", "عرض أسرع"],
           ["Checked prop types at build time", "فحص أنواع الخصائص وقت البناء"],
           ["Server-side rendering", "العرض من جهة الخادم"],
         ],
         correct: 1,
-        explanation: ["Types are checked before the code runs.", "تُفحص الأنواع قبل تشغيل الشيفرة."],
+        explanation: [
+          "Types are checked before the code runs.",
+          "تُفحص الأنواع قبل تشغيل الشيفرة.",
+        ],
       },
       {
         prompt: ["Where should a loading state live?", "أين يجب أن توضع حالة التحميل؟"],
@@ -210,7 +251,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["In the CSS", "في ملف CSS"],
         ],
         correct: 1,
-        explanation: ["Keep state close to where it is used.", "أبقِ الحالة قريبة من مكان استخدامها."],
+        explanation: [
+          "Keep state close to where it is used.",
+          "أبقِ الحالة قريبة من مكان استخدامها.",
+        ],
       },
     ],
   },
@@ -218,7 +262,10 @@ export const DEMO_COURSES: DemoCourse[] = [
     slug: "demo-node-postgres-api",
     category: "web-development",
     instructor: "karim",
-    title: ["Build REST APIs with Node.js & PostgreSQL", "بناء واجهات REST باستخدام Node.js و PostgreSQL"],
+    title: [
+      "Build REST APIs with Node.js & PostgreSQL",
+      "بناء واجهات REST باستخدام Node.js و PostgreSQL",
+    ],
     short: [
       "Design, secure and test a production-style API.",
       "صمّم واجهة برمجية بأسلوب الإنتاج وأمّنها واختبرها.",
@@ -264,7 +311,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["204", "204"],
         ],
         correct: 1,
-        explanation: ["201 Created is returned after a successful POST.", "يُعاد 201 بعد طلب POST ناجح."],
+        explanation: [
+          "201 Created is returned after a successful POST.",
+          "يُعاد 201 بعد طلب POST ناجح.",
+        ],
       },
       {
         prompt: ["Why paginate list endpoints?", "لماذا نقسّم نتائج القوائم إلى صفحات؟"],
@@ -274,7 +324,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["To hide data", "لإخفاء البيانات"],
         ],
         correct: 0,
-        explanation: ["Large lists slow down both server and client.", "القوائم الكبيرة تبطئ الخادم والعميل."],
+        explanation: [
+          "Large lists slow down both server and client.",
+          "القوائم الكبيرة تبطئ الخادم والعميل.",
+        ],
       },
     ],
   },
@@ -283,7 +336,10 @@ export const DEMO_COURSES: DemoCourse[] = [
     category: "web-development",
     instructor: "karim",
     title: ["HTML & CSS from Zero", "HTML و CSS من الصفر"],
-    short: ["Your first web page, explained line by line.", "صفحتك الأولى على الويب، مشروحة سطرًا بسطر."],
+    short: [
+      "Your first web page, explained line by line.",
+      "صفحتك الأولى على الويب، مشروحة سطرًا بسطر.",
+    ],
     description: [
       "A free starter course: structure a page with HTML, style it with CSS and make it work on phones.",
       "دورة مجانية للمبتدئين: نظّم الصفحة بـ HTML ونسّقها بـ CSS واجعلها تعمل على الهواتف.",
@@ -329,7 +385,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["Loading fonts", "تحميل الخطوط"],
         ],
         correct: 1,
-        explanation: ["Flexbox arranges items along one axis.", "يرتّب Flexbox العناصر على محور واحد."],
+        explanation: [
+          "Flexbox arranges items along one axis.",
+          "يرتّب Flexbox العناصر على محور واحد.",
+        ],
       },
     ],
   },
@@ -338,7 +397,10 @@ export const DEMO_COURSES: DemoCourse[] = [
     category: "design",
     instructor: "laila",
     title: ["UI Design Fundamentals in Figma", "أساسيات تصميم الواجهات في Figma"],
-    short: ["Spacing, type and colour for interfaces that feel right.", "المسافات والخطوط والألوان لواجهات مريحة."],
+    short: [
+      "Spacing, type and colour for interfaces that feel right.",
+      "المسافات والخطوط والألوان لواجهات مريحة.",
+    ],
     description: [
       "Design a mobile banking screen from scratch while learning grids, typography scales, colour systems and reusable components.",
       "صمّم شاشة تطبيق مصرفي من الصفر وتعلّم الشبكات ومقاييس الخطوط وأنظمة الألوان والمكوّنات القابلة لإعادة الاستخدام.",
@@ -380,17 +442,26 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["Faster exports", "تصدير أسرع"],
         ],
         correct: 0,
-        explanation: ["Consistent spacing makes layouts feel calm.", "المسافات المتناسقة تجعل التصميم هادئًا."],
+        explanation: [
+          "Consistent spacing makes layouts feel calm.",
+          "المسافات المتناسقة تجعل التصميم هادئًا.",
+        ],
       },
       {
-        prompt: ["Minimum contrast for body text (WCAG AA)?", "الحد الأدنى للتباين لنص المحتوى (WCAG AA)؟"],
+        prompt: [
+          "Minimum contrast for body text (WCAG AA)?",
+          "الحد الأدنى للتباين لنص المحتوى (WCAG AA)؟",
+        ],
         options: [
           ["2:1", "2:1"],
           ["4.5:1", "4.5:1"],
           ["10:1", "10:1"],
         ],
         correct: 1,
-        explanation: ["AA asks for 4.5:1 on normal text.", "يتطلب معيار AA نسبة 4.5:1 للنص العادي."],
+        explanation: [
+          "AA asks for 4.5:1 on normal text.",
+          "يتطلب معيار AA نسبة 4.5:1 للنص العادي.",
+        ],
       },
     ],
   },
@@ -399,7 +470,10 @@ export const DEMO_COURSES: DemoCourse[] = [
     category: "arabic-calligraphy",
     instructor: "laila",
     title: ["Arabic Calligraphy: Naskh for Beginners", "الخط العربي: خط النسخ للمبتدئين"],
-    short: ["Hold the qalam, measure with dots, write your first words.", "أمسك القلم، وقِس بالنقاط، واكتب كلماتك الأولى."],
+    short: [
+      "Hold the qalam, measure with dots, write your first words.",
+      "أمسك القلم، وقِس بالنقاط، واكتب كلماتك الأولى.",
+    ],
     description: [
       "Learn the tools, letter proportions and joining rules of Naskh, then write a short phrase you can frame.",
       "تعرّف على الأدوات ونِسَب الحروف وقواعد الوصل في خط النسخ، ثم اكتب عبارة قصيرة تصلح للتأطير.",
@@ -435,14 +509,20 @@ export const DEMO_COURSES: DemoCourse[] = [
     ],
     quiz: [
       {
-        prompt: ["What unit measures letter size in Naskh?", "ما وحدة قياس حجم الحروف في خط النسخ؟"],
+        prompt: [
+          "What unit measures letter size in Naskh?",
+          "ما وحدة قياس حجم الحروف في خط النسخ؟",
+        ],
         options: [
           ["The rhombic dot", "النقطة المعيّنة"],
           ["Centimetres", "السنتيمتر"],
           ["The line height", "ارتفاع السطر"],
         ],
         correct: 0,
-        explanation: ["Proportions are counted in dots made by the qalam.", "تُحسب النِّسَب بالنقاط التي يرسمها القلم."],
+        explanation: [
+          "Proportions are counted in dots made by the qalam.",
+          "تُحسب النِّسَب بالنقاط التي يرسمها القلم.",
+        ],
       },
       {
         prompt: ["Which letter is the reference for proportions?", "أي حرف هو مرجع النِّسَب؟"],
@@ -452,7 +532,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["Kaf", "الكاف"],
         ],
         correct: 1,
-        explanation: ["The alif sets the scale for the whole script.", "الألف يحدد مقياس الخط كله."],
+        explanation: [
+          "The alif sets the scale for the whole script.",
+          "الألف يحدد مقياس الخط كله.",
+        ],
       },
       {
         prompt: ["A qalam is cut at…", "يُبرى القلم…"],
@@ -462,7 +545,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["A round tip", "برأس مستدير"],
         ],
         correct: 0,
-        explanation: ["The slanted nib creates thick and thin strokes.", "السنّ المائل يصنع الخطوط العريضة والرفيعة."],
+        explanation: [
+          "The slanted nib creates thick and thin strokes.",
+          "السنّ المائل يصنع الخطوط العريضة والرفيعة.",
+        ],
       },
     ],
   },
@@ -471,7 +557,10 @@ export const DEMO_COURSES: DemoCourse[] = [
     category: "business",
     instructor: "sara",
     title: ["Start Your Online Business", "ابدأ عملك عبر الإنترنت"],
-    short: ["Validate an idea, find first customers, price with confidence.", "اختبر فكرتك، وابحث عن أول عملائك، وسعّر بثقة."],
+    short: [
+      "Validate an idea, find first customers, price with confidence.",
+      "اختبر فكرتك، وابحث عن أول عملائك، وسعّر بثقة.",
+    ],
     description: [
       "A practical playbook for solo founders: pick a niche, test demand in a weekend, set prices and land your first ten customers.",
       "دليل عملي لروّاد الأعمال المنفردين: اختر مجالًا، واختبر الطلب في عطلة نهاية أسبوع، وحدّد الأسعار، واحصل على أول عشرة عملاء.",
@@ -507,7 +596,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["Renting an office", "استئجار مكتب"],
         ],
         correct: 1,
-        explanation: ["Sign-ups show real interest before you build.", "التسجيلات تُظهر اهتمامًا حقيقيًا قبل البناء."],
+        explanation: [
+          "Sign-ups show real interest before you build.",
+          "التسجيلات تُظهر اهتمامًا حقيقيًا قبل البناء.",
+        ],
       },
       {
         prompt: ["Price should mainly reflect…", "يجب أن يعكس السعر أساسًا…"],
@@ -517,7 +609,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["Competitors' lowest price", "أقل سعر لدى المنافسين"],
         ],
         correct: 0,
-        explanation: ["Customers pay for outcomes, not hours.", "يدفع العملاء مقابل النتائج لا الساعات."],
+        explanation: [
+          "Customers pay for outcomes, not hours.",
+          "يدفع العملاء مقابل النتائج لا الساعات.",
+        ],
       },
     ],
   },
@@ -526,7 +621,10 @@ export const DEMO_COURSES: DemoCourse[] = [
     category: "business",
     instructor: "sara",
     title: ["Personal Finance for Freelancers", "الإدارة المالية الشخصية للمستقلين"],
-    short: ["Irregular income, steady life: budgets, taxes and savings.", "دخل غير منتظم وحياة مستقرة: الميزانية والضرائب والادخار."],
+    short: [
+      "Irregular income, steady life: budgets, taxes and savings.",
+      "دخل غير منتظم وحياة مستقرة: الميزانية والضرائب والادخار.",
+    ],
     description: [
       "Set up a simple money system that survives slow months: income buffers, tax pots, invoices and a savings habit.",
       "أنشئ نظامًا ماليًا بسيطًا يصمد في الأشهر الهادئة: احتياطي الدخل وحصالات الضرائب والفواتير وعادة الادخار.",
@@ -571,7 +669,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["Never", "أبدًا"],
         ],
         correct: 1,
-        explanation: ["Small, regular transfers avoid surprises.", "التحويلات الصغيرة المنتظمة تمنع المفاجآت."],
+        explanation: [
+          "Small, regular transfers avoid surprises.",
+          "التحويلات الصغيرة المنتظمة تمنع المفاجآت.",
+        ],
       },
     ],
   },
@@ -580,7 +681,10 @@ export const DEMO_COURSES: DemoCourse[] = [
     category: "languages",
     instructor: "sara",
     title: ["Conversational English for Professionals", "الإنجليزية المحادثة للمهنيين"],
-    short: ["Meetings, emails and small talk without the nerves.", "الاجتماعات والرسائل والأحاديث الجانبية دون توتر."],
+    short: [
+      "Meetings, emails and small talk without the nerves.",
+      "الاجتماعات والرسائل والأحاديث الجانبية دون توتر.",
+    ],
     description: [
       "Practise the phrases you actually need at work: introducing yourself, running a meeting, disagreeing politely and writing clear emails.",
       "تدرّب على العبارات التي تحتاجها فعلًا في العمل: التعريف بنفسك وإدارة اجتماع والاعتراض بلطف وكتابة رسائل واضحة.",
@@ -611,12 +715,15 @@ export const DEMO_COURSES: DemoCourse[] = [
       {
         prompt: ["Which phrase disagrees politely?", "أي عبارة تعبّر عن الاعتراض بلطف؟"],
         options: [
-          ["\"That's wrong.\"", "\"That's wrong.\""],
-          ["\"I see it a little differently.\"", "\"I see it a little differently.\""],
-          ["\"No.\"", "\"No.\""],
+          ['"That\'s wrong."', '"That\'s wrong."'],
+          ['"I see it a little differently."', '"I see it a little differently."'],
+          ['"No."', '"No."'],
         ],
         correct: 1,
-        explanation: ["Softeners keep the conversation open.", "عبارات التلطيف تُبقي الحوار مفتوحًا."],
+        explanation: [
+          "Softeners keep the conversation open.",
+          "عبارات التلطيف تُبقي الحوار مفتوحًا.",
+        ],
       },
       {
         prompt: ["A good email subject line is…", "سطر الموضوع الجيد في الرسالة…"],
@@ -626,7 +733,10 @@ export const DEMO_COURSES: DemoCourse[] = [
           ["Written in capitals", "مكتوب بأحرف كبيرة"],
         ],
         correct: 0,
-        explanation: ["The reader should know the topic at a glance.", "يجب أن يعرف القارئ الموضوع من نظرة."],
+        explanation: [
+          "The reader should know the topic at a glance.",
+          "يجب أن يعرف القارئ الموضوع من نظرة.",
+        ],
       },
     ],
   },
@@ -636,31 +746,49 @@ export const DEMO_REVIEWS: { rating: number; title: Pair; body: Pair }[] = [
   {
     rating: 5,
     title: ["Clear and practical", "واضحة وعملية"],
-    body: ["Every lesson is short and ends with something I can try right away.", "كل درس قصير وينتهي بشيء أستطيع تجربته فورًا."],
+    body: [
+      "Every lesson is short and ends with something I can try right away.",
+      "كل درس قصير وينتهي بشيء أستطيع تجربته فورًا.",
+    ],
   },
   {
     rating: 5,
     title: ["Exactly what I needed", "ما كنت أحتاجه تمامًا"],
-    body: ["I finished it in a week and already used it at work.", "أنهيتها في أسبوع واستخدمتها في العمل بالفعل."],
+    body: [
+      "I finished it in a week and already used it at work.",
+      "أنهيتها في أسبوع واستخدمتها في العمل بالفعل.",
+    ],
   },
   {
     rating: 4,
     title: ["Great pace", "إيقاع رائع"],
-    body: ["Good explanations. I'd love a few more exercises.", "شرح جيد. أتمنى لو كانت هناك تمارين أكثر."],
+    body: [
+      "Good explanations. I'd love a few more exercises.",
+      "شرح جيد. أتمنى لو كانت هناك تمارين أكثر.",
+    ],
   },
   {
     rating: 5,
     title: ["Loved the bilingual notes", "أحببت الملاحظات بلغتين"],
-    body: ["Having Arabic and English side by side helped a lot.", "وجود العربية والإنجليزية جنبًا إلى جنب ساعدني كثيرًا."],
+    body: [
+      "Having Arabic and English side by side helped a lot.",
+      "وجود العربية والإنجليزية جنبًا إلى جنب ساعدني كثيرًا.",
+    ],
   },
   {
     rating: 4,
     title: ["Solid course", "دورة متينة"],
-    body: ["Well structured. The quiz at the end is a nice check.", "منظمة جيدًا. الاختبار في النهاية مراجعة لطيفة."],
+    body: [
+      "Well structured. The quiz at the end is a nice check.",
+      "منظمة جيدًا. الاختبار في النهاية مراجعة لطيفة.",
+    ],
   },
   {
     rating: 3,
     title: ["Good but basic", "جيدة لكنها أساسية"],
-    body: ["Helpful for beginners; I already knew most of it.", "مفيدة للمبتدئين، كنت أعرف معظمها مسبقًا."],
+    body: [
+      "Helpful for beginners; I already knew most of it.",
+      "مفيدة للمبتدئين، كنت أعرف معظمها مسبقًا.",
+    ],
   },
 ];
