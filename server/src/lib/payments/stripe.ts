@@ -33,8 +33,18 @@ export const getOrCreateCustomer = async (user: {
   fullName: string;
   stripeCustomerId: string | null;
 }): Promise<string> => {
-  if (user.stripeCustomerId) return user.stripeCustomerId;
   const stripe = getStripe();
+  if (user.stripeCustomerId) {
+    // A stored id can belong to a previous Stripe account (keys rotated or the
+    // account replaced) or to a deleted customer. Reuse it only if it still
+    // exists here; otherwise fall through and create a fresh customer.
+    try {
+      const existing = await stripe.customers.retrieve(user.stripeCustomerId);
+      if (!existing.deleted) return existing.id;
+    } catch (err) {
+      if ((err as { code?: string }).code !== "resource_missing") throw err;
+    }
+  }
   const customer = await stripe.customers.create({
     email: user.email,
     name: user.fullName,
@@ -71,6 +81,23 @@ export const priceIdToPlan = (priceId: string): SubscriptionPlan | null => {
 };
 
 /**
+ * Stripe only accepts absolute https image URLs (and doesn't render SVG), so
+ * relative paths like the demo courses' `/demo/courses/x.svg` would make the
+ * whole Checkout Session fail with "Not a valid URL". Send the thumbnail only
+ * when Stripe can use it; otherwise the checkout page simply has no image.
+ */
+export const stripeProductImages = (thumbnail?: string | null): string[] | undefined => {
+  if (!thumbnail) return undefined;
+  try {
+    const url = new URL(thumbnail);
+    if (url.protocol !== "https:" || url.pathname.toLowerCase().endsWith(".svg")) return undefined;
+    return [url.toString()];
+  } catch {
+    return undefined;
+  }
+};
+
+/**
  * Creates a Checkout Session for a one-time course purchase. Course price
  * and title are sent inline as price_data so we don't need to pre-create
  * a Stripe Product per course.
@@ -83,6 +110,7 @@ export const createCourseCheckoutSession = async (args: {
   cancelUrl: string;
 }): Promise<Stripe.Checkout.Session> => {
   const stripe = getStripe();
+  const images = stripeProductImages(args.course.thumbnail);
   return stripe.checkout.sessions.create({
     mode: "payment",
     customer: args.customerId,
@@ -95,7 +123,7 @@ export const createCourseCheckoutSession = async (args: {
           unit_amount: Math.round(args.course.oneTimePrice * 100),
           product_data: {
             name: args.course.title,
-            ...(args.course.thumbnail ? { images: [args.course.thumbnail] } : {}),
+            ...(images ? { images } : {}),
           },
         },
       },
