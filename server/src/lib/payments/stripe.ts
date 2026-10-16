@@ -33,8 +33,18 @@ export const getOrCreateCustomer = async (user: {
   fullName: string;
   stripeCustomerId: string | null;
 }): Promise<string> => {
-  if (user.stripeCustomerId) return user.stripeCustomerId;
   const stripe = getStripe();
+  if (user.stripeCustomerId) {
+    // A stored id can belong to a previous Stripe account (keys rotated or the
+    // account replaced) or to a deleted customer. Reuse it only if it still
+    // exists here; otherwise fall through and create a fresh customer.
+    try {
+      const existing = await stripe.customers.retrieve(user.stripeCustomerId);
+      if (!existing.deleted) return existing.id;
+    } catch (err) {
+      if ((err as { code?: string }).code !== "resource_missing") throw err;
+    }
+  }
   const customer = await stripe.customers.create({
     email: user.email,
     name: user.fullName,
