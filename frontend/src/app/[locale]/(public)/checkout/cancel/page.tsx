@@ -12,13 +12,15 @@ export default function CheckoutCancelPage() {
     <div className="mx-auto flex min-h-[60vh] max-w-xl items-center justify-center px-6 py-16">
       <Card className="w-full text-center">
         <CardHeader>
-          <div className="mx-auto grid size-14 place-items-center rounded-full bg-[var(--muted)] text-[var(--muted-foreground)]">
+          <div className="mx-auto grid size-14 place-items-center rounded-full border border-border bg-card text-rule-strong">
             <XCircle className="size-7" />
           </div>
-          <CardTitle className="mt-3">{t("canceledTitle")}</CardTitle>
+          <CardTitle className="mt-5 font-display text-2xl font-medium">
+            {t("canceledTitle")}
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-[var(--muted-foreground)]">{t("canceledBlurb")}</p>
+          <p className="text-sm text-muted-foreground">{t("canceledBlurb")}</p>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Button asChild className="flex-1">
               <Link href="/courses">{t("browseCourses")}</Link>

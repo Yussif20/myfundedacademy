@@ -31,14 +31,12 @@ export default function VerifyEmailPage() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <div className="mx-auto grid size-12 place-items-center rounded-full bg-[var(--primary)]/10">
-          {status === "verifying" && (
-            <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
-          )}
-          {status === "ok" && <CheckCircle2 className="size-6 text-[var(--primary)]" />}
-          {status === "fail" && <XCircle className="size-6 text-[var(--destructive)]" />}
+        <div className="mx-auto grid size-12 place-items-center rounded-full border border-border bg-card">
+          {status === "verifying" && <Loader2 className="size-6 animate-spin text-primary" />}
+          {status === "ok" && <CheckCircle2 className="size-6 text-primary" />}
+          {status === "fail" && <XCircle className="size-6 text-destructive" />}
         </div>
-        <CardTitle className="mt-2">{t("title")}</CardTitle>
+        <CardTitle className="mt-5 font-display text-2xl font-medium">{t("title")}</CardTitle>
         <CardDescription>
           {status === "verifying" && t("verifying")}
           {status === "ok" && t("success")}

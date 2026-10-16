@@ -72,10 +72,7 @@ export default function ForgotPasswordPage() {
         )}
       </CardContent>
       <CardFooter className="justify-center">
-        <Link
-          href="/login"
-          className="text-sm text-[var(--muted-foreground)] hover:text-[var(--primary)]"
-        >
+        <Link href="/login" className="text-sm text-muted-foreground hover:text-primary">
           {t("backToLogin")}
         </Link>
       </CardFooter>

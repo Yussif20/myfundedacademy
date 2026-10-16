@@ -78,7 +78,7 @@ export default function ResetPasswordPage() {
         )}
       </CardContent>
       <CardFooter className="justify-center">
-        <Link href="/login" className="text-sm text-[var(--primary)] hover:underline">
+        <Link href="/login" className="text-sm text-primary hover:underline">
           {t("signIn")}
         </Link>
       </CardFooter>

@@ -87,18 +87,18 @@ export default function LoginPage() {
         )}
         <section
           aria-labelledby="demo-title"
-          className="mb-5 rounded-lg border border-dashed border-[color-mix(in_oklch,var(--primary)_45%,transparent)] bg-[color-mix(in_oklch,var(--primary)_6%,transparent)] p-3"
+          className="mb-6 rounded-xl border border-gold/50 bg-paper-2/60 p-4"
         >
-          <h2 id="demo-title" className="text-sm font-semibold">
+          <h2 id="demo-title" className="font-display text-lg">
             {tDemo("title")}
           </h2>
-          <p className="mt-0.5 text-xs text-[var(--muted-foreground)]">{tDemo("subtitle")}</p>
-          <div className="mt-3 grid gap-2">
+          <p className="mt-1 text-xs leading-5 text-muted-foreground">{tDemo("subtitle")}</p>
+          <div className="mt-4 grid gap-2">
             {DEMO_ROLES.map(({ role, icon: Icon }) => (
               <Button
                 key={role}
                 type="button"
-                variant={role === "student" ? "default" : role === "instructor" ? "secondary" : "outline"}
+                variant={role === "student" ? "default" : "outline"}
                 className="w-full justify-start gap-2"
                 disabled={isLoading}
                 onClick={() => onDemo(role)}
@@ -110,10 +110,10 @@ export default function LoginPage() {
             ))}
           </div>
         </section>
-        <div className="mb-4 flex items-center gap-3 text-xs text-[var(--muted-foreground)]">
-          <span className="h-px flex-1 bg-[var(--border)]" />
+        <div className="mb-5 flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
           {tDemo("or")}
-          <span className="h-px flex-1 bg-[var(--border)]" />
+          <span className="h-px flex-1 bg-border" />
         </div>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -134,7 +134,7 @@ export default function LoginPage() {
               <Label htmlFor="password">{t("passwordLabel")}</Label>
               <Link
                 href="/forgot-password"
-                className="text-xs text-[var(--muted-foreground)] hover:text-[var(--primary)]"
+                className="text-xs text-muted-foreground hover:text-primary"
               >
                 {t("forgot")}
               </Link>
@@ -154,10 +154,10 @@ export default function LoginPage() {
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="justify-center text-sm text-[var(--muted-foreground)]">
+      <CardFooter className="justify-center text-sm text-muted-foreground">
         <span>
           {t("noAccount")}{" "}
-          <Link href="/signup" className="text-[var(--primary)] hover:underline">
+          <Link href="/signup" className="text-primary hover:underline">
             {t("signUpLink")}
           </Link>
         </span>

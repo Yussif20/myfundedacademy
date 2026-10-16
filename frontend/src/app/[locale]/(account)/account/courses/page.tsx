@@ -19,18 +19,18 @@ export default function MyCoursesPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
       </header>
 
       {isLoading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="size-6 animate-spin text-[var(--primary)]" />
+          <Loader2 className="size-6 animate-spin text-primary" />
         </div>
       ) : enrollments.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center">
-            <p className="mb-4 text-sm text-[var(--muted-foreground)]">{t("noEnrollments")}</p>
+            <p className="mb-4 text-sm text-muted-foreground">{t("noEnrollments")}</p>
             <Button asChild>
               <Link href="/courses">{t("browseCatalog")}</Link>
             </Button>
@@ -46,10 +46,10 @@ export default function MyCoursesPage() {
               <li key={e.id}>
                 <Link
                   href={`/learn/${c.slug}` as `/learn/${string}`}
-                  className="group block overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] transition-colors hover:border-[var(--primary)]/40"
+                  className="group block overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary/40"
                 >
                   <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center">
-                    <div className="relative aspect-video w-full overflow-hidden rounded-md bg-[var(--secondary)] sm:w-48 sm:shrink-0">
+                    <div className="relative aspect-video w-full overflow-hidden rounded-md bg-secondary sm:w-48 sm:shrink-0">
                       {c.thumbnail ? (
                         <Image
                           src={c.thumbnail}
@@ -60,26 +60,24 @@ export default function MyCoursesPage() {
                           unoptimized
                         />
                       ) : (
-                        <div className="grid h-full w-full place-items-center bg-gradient-to-br from-[var(--primary)]/20 to-[var(--accent)]/10">
-                          <BookOpen className="size-8 text-[var(--muted-foreground)]" />
+                        <div className="grid h-full w-full place-items-center bg-paper-2">
+                          <BookOpen className="size-6 text-rule-strong" aria-hidden />
                         </div>
                       )}
                     </div>
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-display text-lg font-semibold leading-snug">{title}</h3>
+                        <h3 className="font-display text-xl leading-snug">{title}</h3>
                         {e.source === "PURCHASE" && (
                           <Badge variant="success">{t("lifetime")}</Badge>
                         )}
                         {e.source === "SUBSCRIPTION" && <Badge>{t("subscription")}</Badge>}
                       </div>
                       {desc && (
-                        <p className="mt-1 line-clamp-1 text-sm text-[var(--muted-foreground)]">
-                          {desc}
-                        </p>
+                        <p className="mt-1 line-clamp-1 text-sm text-muted-foreground">{desc}</p>
                       )}
-                      <div className="mt-2 flex items-center gap-4 text-xs text-[var(--muted-foreground)]">
+                      <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
                         <span className="inline-flex items-center gap-1">
                           <BookOpen className="size-3.5" />
                           {t("lessonsCount", { count: c.totalLessons })}

@@ -53,8 +53,8 @@ export default function BillingPage() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{t("title")}</h1>
-        <p className="mt-1 text-[var(--muted-foreground)]">{t("subtitle")}</p>
+        <h1 className="font-display text-4xl font-medium tracking-tight">{t("title")}</h1>
+        <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
       </header>
 
       {error && (
@@ -71,11 +71,11 @@ export default function BillingPage() {
         <CardContent>
           {subLoading ? (
             <div className="flex justify-center py-6">
-              <Loader2 className="size-5 animate-spin text-[var(--primary)]" />
+              <Loader2 className="size-5 animate-spin text-primary" />
             </div>
           ) : !sub ? (
             <div className="space-y-4">
-              <p className="text-sm text-[var(--muted-foreground)]">{t("noActiveSub")}</p>
+              <p className="text-sm text-muted-foreground">{t("noActiveSub")}</p>
               <Button asChild>
                 <Link href="/pricing">{t("viewPlans")}</Link>
               </Button>
@@ -83,12 +83,12 @@ export default function BillingPage() {
           ) : (
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <p className="font-display text-xl font-semibold">{tPlan(sub.plan)}</p>
+                <p className="font-display text-2xl">{tPlan(sub.plan)}</p>
                 <StatusBadge status={sub.status} cancelAtPeriodEnd={sub.cancelAtPeriodEnd} />
               </div>
 
               {sub.currentPeriodEnd && (
-                <p className="text-sm text-[var(--muted-foreground)]">
+                <p className="text-sm text-muted-foreground">
                   {sub.cancelAtPeriodEnd
                     ? t("accessEndsOn", {
                         date: new Date(sub.currentPeriodEnd).toLocaleDateString(),
@@ -132,14 +132,12 @@ export default function BillingPage() {
         <CardContent>
           {ordersLoading ? (
             <div className="flex justify-center py-6">
-              <Loader2 className="size-5 animate-spin text-[var(--primary)]" />
+              <Loader2 className="size-5 animate-spin text-primary" />
             </div>
           ) : orders.length === 0 ? (
-            <p className="py-6 text-center text-sm text-[var(--muted-foreground)]">
-              {t("noOrders")}
-            </p>
+            <p className="py-6 text-center text-sm text-muted-foreground">{t("noOrders")}</p>
           ) : (
-            <ul className="divide-y divide-[var(--border)]">
+            <ul className="divide-y divide-border">
               {orders.map((o) => (
                 <li key={o.id} className="flex items-center justify-between gap-4 py-3 text-sm">
                   <div className="min-w-0 flex-1">
@@ -147,12 +145,12 @@ export default function BillingPage() {
                       {o.course?.title ||
                         (o.type === "SUBSCRIPTION" ? t("subscriptionLabel") : t("orderLabel"))}
                     </p>
-                    <p className="text-xs text-[var(--muted-foreground)]">
+                    <p className="text-xs text-muted-foreground">
                       {new Date(o.createdAt).toLocaleDateString()} · {o.type}
                     </p>
                   </div>
                   <div className="text-end">
-                    <p className="font-semibold">${o.amount.toFixed(2)}</p>
+                    <p className="font-display text-lg tabular-nums">${o.amount.toFixed(2)}</p>
                     <Badge
                       variant={
                         o.status === "COMPLETED"

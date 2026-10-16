@@ -65,23 +65,23 @@ export default function CheckoutSuccessPage() {
     <div className="mx-auto flex min-h-[60vh] max-w-xl items-center justify-center px-6 py-16">
       <Card className="w-full text-center">
         <CardHeader>
-          <div className="mx-auto grid size-14 place-items-center rounded-full bg-[var(--primary)]/10 text-[var(--primary)]">
+          <div className="mx-auto grid size-14 place-items-center rounded-full border border-border bg-card text-primary">
             {stillWaiting ? (
               <Loader2 className="size-7 animate-spin" />
             ) : (
               <CheckCircle2 className="size-7" />
             )}
           </div>
-          <CardTitle className="mt-3">
+          <CardTitle className="mt-5 font-display text-2xl font-medium">
             {stillWaiting ? t("confirming") : isSub ? t("subActivated") : t("purchaseComplete")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {stillWaiting ? (
-            <p className="text-sm text-[var(--muted-foreground)]">{t("confirmingBlurb")}</p>
+            <p className="text-sm text-muted-foreground">{t("confirmingBlurb")}</p>
           ) : isSub ? (
             <>
-              <p className="text-sm text-[var(--muted-foreground)]">{t("subActivatedBlurb")}</p>
+              <p className="text-sm text-muted-foreground">{t("subActivatedBlurb")}</p>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button asChild className="flex-1">
                   <Link href="/courses">{t("browseCourses")}</Link>
@@ -93,7 +93,7 @@ export default function CheckoutSuccessPage() {
             </>
           ) : (
             <>
-              <p className="text-sm text-[var(--muted-foreground)]">{t("purchaseCompleteBlurb")}</p>
+              <p className="text-sm text-muted-foreground">{t("purchaseCompleteBlurb")}</p>
               <div className="flex flex-col gap-2 sm:flex-row">
                 {courseSlug && (
                   <Button asChild className="flex-1">
