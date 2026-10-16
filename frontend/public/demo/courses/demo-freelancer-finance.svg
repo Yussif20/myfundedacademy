@@ -1,11 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e3a8a"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
-<pattern id="p" width="48" height="48" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="2" fill="#fff" fill-opacity="0.08"/></pattern></defs>
-<rect width="1280" height="720" fill="url(#g)"/><rect width="1280" height="720" fill="url(#p)"/>
-<circle cx="1120" cy="640" r="260" fill="#fff" fill-opacity="0.06"/>
-<g fill="none" stroke="#fff" stroke-opacity="0.22" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="1010" cy="460" rx="130" ry="40"/><ellipse cx="1010" cy="390" rx="130" ry="40"/><ellipse cx="1010" cy="320" rx="130" ry="40"/><ellipse cx="1010" cy="250" rx="130" ry="40"/></g>
-<text x="80" y="235" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="30" font-weight="600" letter-spacing="3" fill="#fff" fill-opacity="0.85">BUSINESS · <tspan font-family="Noto Sans Arabic, Segoe UI, Tahoma, sans-serif" letter-spacing="0">الأعمال</tspan></text>
-<text x="80" y="356" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="64" font-weight="800" fill="#fff"><tspan x="80" dy="0">Personal Finance for</tspan><tspan x="80" dy="74">Freelancers</tspan></text>
-<text x="80" y="560" direction="rtl" unicode-bidi="plaintext" font-family="Noto Sans Arabic, Segoe UI, Tahoma, sans-serif" font-size="40" font-weight="600" fill="#fff" fill-opacity="0.9" text-anchor="end" transform="translate(0 0)"><tspan x="760">المالية الشخصية للمستقلين</tspan></text>
-<text x="80" y="650" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" fill="#fff" fill-opacity="0.7">Nibras · نبراس — demo course</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" data-paper-ink="1">
+<defs><radialGradient id="lamp" cx="0.82" cy="0.3" r="0.6"><stop offset="0" stop-color="#8a6a24" stop-opacity="0.16"/><stop offset="1" stop-color="#8a6a24" stop-opacity="0"/></radialGradient></defs>
+<rect width="1280" height="720" fill="#ece2cc"/>
+<rect width="1280" height="720" fill="url(#lamp)"/>
+<rect x="28" y="28" width="1224" height="664" fill="none" stroke="#8a6a24" stroke-opacity="0.45" stroke-width="2"/>
+<g transform="translate(1184 560) scale(0.6) translate(-1260 -560)"><g fill="none" stroke="#8a6a24" stroke-opacity="0.85" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="1010" cy="460" rx="130" ry="40"/><ellipse cx="1010" cy="390" rx="130" ry="40"/><ellipse cx="1010" cy="320" rx="130" ry="40"/><ellipse cx="1010" cy="250" rx="130" ry="40"/></g></g>
+<line x1="96" y1="190" x2="140" y2="190" stroke="#8a6a24" stroke-width="2"/>
+<text x="156" y="199" font-family="Inter, &apos;Segoe UI&apos;, Arial, sans-serif" font-size="24" font-weight="600" letter-spacing="4" fill="#8a6a24">BUSINESS · <tspan font-family="&apos;Noto Naskh Arabic&apos;, &apos;Traditional Arabic&apos;, &apos;Times New Roman&apos;, serif" letter-spacing="0" font-weight="500">الأعمال</tspan></text>
+<text x="96" y="300" font-family="Newsreader, Georgia, &apos;Times New Roman&apos;, serif" font-size="72" font-weight="500" letter-spacing="-1" fill="#1c1b18"><tspan x="96" dy="0">Personal Finance for</tspan><tspan x="96" dy="84">Freelancers</tspan></text>
+<text x="96" y="464" direction="rtl" unicode-bidi="plaintext" text-anchor="end" font-family="&apos;Noto Naskh Arabic&apos;, &apos;Traditional Arabic&apos;, &apos;Times New Roman&apos;, serif" font-size="38" fill="#1c1b18" fill-opacity="0.75"><tspan x="96">المالية الشخصية للمستقلين</tspan></text>
+<line x1="96" y1="610" x2="1184" y2="610" stroke="#1c1b18" stroke-opacity="0.18" stroke-width="1.5"/>
+<text x="96" y="652" font-family="Newsreader, Georgia, &apos;Times New Roman&apos;, serif" font-size="26" font-style="italic" fill="#1c1b18" fill-opacity="0.65">Nibras · نبراس</text>
+<text x="1184" y="652" text-anchor="end" font-family="Inter, &apos;Segoe UI&apos;, Arial, sans-serif" font-size="20" letter-spacing="3" fill="#1c1b18" fill-opacity="0.5">DEMO COURSE</text>
 </svg>

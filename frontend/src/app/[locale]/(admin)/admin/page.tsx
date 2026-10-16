@@ -2,7 +2,7 @@
 
 import { EnrollmentsChart, RevenueChart } from "@/components/admin/dashboard-charts";
 import { KpiCard } from "@/components/admin/kpi-card";
-import { ScrollReveal } from "@/components/motion";
+import { Reveal } from "@/components/ui/reveal";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { useListCoursesQuery } from "@/redux/api/coursesApi";
@@ -75,7 +75,7 @@ export default function AdminHomePage() {
 
       {/* Charts row */}
       <div className="grid gap-6 lg:grid-cols-3">
-        <ScrollReveal className="lg:col-span-2">
+        <Reveal className="lg:col-span-2">
           <Card className="overflow-hidden">
             <CardHeader>
               <CardTitle className="flex items-center justify-between text-lg">
@@ -87,9 +87,9 @@ export default function AdminHomePage() {
               <RevenueChart />
             </CardContent>
           </Card>
-        </ScrollReveal>
+        </Reveal>
 
-        <ScrollReveal delay={0.1}>
+        <Reveal delay={100}>
           <Card className="overflow-hidden">
             <CardHeader>
               <CardTitle className="text-lg">{t("enrollmentsChartTitle")}</CardTitle>
@@ -99,12 +99,12 @@ export default function AdminHomePage() {
               <EnrollmentsChart />
             </CardContent>
           </Card>
-        </ScrollReveal>
+        </Reveal>
       </div>
 
       {/* Top courses + manage cards */}
       <div className="grid gap-6 lg:grid-cols-3">
-        <ScrollReveal className="lg:col-span-2">
+        <Reveal className="lg:col-span-2">
           <Card className="border-border bg-card">
             <CardHeader>
               <CardTitle className="text-lg">{t("topCoursesTitle")}</CardTitle>
@@ -160,9 +160,9 @@ export default function AdminHomePage() {
               )}
             </CardContent>
           </Card>
-        </ScrollReveal>
+        </Reveal>
 
-        <ScrollReveal delay={0.1}>
+        <Reveal delay={100}>
           <div className="grid gap-3">
             <DashCard
               href="/admin/categories"
@@ -186,7 +186,7 @@ export default function AdminHomePage() {
               cta={t("manage")}
             />
           </div>
-        </ScrollReveal>
+        </Reveal>
       </div>
     </div>
   );

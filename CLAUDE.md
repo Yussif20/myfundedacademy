@@ -95,11 +95,11 @@ One-time course purchases work at any tier and grant **lifetime access** that by
 ## Brand
 
 - Name: **Nibras · نبراس** (always bilingual in the logo; "Nibras" in English copy, "نبراس" in Arabic copy)
-- Logo: lamp mark (amber flame over a teal bowl) + wordmark — `frontend/public/logo.svg` (light), `logo-dark.svg` (dark), `logo-mark.svg`, `favicon.svg`. Text is outlined, so the SVGs don't depend on installed fonts.
-- Primary: deep teal (lamp glass) `#0B7768` — `oklch(0.51 0.09 180)` light / `#24A592` — `oklch(0.65 0.11 180)` dark
-- Accent: warm amber (flame) `#F7A224` — `oklch(0.78 0.16 70)`
-- Default theme: **dark**
-- Display font: **Sora** • Body: **Inter** • Arabic: **IBM Plex Sans Arabic**
+- Logo: lamp mark (gold flame over a teal bowl) + wordmark — `frontend/public/logo.svg` (light), `logo-dark.svg` (dark), `logo-mark.svg`, `favicon.svg`. In the app the lockup is the `Wordmark` component (typographic, theme-aware).
+- Look: **"Paper & Ink"** — warm ivory paper, ink text, one teal accent (`#1f5c4f` light / `#5fb39c` dark), gold details (`#b08a3e`). See `frontend/DESIGN.md`.
+- Default theme: **light** (dark mode matches)
+- Display: **Newsreader** / **Noto Naskh Arabic** • Body: **Inter** / **IBM Plex Sans Arabic**
+- No animation library: CSS transitions + `Reveal`; `npm run lint:tokens` and `npm run lint:rtl` guard colours and RTL.
 
 ## Key Patterns
 

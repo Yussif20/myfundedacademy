@@ -20,12 +20,12 @@ _Nibras_ (نبراس) is Arabic for a lamp: the light a good teacher holds up fo
 
 ## Stack
 
-| Layer    | Technology                                                                           |
-| -------- | ------------------------------------------------------------------------------------ |
-| Frontend | Next.js 16, React 19, Tailwind CSS 4, RTK Query, shadcn/ui, next-intl, Framer Motion |
-| Backend  | Express 5, TypeScript, Prisma 6, Zod                                                 |
-| Data     | PostgreSQL (Neon), Cloudflare R2 (S3-compatible storage)                             |
-| Services | Stripe (test mode), VdoCipher, Resend                                                |
+| Layer    | Technology                                                                      |
+| -------- | ------------------------------------------------------------------------------- |
+| Frontend | Next.js 16, React 19, Tailwind CSS 4, RTK Query, shadcn/ui, next-intl, Recharts |
+| Backend  | Express 5, TypeScript, Prisma 6, Zod                                            |
+| Data     | PostgreSQL (Neon), Cloudflare R2 (S3-compatible storage)                        |
+| Services | Stripe (test mode), VdoCipher, Resend                                           |
 
 ```
 nibras/
