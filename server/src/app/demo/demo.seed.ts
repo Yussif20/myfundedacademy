@@ -112,7 +112,7 @@ async function createDemoData(tx: Tx) {
       fullName: ins.fullName,
       country: ins.country,
       bio: ins.bio[0],
-      profile: `/demo/instructors/${ins.key}.jpg`,
+      profile: ins.photo ?? "",
       role: "INSTRUCTOR",
       createdAt: daysAgo(300),
     });
@@ -314,16 +314,14 @@ async function createDemoData(tx: Tx) {
       enrol(userId, course, when);
 
       const done = pick(li + k * 5, course.lessonIds.length + 1);
-      course.lessonIds
-        .slice(0, done)
-        .forEach((lessonId, n) =>
-          progress.push({
-            userId,
-            lessonId,
-            lastWatchedSeconds: 0,
-            completedAt: new Date(when.getTime() + (n + 1) * DAY),
-          }),
-        );
+      course.lessonIds.slice(0, done).forEach((lessonId, n) =>
+        progress.push({
+          userId,
+          lessonId,
+          lastWatchedSeconds: 0,
+          completedAt: new Date(when.getTime() + (n + 1) * DAY),
+        }),
+      );
 
       if ((li + k) % 2 === 0) {
         const r = DEMO_REVIEWS[pick(li * 3 + k * 11, DEMO_REVIEWS.length)];
