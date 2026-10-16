@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eyebrow } from "@/components/ui/eyebrow";
+import { PersonAvatar } from "@/components/public/person-avatar";
 import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
 import { extractApiError } from "@/lib/errors";
@@ -127,9 +128,11 @@ export default function CourseDetailPage() {
 
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-2">
-                <span className="grid size-7 place-items-center rounded-full border border-border bg-card font-display text-sm text-primary">
-                  {instructorName.charAt(0)}
-                </span>
+                <PersonAvatar
+                  name={instructorName}
+                  src={course.instructor.user.profile}
+                  size={32}
+                />
                 {t("by")} <span className="text-foreground">{instructorName}</span>
               </span>
               <span className="inline-flex items-center gap-2">
@@ -245,9 +248,11 @@ export default function CourseDetailPage() {
             <Card className="mt-6">
               <CardContent className="p-6 sm:p-6">
                 <div className="flex items-start gap-4">
-                  <div className="grid size-14 shrink-0 place-items-center rounded-full border border-border bg-paper-2 font-display text-xl text-primary">
-                    {instructorName.charAt(0)}
-                  </div>
+                  <PersonAvatar
+                    name={instructorName}
+                    src={course.instructor.user.profile}
+                    size={64}
+                  />
                   <div className="min-w-0">
                     <Link
                       href={{ pathname: `/instructors/${course.instructor.id}` }}

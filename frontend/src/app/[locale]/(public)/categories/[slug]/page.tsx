@@ -7,9 +7,11 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/ui/reveal";
 import { Link } from "@/i18n/navigation";
 import { useListCategoriesQuery } from "@/redux/api/categoriesApi";
+import { categoryImage } from "@/lib/category-images";
 import { useListCoursesQuery } from "@/redux/api/coursesApi";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 
 export default function CategoryPage() {
@@ -28,26 +30,34 @@ export default function CategoryPage() {
     { skip: !slug },
   );
   const courses = data?.data?.data || [];
+  const photo = categoryImage(slug);
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-16 md:py-20">
       <Reveal>
-        <header className="max-w-2xl">
-          <Eyebrow className="mb-5">{tHome("eyebrows.categories")}</Eyebrow>
-          <div className="flex items-center gap-4">
-            {category && (
-              <span className="grid size-12 shrink-0 place-items-center rounded-lg border border-border bg-card text-primary">
-                <CategoryIcon icon={category.icon} className="size-6" />
-              </span>
+        <header className="grid items-center gap-10 md:grid-cols-[1fr_minmax(0,22rem)]">
+          <div className="max-w-2xl">
+            <Eyebrow className="mb-5">{tHome("eyebrows.categories")}</Eyebrow>
+            <div className="flex items-center gap-4">
+              {category && !photo && (
+                <span className="grid size-12 shrink-0 place-items-center rounded-lg border border-border bg-card text-primary">
+                  <CategoryIcon icon={category.icon} className="size-6" />
+                </span>
+              )}
+              <h1 className="font-display text-4xl font-medium tracking-tight md:text-5xl">
+                {category ? (isAr && category.nameArabic) || category.name : slug}
+              </h1>
+            </div>
+            {category && (category.description || category.descriptionArabic) && (
+              <p className="mt-5 leading-7 text-muted-foreground">
+                {(isAr && category.descriptionArabic) || category.description}
+              </p>
             )}
-            <h1 className="font-display text-4xl font-medium tracking-tight md:text-5xl">
-              {category ? (isAr && category.nameArabic) || category.name : slug}
-            </h1>
           </div>
-          {category && (category.description || category.descriptionArabic) && (
-            <p className="mt-5 leading-7 text-muted-foreground">
-              {(isAr && category.descriptionArabic) || category.description}
-            </p>
+          {photo && (
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border bg-paper-2">
+              <Image src={photo} alt="" fill priority sizes="22rem" className="object-cover" />
+            </div>
           )}
         </header>
       </Reveal>

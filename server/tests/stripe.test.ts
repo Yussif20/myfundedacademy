@@ -13,11 +13,22 @@ import { getOrCreateCustomer, stripeProductImages } from "@/lib/payments/stripe"
 
 describe("stripeProductImages", () => {
   it("passes absolute https raster images through", () => {
-    expect(stripeProductImages("https://cdn.example.com/c/thumb.jpg")).toEqual(["https://cdn.example.com/c/thumb.jpg"]);
+    expect(stripeProductImages("https://cdn.example.com/c/thumb.jpg")).toEqual([
+      "https://cdn.example.com/c/thumb.jpg",
+    ]);
   });
 
-  it("drops what Stripe rejects: relative paths, SVG, plain http, empty", () => {
-    expect(stripeProductImages("/demo/courses/demo-html-css-basics.svg")).toBeUndefined();
+  it("resolves relative paths against the frontend URL", () => {
+    expect(
+      stripeProductImages("/demo/courses/demo-html-css-basics.jpg", "https://nibras.example.com"),
+    ).toEqual(["https://nibras.example.com/demo/courses/demo-html-css-basics.jpg"]);
+  });
+
+  it("drops what Stripe rejects: SVG, plain http, unresolvable paths, empty", () => {
+    expect(
+      stripeProductImages("/demo/courses/demo-html-css-basics.svg", "https://nibras.example.com"),
+    ).toBeUndefined();
+    expect(stripeProductImages("/demo/courses/x.jpg", "http://localhost:3000")).toBeUndefined();
     expect(stripeProductImages("https://cdn.example.com/c/thumb.SVG")).toBeUndefined();
     expect(stripeProductImages("http://cdn.example.com/c/thumb.png")).toBeUndefined();
     expect(stripeProductImages("")).toBeUndefined();
@@ -26,7 +37,12 @@ describe("stripeProductImages", () => {
 });
 
 describe("getOrCreateCustomer", () => {
-  const user = { id: "u1", email: "learner@example.com", fullName: "Learner", stripeCustomerId: "cus_old" };
+  const user = {
+    id: "u1",
+    email: "learner@example.com",
+    fullName: "Learner",
+    stripeCustomerId: "cus_old",
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -40,9 +56,14 @@ describe("getOrCreateCustomer", () => {
   });
 
   it("replaces a stored id from another Stripe account", async () => {
-    stripeApi.customers.retrieve.mockRejectedValue(Object.assign(new Error("No such customer"), { code: "resource_missing" }));
+    stripeApi.customers.retrieve.mockRejectedValue(
+      Object.assign(new Error("No such customer"), { code: "resource_missing" }),
+    );
     await expect(getOrCreateCustomer(user)).resolves.toBe("cus_new");
-    expect(db.user.update).toHaveBeenCalledWith({ where: { id: "u1" }, data: { stripeCustomerId: "cus_new" } });
+    expect(db.user.update).toHaveBeenCalledWith({
+      where: { id: "u1" },
+      data: { stripeCustomerId: "cus_new" },
+    });
   });
 
   it("replaces a deleted customer", async () => {
@@ -51,7 +72,9 @@ describe("getOrCreateCustomer", () => {
   });
 
   it("does not swallow other Stripe errors", async () => {
-    stripeApi.customers.retrieve.mockRejectedValue(Object.assign(new Error("rate limited"), { code: "rate_limit" }));
+    stripeApi.customers.retrieve.mockRejectedValue(
+      Object.assign(new Error("rate limited"), { code: "rate_limit" }),
+    );
     await expect(getOrCreateCustomer(user)).rejects.toThrow("rate limited");
     expect(stripeApi.customers.create).not.toHaveBeenCalled();
   });
