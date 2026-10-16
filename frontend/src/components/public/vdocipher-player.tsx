@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Maximize, Minimize, PlayCircle } from "lucide-react";
+import { Loader2, Maximize, Minimize, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -115,11 +115,10 @@ export function VdoCipherPlayer({
             : undefined
         }
       >
-        <div className="absolute inset-0 grid place-items-center bg-black/40 transition-colors group-hover:bg-black/30">
-          <PlayCircle
-            className="size-14 text-white transition-transform group-hover:scale-105"
-            strokeWidth={1.25}
-          />
+        <div className="absolute inset-0 grid place-items-center bg-foreground/5 transition-colors group-hover:bg-transparent">
+          <span className="grid size-16 place-items-center rounded-full bg-primary text-primary-foreground shadow-[0_12px_30px_-10px_rgb(28_27_24/0.5)] ring-4 ring-card/70 transition-transform group-hover:scale-105">
+            <Play className="size-6 translate-x-0.5 fill-current" aria-hidden />
+          </span>
         </div>
       </button>
     );
